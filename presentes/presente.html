@@ -824,26 +824,43 @@
         });
     }
 
-    // Configuração correta do Mercado Pago para criar token
-    async function createCardTokenSecurely(cardData) {
-        try {
-            const response = await mp.createCardToken({
-                cardNumber: cardData.cardNumber,
-                cardholderName: cardData.cardholderName,
-                expirationMonth: cardData.expirationMonth,
-                expirationYear: cardData.expirationYear,
-                securityCode: cardData.securityCode,
-                identificationType: 'CPF',
-                identificationNumber: cardData.docNumber.replace(/\D/g, '')
-            });
-            
-            return response.id; // Retorna o token do cartão
-        } catch (error) {
-            console.error('Erro ao criar token:', error);
-            throw error;
+    // Função para detectar a bandeira do cartão
+    function detectCardBrand(cardNumber) {
+        const cleanNumber = cardNumber.replace(/\D/g, '');
+        
+        // Regras de detecção de bandeira
+        const patterns = {
+            visa: /^4/,
+            master: /^5[1-5]/,
+            amex: /^3[47]/,
+            elo: /^(4011|4312|4389|4514|4576|5041|5066|5090|6277|6362|6363|650)/,
+            hipercard: /^(606282|3841)/,
+            diners: /^3(?:0[0-5]|[68])/
+        };
+        
+        for (const [brand, pattern] of Object.entries(patterns)) {
+            if (pattern.test(cleanNumber)) {
+                return brand;
+            }
         }
+        
+        return 'visa'; // fallback
     }
 
+    // Função para obter o payment_method_id correto
+    function getPaymentMethodId(brand, isDebit = false) {
+        const methods = {
+            visa: isDebit ? 'visa_debit' : 'visa',
+            master: isDebit ? 'master_debit' : 'master',
+            amex: 'amex',
+            elo: 'elo',
+            hipercard: 'hipercard',
+            diners: 'diners'
+        };
+        return methods[brand] || methods.visa;
+    }
+
+    // Processar pagamento com cartão (versão corrigida)
     async function processCreditPayment() {
         const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
         const cardholderName = document.getElementById('cardholderName').value;
@@ -856,21 +873,27 @@
             return;
         }
 
+        // Detectar bandeira do cartão
+        const cardBrand = detectCardBrand(cardNumber);
+        const paymentMethodId = getPaymentMethodId(cardBrand, false);
+        
+        console.log('Bandeira detectada:', cardBrand, '-> Método:', paymentMethodId);
+
         const [month, year] = expirationDate.split('/');
         if (!month || !year || month < 1 || month > 12) {
             showToast('Data de validade inválida (MM/AA)', 'error');
             return;
         }
 
-        showToast('🔄 Processando pagamento...', 'success');
+        showToast('🔄 Validando dados do cartão...', 'success');
         
         try {
-            // Inicializar SDK se ainda não foi inicializado
+            // Inicializar SDK se necessário
             if (!mp) {
                 await initMercadoPago();
             }
             
-            // Criar token usando o método correto do SDK
+            // Criar token usando o SDK
             const cardToken = await mp.createCardToken({
                 cardNumber: cardNumber,
                 cardholderName: cardholderName,
@@ -881,25 +904,28 @@
                 identificationNumber: docNumber.replace(/\D/g, '')
             });
             
-            // Enviar o token para sua função backend
+            showToast('🔄 Processando pagamento...', 'success');
+            
+            // Enviar para a Netlify Function com o payment_method_id correto
             const response = await fetch(`${API_BASE}/create-card-payment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     amount: currentPresente.preco,
                     description: currentPresente.nome,
-                    token: cardToken.id, // Usar o id do token retornado
-                    paymentMethodId: 'visa',
+                    token: cardToken.id,
+                    paymentMethodId: paymentMethodId,  // ← Usar o método detectado
                     installments: 1,
                     docNumber: docNumber,
-                    payerEmail: 'convidado@casamento.com'
+                    payerEmail: 'convidado@casamento.com',
+                    cardBrand: cardBrand  // ← Enviar também a bandeira para debug
                 })
             });
             
             const data = await response.json();
             
             if (data.success && data.status === 'approved') {
-                showToast(`✅ Pagamento aprovado! Obrigado por presentear ${currentPresente.nome}!`, 'success');
+                showToast(`✅ Pagamento aprovado! Obrigado por presentear!`, 'success');
                 closeModal();
                 setTimeout(() => window.location.reload(), 2000);
             } else if (data.status === 'pending') {
@@ -911,7 +937,7 @@
             
         } catch (error) {
             console.error('Erro no pagamento:', error);
-            showToast(`❌ Erro: ${error.message}`, 'error');
+            showToast(`❌ ${error.message}`, 'error');
         }
     }
 

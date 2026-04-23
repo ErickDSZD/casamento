@@ -27,7 +27,8 @@ exports.handler = async (event, context) => {
       paymentMethodId,
       installments = 1,
       payerEmail,
-      docNumber
+      docNumber,
+      cardBrand  // ← Receber a bandeira
     } = JSON.parse(event.body);
     
     const accessToken = process.env.MP_ACCESS_TOKEN_PRODUCTION;
@@ -36,10 +37,29 @@ exports.handler = async (event, context) => {
       throw new Error('Access Token não configurado');
     }
 
+    // Mapeamento de payment_method_id válidos
+    const validPaymentMethods = {
+      visa: 'visa',
+      master: 'master',
+      amex: 'amex',
+      elo: 'elo',
+      hipercard: 'hipercard',
+      diners: 'diners',
+      visa_debit: 'visa_debit',
+      master_debit: 'master_debit'
+    };
+
+    // Validar o payment_method_id
+    let finalPaymentMethodId = paymentMethodId;
+    if (!validPaymentMethods[paymentMethodId]) {
+      console.warn(`Payment method ${paymentMethodId} inválido, usando fallback para visa`);
+      finalPaymentMethodId = 'visa';
+    }
+
     const paymentData = {
       transaction_amount: parseFloat(amount),
       description: description,
-      payment_method_id: paymentMethodId || 'visa',
+      payment_method_id: finalPaymentMethodId,
       token: token,
       installments: installments,
       payer: {
@@ -51,21 +71,27 @@ exports.handler = async (event, context) => {
       },
       metadata: {
         presente_nome: description,
-        payment_type: 'card'
+        payment_type: 'card',
+        card_brand: cardBrand || 'unknown'
       }
     };
 
-    // Gerar uma chave única para idempotência (evita duplicidade)
+    // Gerar chave de idempotência
     const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}-${description.replace(/\s/g, '')}`;
 
-    console.log('Criando pagamento com cartão:', { amount, description, paymentMethodId });
+    console.log('Criando pagamento com cartão:', { 
+      amount, 
+      description, 
+      paymentMethodId: finalPaymentMethodId,
+      cardBrand 
+    });
 
     const response = await fetch('https://api.mercadopago.com/v1/payments', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
-        'X-Idempotency-Key': idempotencyKey  // ← ADICIONADO
+        'X-Idempotency-Key': idempotencyKey
       },
       body: JSON.stringify(paymentData)
     });
