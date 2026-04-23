@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 exports.handler = async (event, context) => {
   const headers = {
-    'Access-Control-Allow-Origin': 'https://seu-site.netlify.app',
+    'Access-Control-Allow-Origin': 'https://casamentoge.netlify.app',
     'Access-Control-Allow-Headers': 'Content-Type'
   };
 
