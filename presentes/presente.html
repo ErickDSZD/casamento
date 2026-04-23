@@ -514,8 +514,7 @@
   </div>
 
   <script>
-    // Configuração do Mercado Pago - PRODUÇÃO
-    const mp = new MercadoPago('APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123');
+    // Configuração do Mercado Pago
     let currentPresente = null;
     let pollingInterval = null;
 
@@ -801,124 +800,206 @@
       }
     }
 
-    // Processar pagamento com cartão de crédito
-    async function processCreditPayment() {
-      const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
-      const cardholderName = document.getElementById('cardholderName').value;
-      const expirationDate = document.getElementById('expirationDate').value;
-      const securityCode = document.getElementById('securityCode').value;
-      const docNumber = document.getElementById('docNumber').value;
+    // Configuração do Mercado Pago
+    let mp = null;
+    let cardTokenCreated = false;
 
-      if (!cardNumber || !cardholderName || !expirationDate || !securityCode || !docNumber) {
-        showToast('Preencha todos os campos', 'error');
-        return;
-      }
-
-      showToast('🔄 Processando pagamento...', 'success');
-      
-      try {
-        // Criar token do cartão usando SDK do Mercado Pago
-        const [month, year] = expirationDate.split('/');
-        
-        const cardToken = await mp.fields.createCardToken({
-          cardNumber: cardNumber,
-          cardholderName: cardholderName,
-          cardExpirationMonth: month,
-          cardExpirationYear: `20${year}`,
-          securityCode: securityCode,
-          identificationType: 'CPF',
-          identificationNumber: docNumber.replace(/\D/g, '')
+    // Inicializar o SDK do Mercado Pago de forma correta
+    async function initMercadoPago() {
+        return new Promise((resolve, reject) => {
+            // Aguardar o SDK carregar
+            if (typeof MercadoPago !== 'undefined') {
+                mp = new MercadoPago('APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123');
+                resolve(mp);
+            } else {
+                // Se o SDK não estiver carregado, aguardar
+                const checkInterval = setInterval(() => {
+                    if (typeof MercadoPago !== 'undefined') {
+                        clearInterval(checkInterval);
+                        mp = new MercadoPago('APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123');
+                        resolve(mp);
+                    }
+                }, 100);
+            }
         });
-        
-        // Processar pagamento via Netlify Function
-        const response = await fetch(`${API_BASE}/create-card-payment`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: currentPresente.preco,
-            description: currentPresente.nome,
-            token: cardToken.id,
-            paymentMethodId: 'visa',
-            installments: 1,
-            docNumber: docNumber,
-            payerEmail: 'convidado@casamento.com'
-          })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success && data.status === 'approved') {
-          showToast(`✅ Pagamento aprovado! Obrigado por presentear ${currentPresente.nome}!`, 'success');
-          closeModal();
-          setTimeout(() => window.location.reload(), 2000);
-        } else if (data.status === 'pending') {
-          showToast('⏳ Pagamento pendente. Acompanhe no seu email.', 'info');
-          startPaymentPolling(data.paymentId);
-        } else {
-          throw new Error(data.statusDetail || 'Pagamento não aprovado');
-        }
-        
-      } catch (error) {
-        console.error('Erro no pagamento:', error);
-        showToast(`❌ Erro: ${error.message}`, 'error');
-      }
     }
 
-    // Processar pagamento com cartão de débito
-    async function processDebitPayment() {
-      const cardNumber = document.getElementById('debitCardNumber').value.replace(/\s/g, '');
-      const cardholderName = document.getElementById('debitCardholderName').value;
-      const expirationDate = document.getElementById('debitExpirationDate').value;
-      const securityCode = document.getElementById('debitSecurityCode').value;
-      const docNumber = document.getElementById('debitDocNumber').value;
+    // Processar pagamento com cartão de crédito (versão corrigida)
+    async function processCreditPayment() {
+        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        const cardholderName = document.getElementById('cardholderName').value;
+        const expirationDate = document.getElementById('expirationDate').value;
+        const securityCode = document.getElementById('securityCode').value;
+        const docNumber = document.getElementById('docNumber').value;
 
-      if (!cardNumber || !cardholderName || !expirationDate || !securityCode || !docNumber) {
-        showToast('Preencha todos os campos', 'error');
-        return;
-      }
-
-      showToast('🔄 Processando pagamento...', 'success');
-      
-      try {
-        const [month, year] = expirationDate.split('/');
-        
-        const cardToken = await mp.fields.createCardToken({
-          cardNumber: cardNumber,
-          cardholderName: cardholderName,
-          cardExpirationMonth: month,
-          cardExpirationYear: `20${year}`,
-          securityCode: securityCode,
-          identificationType: 'CPF',
-          identificationNumber: docNumber.replace(/\D/g, '')
-        });
-        
-        const response = await fetch(`${API_BASE}/create-card-payment`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: currentPresente.preco,
-            description: currentPresente.nome,
-            token: cardToken.id,
-            paymentMethodId: 'debit_card',
-            docNumber: docNumber,
-            payerEmail: 'convidado@casamento.com'
-          })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success && data.status === 'approved') {
-          showToast(`✅ Pagamento aprovado! Obrigado por presentear!`, 'success');
-          closeModal();
-          setTimeout(() => window.location.reload(), 2000);
-        } else {
-          throw new Error(data.statusDetail || 'Pagamento não aprovado');
+        if (!cardNumber || !cardholderName || !expirationDate || !securityCode || !docNumber) {
+            showToast('Preencha todos os campos', 'error');
+            return;
         }
+
+        // Validar formato da data
+        const [month, year] = expirationDate.split('/');
+        if (!month || !year || month < 1 || month > 12 || year.length !== 2) {
+            showToast('Data de validade inválida (MM/AA)', 'error');
+            return;
+        }
+
+        showToast('🔄 Processando pagamento...', 'success');
         
-      } catch (error) {
-        console.error('Erro no pagamento:', error);
-        showToast(`❌ Erro: ${error.message}`, 'error');
-      }
+        try {
+            // Garantir que o SDK está inicializado
+            if (!mp) {
+                await initMercadoPago();
+            }
+            
+            // Criar token do cartão usando a API diretamente (sem SDK de campos)
+            // Opção 1: Usar a API de criação de token do Mercado Pago diretamente
+            const tokenResponse = await fetch('https://api.mercadopago.com/v1/card_tokens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    public_key: 'APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123',
+                    card_number: cardNumber,
+                    cardholder: {
+                        name: cardholderName,
+                        identification: {
+                            type: 'CPF',
+                            number: docNumber.replace(/\D/g, '')
+                        }
+                    },
+                    security_code: securityCode,
+                    expiration_month: parseInt(month),
+                    expiration_year: parseInt(`20${year}`)
+                })
+            });
+            
+            const tokenData = await tokenResponse.json();
+            
+            if (!tokenResponse.ok) {
+                throw new Error(tokenData.message || 'Erro ao criar token do cartão');
+            }
+            
+            const cardToken = tokenData.id;
+            
+            // Processar pagamento via Netlify Function
+            const response = await fetch(`${API_BASE}/create-card-payment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: currentPresente.preco,
+                    description: currentPresente.nome,
+                    token: cardToken,
+                    paymentMethodId: 'visa',
+                    installments: 1,
+                    docNumber: docNumber,
+                    payerEmail: 'convidado@casamento.com'
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.status === 'approved') {
+                showToast(`✅ Pagamento aprovado! Obrigado por presentear ${currentPresente.nome}!`, 'success');
+                closeModal();
+                setTimeout(() => window.location.reload(), 2000);
+            } else if (data.status === 'pending') {
+                showToast('⏳ Pagamento pendente. Acompanhe no seu email.', 'info');
+                startPaymentPolling(data.paymentId);
+            } else {
+                throw new Error(data.statusDetail || data.error || 'Pagamento não aprovado');
+            }
+            
+        } catch (error) {
+            console.error('Erro no pagamento:', error);
+            showToast(`❌ Erro: ${error.message}`, 'error');
+        }
+    }
+
+    // Processar pagamento com cartão de débito (versão corrigida)
+    async function processDebitPayment() {
+        const cardNumber = document.getElementById('debitCardNumber').value.replace(/\s/g, '');
+        const cardholderName = document.getElementById('debitCardholderName').value;
+        const expirationDate = document.getElementById('debitExpirationDate').value;
+        const securityCode = document.getElementById('debitSecurityCode').value;
+        const docNumber = document.getElementById('debitDocNumber').value;
+
+        if (!cardNumber || !cardholderName || !expirationDate || !securityCode || !docNumber) {
+            showToast('Preencha todos os campos', 'error');
+            return;
+        }
+
+        const [month, year] = expirationDate.split('/');
+        if (!month || !year || month < 1 || month > 12 || year.length !== 2) {
+            showToast('Data de validade inválida (MM/AA)', 'error');
+            return;
+        }
+
+        showToast('🔄 Processando pagamento...', 'success');
+        
+        try {
+            if (!mp) {
+                await initMercadoPago();
+            }
+            
+            // Criar token do cartão via API direta
+            const tokenResponse = await fetch('https://api.mercadopago.com/v1/card_tokens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    public_key: 'APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123',
+                    card_number: cardNumber,
+                    cardholder: {
+                        name: cardholderName,
+                        identification: {
+                            type: 'CPF',
+                            number: docNumber.replace(/\D/g, '')
+                        }
+                    },
+                    security_code: securityCode,
+                    expiration_month: parseInt(month),
+                    expiration_year: parseInt(`20${year}`)
+                })
+            });
+            
+            const tokenData = await tokenResponse.json();
+            
+            if (!tokenResponse.ok) {
+                throw new Error(tokenData.message || 'Erro ao criar token do cartão');
+            }
+            
+            const cardToken = tokenData.id;
+            
+            const response = await fetch(`${API_BASE}/create-card-payment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: currentPresente.preco,
+                    description: currentPresente.nome,
+                    token: cardToken,
+                    paymentMethodId: 'debit_card',
+                    docNumber: docNumber,
+                    payerEmail: 'convidado@casamento.com'
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.status === 'approved') {
+                showToast(`✅ Pagamento aprovado! Obrigado por presentear!`, 'success');
+                closeModal();
+                setTimeout(() => window.location.reload(), 2000);
+            } else {
+                throw new Error(data.statusDetail || data.error || 'Pagamento não aprovado');
+            }
+            
+        } catch (error) {
+            console.error('Erro no pagamento:', error);
+            showToast(`❌ Erro: ${error.message}`, 'error');
+        }
     }
 
     function showToast(message, type = 'success') {
