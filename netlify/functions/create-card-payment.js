@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 exports.handler = async (event, context) => {
   const headers = {
-    'Access-Control-Allow-Origin': 'https://casamentoge.netlify.app/',
+    'Access-Control-Allow-Origin': 'https://casamentoge.netlify.app',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS'
   };
@@ -12,7 +12,11 @@ exports.handler = async (event, context) => {
   }
 
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };
+    return { 
+      statusCode: 405, 
+      headers,
+      body: JSON.stringify({ error: 'Method Not Allowed' }) 
+    };
   }
 
   try {
@@ -27,6 +31,10 @@ exports.handler = async (event, context) => {
     } = JSON.parse(event.body);
     
     const accessToken = process.env.MP_ACCESS_TOKEN_PRODUCTION;
+    
+    if (!accessToken) {
+      throw new Error('Access Token não configurado');
+    }
 
     const paymentData = {
       transaction_amount: parseFloat(amount),
@@ -42,15 +50,22 @@ exports.handler = async (event, context) => {
         }
       },
       metadata: {
-        presente_nome: description
+        presente_nome: description,
+        payment_type: 'card'
       }
     };
+
+    // Gerar uma chave única para idempotência (evita duplicidade)
+    const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}-${description.replace(/\s/g, '')}`;
+
+    console.log('Criando pagamento com cartão:', { amount, description, paymentMethodId });
 
     const response = await fetch('https://api.mercadopago.com/v1/payments', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Idempotency-Key': idempotencyKey  // ← ADICIONADO
       },
       body: JSON.stringify(paymentData)
     });
@@ -58,8 +73,11 @@ exports.handler = async (event, context) => {
     const data = await response.json();
 
     if (!response.ok) {
+      console.error('Erro Mercado Pago:', data);
       throw new Error(data.message || 'Erro ao processar pagamento');
     }
+
+    console.log('Pagamento com cartão criado:', data.id, 'Status:', data.status);
 
     return {
       statusCode: 200,
@@ -73,11 +91,14 @@ exports.handler = async (event, context) => {
     };
 
   } catch (error) {
-    console.error('Erro:', error);
+    console.error('Erro na função create-card-payment:', error);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ success: false, error: error.message })
+      body: JSON.stringify({ 
+        success: false, 
+        error: error.message || 'Erro interno ao processar pagamento' 
+      })
     };
   }
 };

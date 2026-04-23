@@ -827,8 +827,6 @@
     // Configuração correta do Mercado Pago para criar token
     async function createCardTokenSecurely(cardData) {
         try {
-            // Usar o método createCardToken do SDK
-            // IMPORTANTE: O SDK precisa estar inicializado com a public_key
             const response = await mp.createCardToken({
                 cardNumber: cardData.cardNumber,
                 cardholderName: cardData.cardholderName,
