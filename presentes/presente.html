@@ -824,7 +824,28 @@
         });
     }
 
-    // Processar pagamento com cartão de crédito (versão corrigida)
+    // Configuração correta do Mercado Pago para criar token
+    async function createCardTokenSecurely(cardData) {
+        try {
+            // Usar o método createCardToken do SDK
+            // IMPORTANTE: O SDK precisa estar inicializado com a public_key
+            const response = await mp.createCardToken({
+                cardNumber: cardData.cardNumber,
+                cardholderName: cardData.cardholderName,
+                expirationMonth: cardData.expirationMonth,
+                expirationYear: cardData.expirationYear,
+                securityCode: cardData.securityCode,
+                identificationType: 'CPF',
+                identificationNumber: cardData.docNumber.replace(/\D/g, '')
+            });
+            
+            return response.id; // Retorna o token do cartão
+        } catch (error) {
+            console.error('Erro ao criar token:', error);
+            throw error;
+        }
+    }
+
     async function processCreditPayment() {
         const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
         const cardholderName = document.getElementById('cardholderName').value;
@@ -837,9 +858,8 @@
             return;
         }
 
-        // Validar formato da data
         const [month, year] = expirationDate.split('/');
-        if (!month || !year || month < 1 || month > 12 || year.length !== 2) {
+        if (!month || !year || month < 1 || month > 12) {
             showToast('Data de validade inválida (MM/AA)', 'error');
             return;
         }
@@ -847,50 +867,30 @@
         showToast('🔄 Processando pagamento...', 'success');
         
         try {
-            // Garantir que o SDK está inicializado
+            // Inicializar SDK se ainda não foi inicializado
             if (!mp) {
                 await initMercadoPago();
             }
             
-            // Criar token do cartão usando a API diretamente (sem SDK de campos)
-            // Opção 1: Usar a API de criação de token do Mercado Pago diretamente
-            const tokenResponse = await fetch('https://api.mercadopago.com/v1/card_tokens', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    public_key: 'APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123',
-                    card_number: cardNumber,
-                    cardholder: {
-                        name: cardholderName,
-                        identification: {
-                            type: 'CPF',
-                            number: docNumber.replace(/\D/g, '')
-                        }
-                    },
-                    security_code: securityCode,
-                    expiration_month: parseInt(month),
-                    expiration_year: parseInt(`20${year}`)
-                })
+            // Criar token usando o método correto do SDK
+            const cardToken = await mp.createCardToken({
+                cardNumber: cardNumber,
+                cardholderName: cardholderName,
+                expirationMonth: month,
+                expirationYear: `20${year}`,
+                securityCode: securityCode,
+                identificationType: 'CPF',
+                identificationNumber: docNumber.replace(/\D/g, '')
             });
             
-            const tokenData = await tokenResponse.json();
-            
-            if (!tokenResponse.ok) {
-                throw new Error(tokenData.message || 'Erro ao criar token do cartão');
-            }
-            
-            const cardToken = tokenData.id;
-            
-            // Processar pagamento via Netlify Function
+            // Enviar o token para sua função backend
             const response = await fetch(`${API_BASE}/create-card-payment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     amount: currentPresente.preco,
                     description: currentPresente.nome,
-                    token: cardToken,
+                    token: cardToken.id, // Usar o id do token retornado
                     paymentMethodId: 'visa',
                     installments: 1,
                     docNumber: docNumber,
