@@ -1,0 +1,38 @@
+{
+  "presentes": [
+    {
+      "id": 1,
+      "nome": "Jogo de Panelas Le Creuset",
+      "categoria": "cozinha",
+      "preco": 1800,
+      "descricao": "Conjunto de panelas em ferro fundido esmaltado, 5 peças, na cor Cerise.",
+      "imagem": "/assets/images/panelas.jpg",
+      "icone": "🍳",
+      "status": "priority",
+      "linkExterno": null,
+      "detalhes": [
+        "Material: Ferro fundido esmaltado",
+        "5 peças: 2 panelas, 2 frigideiras, 1 caçarola",
+        "Cor: Cerise (vermelho cereja)",
+        "Compatível com todos os fogões, incluindo indução"
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "Jogo de Cama King Size",
+      "categoria": "quarto",
+      "preco": 750,
+      "descricao": "Lençol de algodão egípcio 400 fios, cor champagne, 4 peças.",
+      "imagem": "/assets/images/jogo-cama.jpg",
+      "icone": "🛏️",
+      "status": "available",
+      "linkExterno": "https://www.lojas.americanas.com.br/jogo-cama-king",
+      "detalhes": [
+        "Algodão egípcio 400 fios",
+        "Cor: Champagne",
+        "4 peças: 1 lençol, 1 edredom, 2 fronhas",
+        "Tamanho: King Size (200x200cm)"
+      ]
+    }
+  ]
+}

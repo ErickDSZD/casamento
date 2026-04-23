@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhe do Presente - Casamento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  
+  <!-- Mercado Pago SDK Produção -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+  <style>
+    /* Seus estilos existentes aqui (mantenha o CSS que você já tem) */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --rosa: #D63384;
+      --amarelo: #F3C623;
+      --laranja: #F05A28;
+      --terracota: #C85A2F;
+      --creme: #FDF6EE;
+      --creme-dark: #F5EBD8;
+      --marrom: #3A1F10;
+      --marrom-light: #6B3A22;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Jost', sans-serif;
+    }
+
+    body {
+      background: var(--creme);
+      color: var(--marrom);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+
+    .container {
+      width: min(1200px, 92%);
+      margin-inline: auto;
+    }
+
+    /* Navbar */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.25rem 0;
+      background: rgba(253, 246, 238, .92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(58, 31, 16, .08);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav__logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--marrom);
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 400;
+      color: var(--marrom-light);
+      transition: color .2s;
+    }
+
+    .nav__links a:hover,
+    .nav__links a.active {
+      color: var(--rosa);
+    }
+
+    .nav__toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav__toggle span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--marrom);
+      transition: transform .3s, opacity .3s;
+    }
+
+    /* Detail Card */
+    .presente-detalhe {
+      min-height: 100vh;
+      padding: 6rem 0 5rem;
+      position: relative;
+    }
+
+    .detalhe-card {
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(58, 31, 16, .08);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .detalhe-imagem {
+      background: linear-gradient(135deg, #FDE8F3 0%, #F9C8E1 100%);
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detalhe-placeholder {
+      font-size: 8rem;
+      opacity: 0.7;
+    }
+
+    .detalhe-info {
+      padding: 2.5rem 2.5rem 2.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .detalhe-categoria {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--terracota);
+      font-weight: 500;
+    }
+
+    .detalhe-info h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      color: var(--marrom);
+    }
+
+    .detalhe-ribbon {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 99px;
+      width: fit-content;
+    }
+
+    .ribbon--priority { background: var(--laranja); color: #fff; }
+    .ribbon--available { background: rgba(243, 198, 35, 0.2); color: #8a6800; }
+    .ribbon--gifted { background: rgba(214, 51, 132, 0.12); color: var(--rosa); }
+
+    .detalhe-preco {
+      background: linear-gradient(135deg, rgba(214, 51, 132, 0.05) 0%, rgba(243, 198, 35, 0.05) 100%);
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+    }
+
+    .detalhe-preco span {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--rosa);
+    }
+
+    .btn-presentear {
+      background: var(--rosa);
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .btn-presentear:hover {
+      background: var(--terracota);
+      transform: translateY(-2px);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--creme);
+      border-radius: 24px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(58, 31, 16, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--marrom-light);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .payment-methods {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .payment-btn {
+      flex: 1;
+      padding: 0.75rem;
+      background: transparent;
+      border: 1.5px solid rgba(58, 31, 16, 0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+
+    .payment-btn.active {
+      border-color: var(--rosa);
+      background: rgba(214, 51, 132, 0.1);
+      color: var(--rosa);
+    }
+
+    .payment-content {
+      display: none;
+    }
+
+    .payment-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(58, 31, 16, 0.2);
+      border-radius: 12px;
+      font-family: var(--font-body);
+    }
+
+    .btn-pagar {
+      width: 100%;
+      padding: 1rem;
+      background: var(--rosa);
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .qr-code {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .qr-code img {
+      margin: 0 auto;
+      width: 200px;
+      height: 200px;
+    }
+
+    .pix-code {
+      background: rgba(58, 31, 16, 0.05);
+      padding: 0.75rem;
+      border-radius: 12px;
+      font-family: monospace;
+      word-break: break-all;
+      margin: 1rem 0;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--marrom);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      z-index: 1001;
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast.success { background: #10b981; }
+    .toast.error { background: #ef4444; }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav__links {
+        display: none;
+      }
+      .nav__links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--creme);
+        justify-content: center;
+        align-items: center;
+        z-index: 99;
+      }
+      .nav__toggle {
+        display: flex;
+        z-index: 101;
+      }
+      .detalhe-card {
+        grid-template-columns: 1fr;
+      }
+      .detalhe-info {
+        padding: 2rem;
+      }
+      .payment-methods {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav__inner">
+        <a href="/index.html" class="nav__logo">C &amp; L</a>
+        <button class="nav__toggle" id="navToggle" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <ul class="nav__links" id="navLinks">
+          <li><a href="/index.html">Início</a></li>
+          <li><a href="/index.html#presentes" class="active">Presentes</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="presente-detalhe">
+    <div class="container">
+      <div id="detalheContent">
+        <div class="loading" style="text-align: center; padding: 4rem;">
+          <p>Carregando detalhes do presente...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal de Pagamento -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Presentear este item</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="payment-methods">
+          <button class="payment-btn active" data-method="pix">💳 PIX</button>
+          <button class="payment-btn" data-method="credit">💳 Cartão de Crédito</button>
+          <button class="payment-btn" data-method="debit">💳 Cartão de Débito</button>
+        </div>
+
+        <div id="pixContent" class="payment-content active">
+          <div class="qr-code" id="qrCodeContainer">
+            <p>Gerando QR Code...</p>
+          </div>
+          <div class="pix-code" id="pixCode"></div>
+          <button class="btn-pagar" onclick="copyPixCode()">Copiar código PIX</button>
+        </div>
+
+        <div id="creditContent" class="payment-content">
+          <div class="form-group">
+            <label>Número do cartão</label>
+            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+          </div>
+          <div class="form-group">
+            <label>Nome no cartão</label>
+            <input type="text" id="cardholderName" placeholder="Como está no cartão">
+          </div>
+          <div class="form-group">
+            <label>Data de validade</label>
+            <input type="text" id="expirationDate" placeholder="MM/AA">
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input type="text" id="securityCode" placeholder="123" maxlength="4">
+          </div>
+          <div class="form-group">
+            <label>CPF do titular</label>
+            <input type="text" id="docNumber" placeholder="123.456.789-00">
+          </div>
+          <button class="btn-pagar" onclick="processCreditPayment()">Pagar com cartão de crédito</button>
+        </div>
+
+        <div id="debitContent" class="payment-content">
+          <div class="form-group">
+            <label>Número do cartão</label>
+            <input type="text" id="debitCardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+          </div>
+          <div class="form-group">
+            <label>Nome no cartão</label>
+            <input type="text" id="debitCardholderName" placeholder="Como está no cartão">
+          </div>
+          <div class="form-group">
+            <label>Data de validade</label>
+            <input type="text" id="debitExpirationDate" placeholder="MM/AA">
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input type="text" id="debitSecurityCode" placeholder="123" maxlength="4">
+          </div>
+          <div class="form-group">
+            <label>CPF do titular</label>
+            <input type="text" id="debitDocNumber" placeholder="123.456.789-00">
+          </div>
+          <button class="btn-pagar" onclick="processDebitPayment()">Pagar com cartão de débito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuração do Mercado Pago - PRODUÇÃO
+    const mp = new MercadoPago('APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123');
+    let currentPresente = null;
+    let pollingInterval = null;
+
+    // URLs das Netlify Functions (caminho correto para sua estrutura)
+    const API_BASE = '/.netlify/functions';
+
+    // Mobile menu
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    if (toggle && links) {
+      toggle.addEventListener('click', () => {
+        const open = links.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+        const spans = toggle.querySelectorAll('span');
+        if (open) {
+          spans[0].style.transform = 'translateY(6.5px) rotate(45deg)';
+          spans[1].style.opacity = '0';
+          spans[2].style.transform = 'translateY(-6.5px) rotate(-45deg)';
+        } else {
+          spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+        }
+      });
+      
+      links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', false);
+        toggle.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+      }));
+    }
+
+    // Pega o ID da URL
+    function getIdFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    // Carrega e exibe o presente específico
+    async function carregarDetalhePresente() {
+      const id = getIdFromURL();
+
+      if (!id) {
+        mostrarErro('ID do presente não informado.');
+        return;
+      }
+
+      try {
+        // Caminho relativo para o JSON na pasta data
+        const response = await fetch('/data/presentes.json');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        const presente = data.presentes.find(p => p.id === parseInt(id));
+
+        if (!presente) {
+          mostrarErro('Presente não encontrado.');
+          return;
+        }
+
+        currentPresente = presente;
+        renderizarDetalhe(presente);
+
+      } catch (error) {
+        console.error('Erro:', error);
+        mostrarErro(`Erro ao carregar detalhes do presente. Detalhe: ${error.message}`);
+      }
+    }
+
+    function renderizarDetalhe(presente) {
+      const container = document.getElementById('detalheContent');
+
+      const statusInfo = {
+        priority: { class: 'ribbon--priority', text: 'Prioritário' },
+        available: { class: 'ribbon--available', text: 'Disponível' },
+        gifted: { class: 'ribbon--gifted', text: 'Presenteado ♡' }
+      }[presente.status] || { class: 'ribbon--available', text: 'Disponível' };
+
+      const precoFormatado = presente.preco.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      const html = `
+        <article class="detalhe-card">
+          <div class="detalhe-imagem">
+            ${presente.imagem ?
+              `<img src="${presente.imagem}" alt="${escapeHTML(presente.nome)}">` :
+              `<div class="detalhe-placeholder" aria-hidden="true">${presente.icone || '🎁'}</div>`
+            }
+          </div>
+          
+          <div class="detalhe-info">
+            <span class="detalhe-categoria">${capitalizar(presente.categoria)}</span>
+            <h1>${escapeHTML(presente.nome)}</h1>
+            <span class="detalhe-ribbon ${statusInfo.class}">${statusInfo.text}</span>
+            
+            <p class="detalhe-descricao">${escapeHTML(presente.descricao)}</p>
+            
+            <div class="detalhe-preco">
+              <strong>Valor:</strong> 
+              <span>R$ ${precoFormatado}</span>
+            </div>
+            
+            ${presente.detalhes && presente.detalhes.length > 0 ? `
+              <div class="detalhe-especificacoes">
+                <h3>Detalhes do produto</h3>
+                <ul>
+                  ${presente.detalhes.map(d => `<li>${escapeHTML(d)}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+            
+            <div class="detalhe-acoes">
+              ${presente.status !== 'gifted' ? `
+                <button class="btn-presentear" data-id="${presente.id}" onclick="openModal()">
+                  Presentear este item
+                </button>
+              ` : `
+                <p class="mensagem-gifted">🎉 Este presente já foi adquirido por um convidado especial!</p>
+              `}
+            </div>
+          </div>
+        </article>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    // Modal functions
+    function openModal() {
+      const modal = document.getElementById('paymentModal');
+      modal.classList.add('active');
+      generatePixQRCode();
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('paymentModal');
+      modal.classList.remove('active');
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+        pollingInterval = null;
+      }
+    }
+
+    // Payment method switching
+    document.querySelectorAll('.payment-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const method = btn.dataset.method;
+        
+        document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        document.querySelectorAll('.payment-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(`${method}Content`).classList.add('active');
+        
+        if (method === 'pix') {
+          generatePixQRCode();
+        }
+      });
+    });
+
+    // Gerar PIX QR Code via Netlify Function
+    async function generatePixQRCode() {
+      const qrContainer = document.getElementById('qrCodeContainer');
+      const pixCodeElement = document.getElementById('pixCode');
+      
+      qrContainer.innerHTML = '<p>⏳ Gerando QR Code PIX...</p>';
+      pixCodeElement.innerHTML = '';
+      
+      try {
+        const response = await fetch(`${API_BASE}/create-payment`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            amount: currentPresente.preco,
+            description: currentPresente.nome,
+            payerEmail: 'convidado@casamento.com',
+            payerName: 'Convidado',
+            presenteId: currentPresente.id
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          // Exibir QR Code
+          if (data.qrCodeBase64) {
+            qrContainer.innerHTML = `
+              <img src="data:image/jpeg;base64,${data.qrCodeBase64}" 
+                   alt="QR Code PIX" 
+                   style="width: 200px; height: 200px; margin: 0 auto;">
+              <p style="margin-top: 1rem; font-size: 0.85rem;">Escaneie o QR Code com seu banco</p>
+            `;
+          } else if (data.qrCode) {
+            qrContainer.innerHTML = `
+              <div style="background: #000; padding: 1rem; border-radius: 12px;">
+                <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(data.qrCode)}" 
+                     alt="QR Code PIX" 
+                     style="width: 200px; height: 200px;">
+              </div>
+              <p style="margin-top: 1rem; font-size: 0.85rem;">Escaneie o QR Code com seu banco</p>
+            `;
+          }
+          
+          pixCodeElement.textContent = data.pixCode || data.qrCode;
+          
+          // Iniciar polling para verificar pagamento
+          startPaymentPolling(data.paymentId);
+          
+          showToast('✅ PIX gerado! Escaneie o QR Code para pagar', 'success');
+        } else {
+          throw new Error(data.error || 'Erro ao gerar PIX');
+        }
+        
+      } catch (error) {
+        console.error('Erro ao gerar PIX:', error);
+        qrContainer.innerHTML = `
+          <p style="color: red;">❌ Erro ao gerar PIX</p>
+          <p style="font-size: 0.85rem;">${error.message}</p>
+          <button onclick="generatePixQRCode()" style="margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer;">
+            Tentar novamente
+          </button>
+        `;
+        showToast('Erro ao gerar pagamento PIX. Tente novamente.', 'error');
+      }
+    }
+
+    // Polling para verificar status do pagamento
+    function startPaymentPolling(paymentId) {
+      if (pollingInterval) clearInterval(pollingInterval);
+      
+      let attempts = 0;
+      const maxAttempts = 60; // 5 minutos (5s * 60)
+      
+      pollingInterval = setInterval(async () => {
+        attempts++;
+        
+        try {
+          const response = await fetch(`${API_BASE}/check-payment?id=${paymentId}`);
+          const data = await response.json();
+          
+          if (data.success) {
+            if (data.status === 'approved') {
+              clearInterval(pollingInterval);
+              pollingInterval = null;
+              showToast('🎉 Pagamento confirmado! Obrigado por presentear!', 'success');
+              closeModal();
+              setTimeout(() => window.location.reload(), 2000);
+            } else if (data.status === 'rejected') {
+              clearInterval(pollingInterval);
+              pollingInterval = null;
+              showToast('❌ Pagamento recusado. Tente novamente.', 'error');
+            } else if (data.status === 'pending') {
+              if (attempts % 6 === 0) { // A cada 30 segundos
+                console.log('Aguardando confirmação do pagamento...');
+              }
+            }
+          }
+          
+          if (attempts >= maxAttempts) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+            showToast('⏰ Tempo limite. Verifique seu email para confirmação.', 'info');
+          }
+          
+        } catch (error) {
+          console.error('Erro ao verificar status:', error);
+        }
+      }, 5000);
+    }
+
+    function copyPixCode() {
+      const pixCode = document.getElementById('pixCode').textContent;
+      if (pixCode) {
+        navigator.clipboard.writeText(pixCode);
+        showToast('Código PIX copiado!', 'success');
+      } else {
+        showToast('Nenhum código PIX disponível', 'error');
+      }
+    }
+
+    // Processar pagamento com cartão de crédito
+    async function processCreditPayment() {
+      const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+      const cardholderName = document.getElementById('cardholderName').value;
+      const expirationDate = document.getElementById('expirationDate').value;
+      const securityCode = document.getElementById('securityCode').value;
+      const docNumber = document.getElementById('docNumber').value;
+
+      if (!cardNumber || !cardholderName || !expirationDate || !securityCode || !docNumber) {
+        showToast('Preencha todos os campos', 'error');
+        return;
+      }
+
+      showToast('🔄 Processando pagamento...', 'success');
+      
+      try {
+        // Criar token do cartão usando SDK do Mercado Pago
+        const [month, year] = expirationDate.split('/');
+        
+        const cardToken = await mp.fields.createCardToken({
+          cardNumber: cardNumber,
+          cardholderName: cardholderName,
+          cardExpirationMonth: month,
+          cardExpirationYear: `20${year}`,
+          securityCode: securityCode,
+          identificationType: 'CPF',
+          identificationNumber: docNumber.replace(/\D/g, '')
+        });
+        
+        // Processar pagamento via Netlify Function
+        const response = await fetch(`${API_BASE}/create-card-payment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: currentPresente.preco,
+            description: currentPresente.nome,
+            token: cardToken.id,
+            paymentMethodId: 'visa',
+            installments: 1,
+            docNumber: docNumber,
+            payerEmail: 'convidado@casamento.com'
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.status === 'approved') {
+          showToast(`✅ Pagamento aprovado! Obrigado por presentear ${currentPresente.nome}!`, 'success');
+          closeModal();
+          setTimeout(() => window.location.reload(), 2000);
+        } else if (data.status === 'pending') {
+          showToast('⏳ Pagamento pendente. Acompanhe no seu email.', 'info');
+          startPaymentPolling(data.paymentId);
+        } else {
+          throw new Error(data.statusDetail || 'Pagamento não aprovado');
+        }
+        
+      } catch (error) {
+        console.error('Erro no pagamento:', error);
+        showToast(`❌ Erro: ${error.message}`, 'error');
+      }
+    }
+
+    // Processar pagamento com cartão de débito
+    async function processDebitPayment() {
+      const cardNumber = document.getElementById('debitCardNumber').value.replace(/\s/g, '');
+      const cardholderName = document.getElementById('debitCardholderName').value;
+      const expirationDate = document.getElementById('debitExpirationDate').value;
+      const securityCode = document.getElementById('debitSecurityCode').value;
+      const docNumber = document.getElementById('debitDocNumber').value;
+
+      if (!cardNumber || !cardholderName || !expirationDate || !securityCode || !docNumber) {
+        showToast('Preencha todos os campos', 'error');
+        return;
+      }
+
+      showToast('🔄 Processando pagamento...', 'success');
+      
+      try {
+        const [month, year] = expirationDate.split('/');
+        
+        const cardToken = await mp.fields.createCardToken({
+          cardNumber: cardNumber,
+          cardholderName: cardholderName,
+          cardExpirationMonth: month,
+          cardExpirationYear: `20${year}`,
+          securityCode: securityCode,
+          identificationType: 'CPF',
+          identificationNumber: docNumber.replace(/\D/g, '')
+        });
+        
+        const response = await fetch(`${API_BASE}/create-card-payment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: currentPresente.preco,
+            description: currentPresente.nome,
+            token: cardToken.id,
+            paymentMethodId: 'debit_card',
+            docNumber: docNumber,
+            payerEmail: 'convidado@casamento.com'
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.status === 'approved') {
+          showToast(`✅ Pagamento aprovado! Obrigado por presentear!`, 'success');
+          closeModal();
+          setTimeout(() => window.location.reload(), 2000);
+        } else {
+          throw new Error(data.statusDetail || 'Pagamento não aprovado');
+        }
+        
+      } catch (error) {
+        console.error('Erro no pagamento:', error);
+        showToast(`❌ Erro: ${error.message}`, 'error');
+      }
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 4000);
+    }
+
+    function mostrarErro(mensagem) {
+      document.getElementById('detalheContent').innerHTML = `
+        <div class="erro-detalhe" style="text-align: center; padding: 4rem; background: #fff; border-radius: 24px;">
+          <p>❌ ${mensagem}</p>
+          <a href="/index.html" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--rosa); color: #fff; border-radius: 99px;">← Voltar para lista de presentes</a>
+        </div>
+      `;
+    }
+
+    function capitalizar(str) {
+      if (!str) return '';
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Fechar modal ao clicar fora
+    window.onclick = function(event) {
+      const modal = document.getElementById('paymentModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+
+    // Inicializa
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Página de detalhes carregada - API Base:', API_BASE);
+      carregarDetalhePresente();
+    });
+  </script>
+</body>
+
+</html>

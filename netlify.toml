@@ -1,0 +1,11 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+  command = "npm install"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Plugin para instalar dependências das functions
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
