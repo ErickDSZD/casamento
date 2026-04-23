@@ -1,0 +1,15 @@
+{
+  "name": "casamento-presentes",
+  "version": "1.0.0",
+  "description": "Lista de presentes de casamento com Mercado Pago",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Build concluído'"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "keywords": ["casamento", "presentes", "mercado-pago"],
+  "author": "Erick Zaniratto Duarte",
+  "license": "MIT"
+}
