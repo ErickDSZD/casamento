@@ -33,6 +33,20 @@
         "4 peças: 1 lençol, 1 edredom, 2 fronhas",
         "Tamanho: King Size (200x200cm)"
       ]
+    },
+    {
+      "id": 3,
+      "nome": "Teste",
+      "categoria": "quarto",
+      "preco": 0.10,
+      "descricao": "Teste",
+      "imagem": "/assets/images/jogo-cama.jpg",
+      "icone": "🛏️",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Teste"
+      ]
     }
   ]
 }
