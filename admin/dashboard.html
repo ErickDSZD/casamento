@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Presentes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .toolbar {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3rem;
+            cursor: pointer;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3rem;
+            cursor: pointer;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3rem;
+            cursor: pointer;
+        }
+        .presentes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .presente-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .presente-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .presente-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        .presente-nome {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .presente-preco {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        .status-available { background: #d4edda; color: #155724; }
+        .status-priority { background: #fff3cd; color: #856404; }
+        .status-reserved { background: #f8d7da; color: #721c24; }
+        .presente-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+        .card-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 600px;
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 0.3rem;
+            font-size: 0.9rem;
+        }
+        .form-group textarea {
+            min-height: 100px;
+        }
+        .detalhes-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .success-msg {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            z-index: 1100;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .presentes-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎁 Gerenciador de Presentes</h1>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+    
+    <div class="container">
+        <div class="toolbar">
+            <button class="btn-primary" onclick="abrirModalNovo()">+ Novo Presente</button>
+            <button class="btn-secondary" onclick="carregarPresentes()">⟳ Atualizar</button>
+        </div>
+        
+        <div id="presentesGrid" class="presentes-grid">
+            <div style="text-align: center; padding: 2rem;">Carregando...</div>
+        </div>
+    </div>
+    
+    <!-- Modal Form -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Novo Presente</h2>
+                <span class="close" onclick="fecharModal()">&times;</span>
+            </div>
+            <form id="presenteForm">
+                <input type="hidden" id="id">
+                <div class="form-group">
+                    <label>Nome *</label>
+                    <input type="text" id="nome" required>
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="categoria">
+                        <option value="cozinha">Cozinha</option>
+                        <option value="quarto">Quarto</option>
+                        <option value="sala">Sala</option>
+                        <option value="banheiro">Banheiro</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="viagem">Viagem</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Preço (R$)</label>
+                    <input type="number" id="preco" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="descricao" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>URL da Imagem</label>
+                    <input type="text" id="imagem" placeholder="/assets/images/imagem.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Ícone (Emoji)</label>
+                    <input type="text" id="icone" placeholder="🎁">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="status">
+                        <option value="available">Disponível</option>
+                        <option value="priority">Prioritário</option>
+                        <option value="reserved">Reservado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Link Externo (opcional)</label>
+                    <input type="url" id="linkExterno" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Detalhes (um por linha)</label>
+                    <textarea id="detalhes" placeholder="Material: ...&#10;Tamanho: ...&#10;Cor: ..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Salvar</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="successMsg" class="success-msg">✓ Salvo com sucesso!</div>
+    
+    <script>
+        let presentes = [];
+        
+        function verificarAutenticacao() {
+            if (!sessionStorage.getItem('admin_authenticated')) {
+                window.location.href = '/admin/login.html';
+            }
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('admin_authenticated');
+            window.location.href = '/admin/login.html';
+        }
+        
+        function mostrarMensagem(msg, isError = false) {
+            const msgDiv = document.getElementById('successMsg');
+            msgDiv.textContent = isError ? '❌ ' + msg : '✓ ' + msg;
+            msgDiv.style.backgroundColor = isError ? '#dc3545' : '#28a745';
+            msgDiv.style.display = 'block';
+            setTimeout(() => {
+                msgDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        async function carregarPresentes() {
+            try {
+                const response = await fetch('/.netlify/functions/get-presentes');
+                const data = await response.json();
+                presentes = data.presentes || [];
+                renderizarPresentes();
+            } catch (error) {
+                console.error('Erro:', error);
+                mostrarMensagem('Erro ao carregar presentes', true);
+            }
+        }
+        
+        function renderizarPresentes() {
+            const grid = document.getElementById('presentesGrid');
+            if (!presentes.length) {
+                grid.innerHTML = '<div style="text-align: center; padding: 2rem;">Nenhum presente cadastrado</div>';
+                return;
+            }
+            
+            grid.innerHTML = presentes.map(p => `
+                <div class="presente-card">
+                    <div class="presente-header">
+                        <div>
+                            <div class="presente-nome">${p.icone || '🎁'} ${p.nome}</div>
+                            <div class="status-badge status-${p.status || 'available'}">
+                                ${p.status === 'priority' ? '⭐ Prioritário' : p.status === 'reserved' ? '🔒 Reservado' : '✅ Disponível'}
+                            </div>
+                        </div>
+                        <div class="presente-preco">R$ ${p.preco.toLocaleString('pt-BR')}</div>
+                    </div>
+                    <div class="presente-desc">${p.descricao.substring(0, 100)}${p.descricao.length > 100 ? '...' : ''}</div>
+                    <div class="card-actions">
+                        <button class="btn-warning" onclick="editarPresente(${p.id})">✏️ Editar</button>
+                        <button class="btn-danger" onclick="excluirPresente(${p.id})">🗑️ Excluir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function abrirModalNovo() {
+            document.getElementById('modalTitle').textContent = 'Novo Presente';
+            document.getElementById('presenteForm').reset();
+            document.getElementById('id').value = '';
+            document.getElementById('modal').style.display = 'block';
+        }
+        
+        function editarPresente(id) {
+            const presente = presentes.find(p => p.id === id);
+            if (!presente) return;
+            
+            document.getElementById('modalTitle').textContent = 'Editar Presente';
+            document.getElementById('id').value = presente.id;
+            document.getElementById('nome').value = presente.nome;
+            document.getElementById('categoria').value = presente.categoria || '';
+            document.getElementById('preco').value = presente.preco;
+            document.getElementById('descricao').value = presente.descricao;
+            document.getElementById('imagem').value = presente.imagem || '';
+            document.getElementById('icone').value = presente.icone || '';
+            document.getElementById('status').value = presente.status || 'available';
+            document.getElementById('linkExterno').value = presente.linkExterno || '';
+            document.getElementById('detalhes').value = (presente.detalhes || []).join('\n');
+            
+            document.getElementById('modal').style.display = 'block';
+        }
+        
+        async function excluirPresente(id) {
+            if (!confirm('Tem certeza que deseja excluir este presente?')) return;
+            
+            try {
+                const response = await fetch('/.netlify/functions/update-presentes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'delete', id })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    mostrarMensagem('Presente excluído com sucesso!');
+                    carregarPresentes();
+                } else {
+                    mostrarMensagem('Erro ao excluir', true);
+                }
+            } catch (error) {
+                mostrarMensagem('Erro ao excluir', true);
+            }
+        }
+        
+        function fecharModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+        
+        document.getElementById('presenteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = parseInt(document.getElementById('id').value);
+            const presente = {
+                id: id || Date.now(),
+                nome: document.getElementById('nome').value,
+                categoria: document.getElementById('categoria').value,
+                preco: parseFloat(document.getElementById('preco').value),
+                descricao: document.getElementById('descricao').value,
+                imagem: document.getElementById('imagem').value || null,
+                icone: document.getElementById('icone').value || '🎁',
+                status: document.getElementById('status').value,
+                linkExterno: document.getElementById('linkExterno').value || null,
+                detalhes: document.getElementById('detalhes').value.split('\n').filter(d => d.trim())
+            };
+            
+            const action = id ? 'update' : 'create';
+            
+            try {
+                const response = await fetch('/.netlify/functions/update-presentes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, presente })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    mostrarMensagem('Presente salvo com sucesso!');
+                    fecharModal();
+                    carregarPresentes();
+                } else {
+                    mostrarMensagem('Erro ao salvar', true);
+                }
+            } catch (error) {
+                mostrarMensagem('Erro ao salvar', true);
+            }
+        });
+        
+        window.onclick = (event) => {
+            if (event.target === document.getElementById('modal')) {
+                fecharModal();
+            }
+        };
+        
+        verificarAutenticacao();
+        carregarPresentes();
+    </script>
+</body>
+</html>
