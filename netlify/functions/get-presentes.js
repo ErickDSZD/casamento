@@ -13,25 +13,31 @@ exports.handler = async (event) => {
     }
     
     try {
-        const dataPath = path.resolve(process.cwd(), 'data', 'presentes.json');
+        // Busca o JSON público (já que ele está acessível)
+        const siteUrl = process.env.URL || 'https://casamentoge.netlify.app';
+        const response = await fetch(`${siteUrl}/data/presentes.json`);
         
-        console.log('Tentando ler arquivo em:', dataPath);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
         
-        const data = await fs.readFile(dataPath, 'utf8');
-        const presentes = JSON.parse(data);
+        const data = await response.text();
         
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify(presentes)
+            body: data
         };
     } catch (error) {
-        console.error('Erro ao ler presentes:', error);
-        console.error('Caminho tentado:', dataPath);
+        console.error('Erro:', error);
+        
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: 'Erro ao carregar dados', details: error.message })
+            body: JSON.stringify({ 
+                error: 'Erro ao carregar dados',
+                details: error.message
+            })
         };
     }
 };
