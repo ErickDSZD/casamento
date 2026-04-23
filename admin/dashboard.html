@@ -3,136 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Presentes</title>
+    <title>Admin Dashboard — Lista de Presentes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
+        rel="stylesheet" />
     <style>
-        * {
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
+
+        :root {
+            --rosa: #D63384;
+            --amarelo: #F3C623;
+            --laranja: #F05A28;
+            --terracota: #C85A2F;
+            --creme: #FDF6EE;
+            --creme-dark: #F5EBD8;
+            --marrom: #3A1F10;
+            --marrom-light: #6B3A22;
+            --branco: #FFFFFF;
+            --verde: #28a745;
+            --vermelho: #dc3545;
+            --azul: #17a2b8;
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Jost', sans-serif;
+        }
+
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
+            background: var(--creme);
+            color: var(--marrom);
+            font-family: var(--font-body);
+            font-weight: 300;
+            font-size: 1rem;
+            line-height: 1.75;
+            min-height: 100vh;
         }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+
+        /* Header */
+        .admin-header {
+            background: linear-gradient(135deg, var(--rosa) 0%, var(--laranja) 100%);
+            color: var(--branco);
             padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 20px rgba(58, 31, 16, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .header h1 {
-            font-size: 1.5rem;
+
+        .admin-header h1 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 400;
+            letter-spacing: -0.01em;
         }
+
+        .admin-header h1 small {
+            font-size: 0.8rem;
+            font-style: italic;
+            opacity: 0.9;
+            font-family: var(--font-body);
+        }
+
         .logout-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 99px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
         }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
         }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--branco);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            border: 1px solid rgba(58, 31, 16, 0.08);
+            box-shadow: 0 2px 8px rgba(58, 31, 16, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--rosa);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--marrom-light);
+            margin-top: 0.3rem;
+        }
+
+        /* Toolbar */
         .toolbar {
             margin-bottom: 2rem;
             display: flex;
             gap: 1rem;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
+
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--rosa) 0%, var(--laranja) 100%);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
+            padding: 0.75rem 1.8rem;
+            border-radius: 99px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
         }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.3);
+        }
+
         .btn-secondary {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.3rem;
+            background: var(--creme-dark);
+            color: var(--marrom);
+            border: 1px solid rgba(58, 31, 16, 0.15);
+            padding: 0.65rem 1.5rem;
+            border-radius: 99px;
             cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
         }
+
+        .btn-secondary:hover {
+            background: var(--creme);
+            border-color: var(--rosa);
+        }
+
         .btn-danger {
-            background: #dc3545;
+            background: var(--vermelho);
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.3rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
         }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: scale(1.02);
+        }
+
         .btn-warning {
-            background: #ffc107;
-            color: #333;
+            background: var(--amarelo);
+            color: var(--marrom);
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.3rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
         }
+
+        .btn-warning:hover {
+            background: #e0b020;
+            transform: scale(1.02);
+        }
+
+        /* Grid de Presentes */
         .presentes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 1.5rem;
         }
+
         .presente-card {
-            background: white;
-            border-radius: 0.5rem;
+            background: var(--branco);
+            border-radius: 20px;
             padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            box-shadow: 0 4px 12px rgba(58, 31, 16, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(58, 31, 16, 0.06);
+            position: relative;
         }
+
         .presente-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(58, 31, 16, 0.12);
         }
+
         .presente-header {
             display: flex;
             justify-content: space-between;
-            align-items: start;
+            align-items: flex-start;
             margin-bottom: 1rem;
         }
+
         .presente-nome {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #333;
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 400;
+            color: var(--marrom);
+            line-height: 1.2;
         }
+
         .presente-preco {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #28a745;
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--verde);
         }
+
         .status-badge {
             display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 500;
             margin-top: 0.5rem;
+            letter-spacing: 0.02em;
         }
-        .status-available { background: #d4edda; color: #155724; }
-        .status-priority { background: #fff3cd; color: #856404; }
-        .status-reserved { background: #f8d7da; color: #721c24; }
+
+        .status-available {
+            background: rgba(40, 167, 69, 0.12);
+            color: #1e7e34;
+        }
+
+        .status-priority {
+            background: rgba(243, 198, 35, 0.15);
+            color: #856404;
+        }
+
+        .status-reserved {
+            background: rgba(214, 51, 132, 0.1);
+            color: var(--rosa);
+        }
+
+        .presente-categoria {
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--terracota);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
         .presente-desc {
-            color: #666;
-            font-size: 0.9rem;
-            margin: 0.5rem 0;
+            color: var(--marrom-light);
+            font-size: 0.85rem;
+            margin: 0.75rem 0;
+            line-height: 1.5;
         }
+
         .card-actions {
             margin-top: 1rem;
             display: flex;
             gap: 0.5rem;
             justify-content: flex-end;
+            border-top: 1px solid rgba(58, 31, 16, 0.08);
+            padding-top: 1rem;
         }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -140,88 +327,192 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(58, 31, 16, 0.6);
+            backdrop-filter: blur(4px);
             z-index: 1000;
             overflow-y: auto;
         }
+
         .modal-content {
-            background: white;
+            background: var(--branco);
             margin: 2rem auto;
             padding: 2rem;
-            border-radius: 0.5rem;
-            max-width: 600px;
+            border-radius: 24px;
+            max-width: 650px;
             position: relative;
+            box-shadow: 0 32px 48px rgba(58, 31, 16, 0.2);
         }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--creme-dark);
         }
+
+        .modal-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--marrom);
+        }
+
         .close {
-            font-size: 1.5rem;
+            font-size: 2rem;
             cursor: pointer;
-            color: #999;
+            color: var(--marrom-light);
+            transition: color 0.2s;
+            line-height: 1;
         }
+
+        .close:hover {
+            color: var(--rosa);
+        }
+
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: #333;
+            color: var(--marrom);
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
         }
-        .form-group input, .form-group select, .form-group textarea {
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 0.3rem;
+            padding: 0.75rem;
+            border: 1.5px solid rgba(58, 31, 16, 0.12);
+            border-radius: 12px;
             font-size: 0.9rem;
+            font-family: var(--font-body);
+            background: var(--creme);
+            transition: all 0.3s;
         }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--rosa);
+            background: var(--branco);
+            box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
+        }
+
         .form-group textarea {
             min-height: 100px;
+            resize: vertical;
         }
-        .detalhes-item {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .success-msg {
+
+        /* Toast Message */
+        .toast-msg {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #28a745;
+            bottom: 30px;
+            right: 30px;
+            background: var(--verde);
             color: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
             z-index: 1100;
             display: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease;
         }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Loading */
+        .loading-state {
+            text-align: center;
+            padding: 4rem;
+            color: var(--marrom-light);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            .presentes-grid { grid-template-columns: 1fr; }
+            .container {
+                padding: 1rem;
+            }
+            .presentes-grid {
+                grid-template-columns: 1fr;
+            }
+            .admin-header h1 {
+                font-size: 1.2rem;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-primary, .btn-secondary {
+                text-align: center;
+                justify-content: center;
+            }
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🎁 Gerenciador de Presentes</h1>
-        <button class="logout-btn" onclick="logout()">Sair</button>
+    <div class="admin-header">
+        <h1>🎁 Gerenciador de Presentes <small>— Giovanna & Erick</small></h1>
+        <button class="logout-btn" onclick="logout()">✕ Sair</button>
     </div>
     
     <div class="container">
+        <!-- Stats -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-card">
+                <div class="stat-icon">🎁</div>
+                <div class="stat-number" id="totalPresentes">0</div>
+                <div class="stat-label">Total de Presentes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-number" id="priorityCount">0</div>
+                <div class="stat-label">Prioritários</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-number" id="availableCount">0</div>
+                <div class="stat-label">Disponíveis</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-number" id="totalValue">R$ 0</div>
+                <div class="stat-label">Valor Total</div>
+            </div>
+        </div>
+
         <div class="toolbar">
-            <button class="btn-primary" onclick="abrirModalNovo()">+ Novo Presente</button>
-            <button class="btn-secondary" onclick="carregarPresentes()">⟳ Atualizar</button>
+            <button class="btn-primary" onclick="abrirModalNovo()">✨ + Novo Presente</button>
+            <button class="btn-secondary" onclick="carregarPresentes()">⟳ Atualizar Lista</button>
         </div>
         
         <div id="presentesGrid" class="presentes-grid">
-            <div style="text-align: center; padding: 2rem;">Carregando...</div>
+            <div class="loading-state">✨ Carregando presentes...</div>
         </div>
     </div>
     
-    <!-- Modal Form -->
+    <!-- Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -231,81 +522,94 @@
             <form id="presenteForm">
                 <input type="hidden" id="id">
                 <div class="form-group">
-                    <label>Nome *</label>
+                    <label>🏷️ Nome *</label>
                     <input type="text" id="nome" required>
                 </div>
                 <div class="form-group">
-                    <label>Categoria</label>
+                    <label>📂 Categoria</label>
                     <select id="categoria">
-                        <option value="cozinha">Cozinha</option>
-                        <option value="quarto">Quarto</option>
-                        <option value="sala">Sala</option>
-                        <option value="banheiro">Banheiro</option>
-                        <option value="eletronicos">Eletrônicos</option>
-                        <option value="viagem">Viagem</option>
+                        <option value="cozinha">🍳 Cozinha</option>
+                        <option value="quarto">🛏️ Quarto</option>
+                        <option value="sala">🛋️ Sala</option>
+                        <option value="banheiro">🚿 Banheiro</option>
+                        <option value="eletronicos">📱 Eletrônicos</option>
+                        <option value="viagem">✈️ Viagem</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Preço (R$)</label>
+                    <label>💰 Preço (R$)</label>
                     <input type="number" id="preco" step="0.01" required>
                 </div>
                 <div class="form-group">
-                    <label>Descrição</label>
+                    <label>📝 Descrição</label>
                     <textarea id="descricao" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label>URL da Imagem</label>
+                    <label>🖼️ URL da Imagem</label>
                     <input type="text" id="imagem" placeholder="/assets/images/imagem.jpg">
                 </div>
                 <div class="form-group">
-                    <label>Ícone (Emoji)</label>
+                    <label>😊 Ícone (Emoji)</label>
                     <input type="text" id="icone" placeholder="🎁">
                 </div>
                 <div class="form-group">
-                    <label>Status</label>
+                    <label>🏷️ Status</label>
                     <select id="status">
-                        <option value="available">Disponível</option>
-                        <option value="priority">Prioritário</option>
-                        <option value="reserved">Reservado</option>
+                        <option value="available">✅ Disponível</option>
+                        <option value="priority">⭐ Prioritário</option>
+                        <option value="reserved">🔒 Reservado</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Link Externo (opcional)</label>
+                    <label>🔗 Link Externo (opcional)</label>
                     <input type="url" id="linkExterno" placeholder="https://...">
                 </div>
                 <div class="form-group">
-                    <label>Detalhes (um por linha)</label>
+                    <label>📋 Detalhes (um por linha)</label>
                     <textarea id="detalhes" placeholder="Material: ...&#10;Tamanho: ...&#10;Cor: ..."></textarea>
                 </div>
-                <button type="submit" class="btn-primary">Salvar</button>
+                <button type="submit" class="btn-primary" style="width: 100%;">💾 Salvar Presente</button>
             </form>
         </div>
     </div>
     
-    <div id="successMsg" class="success-msg">✓ Salvo com sucesso!</div>
+    <div id="toastMsg" class="toast-msg"></div>
     
     <script>
         let presentes = [];
         
-        // function verificarAutenticacao() {
-        //     if (!sessionStorage.getItem('admin_authenticated')) {
-        //         window.location.href = '/admin/';
-        //     }
-        // }
+        function verificarAutenticacao() {
+            if (!sessionStorage.getItem('admin_authenticated')) {
+                window.location.href = '/admin/';
+            }
+        }
         
         function logout() {
             sessionStorage.removeItem('admin_authenticated');
+            sessionStorage.removeItem('admin_login_time');
             window.location.href = '/admin/';
         }
         
         function mostrarMensagem(msg, isError = false) {
-            const msgDiv = document.getElementById('successMsg');
-            msgDiv.textContent = isError ? '❌ ' + msg : '✓ ' + msg;
-            msgDiv.style.backgroundColor = isError ? '#dc3545' : '#28a745';
-            msgDiv.style.display = 'block';
+            const toast = document.getElementById('toastMsg');
+            toast.textContent = isError ? '❌ ' + msg : '✓ ' + msg;
+            toast.style.backgroundColor = isError ? '#dc3545' : '#28a745';
+            toast.style.display = 'block';
             setTimeout(() => {
-                msgDiv.style.display = 'none';
+                toast.style.display = 'none';
             }, 3000);
+        }
+        
+        function atualizarStats() {
+            const total = presentes.length;
+            const priority = presentes.filter(p => p.status === 'priority').length;
+            const available = presentes.filter(p => p.status === 'available').length;
+            const totalValue = presentes.reduce((sum, p) => sum + (p.preco || 0), 0);
+            
+            document.getElementById('totalPresentes').textContent = total;
+            document.getElementById('priorityCount').textContent = priority;
+            document.getElementById('availableCount').textContent = available;
+            document.getElementById('totalValue').innerHTML = `R$ ${totalValue.toLocaleString('pt-BR')}`;
         }
         
         async function carregarPresentes() {
@@ -313,6 +617,7 @@
                 const response = await fetch('/.netlify/functions/get-presentes');
                 const data = await response.json();
                 presentes = data.presentes || [];
+                atualizarStats();
                 renderizarPresentes();
             } catch (error) {
                 console.error('Erro:', error);
@@ -323,7 +628,7 @@
         function renderizarPresentes() {
             const grid = document.getElementById('presentesGrid');
             if (!presentes.length) {
-                grid.innerHTML = '<div style="text-align: center; padding: 2rem;">Nenhum presente cadastrado</div>';
+                grid.innerHTML = '<div class="loading-state">🎀 Nenhum presente cadastrado ainda. Clique em "Novo Presente" para começar!</div>';
                 return;
             }
             
@@ -331,14 +636,15 @@
                 <div class="presente-card">
                     <div class="presente-header">
                         <div>
+                            <div class="presente-categoria">${getCategoriaIcon(p.categoria)} ${p.categoria || 'geral'}</div>
                             <div class="presente-nome">${p.icone || '🎁'} ${p.nome}</div>
                             <div class="status-badge status-${p.status || 'available'}">
                                 ${p.status === 'priority' ? '⭐ Prioritário' : p.status === 'reserved' ? '🔒 Reservado' : '✅ Disponível'}
                             </div>
                         </div>
-                        <div class="presente-preco">R$ ${p.preco.toLocaleString('pt-BR')}</div>
+                        <div class="presente-preco">R$ ${(p.preco || 0).toLocaleString('pt-BR')}</div>
                     </div>
-                    <div class="presente-desc">${p.descricao.substring(0, 100)}${p.descricao.length > 100 ? '...' : ''}</div>
+                    <div class="presente-desc">${p.descricao ? p.descricao.substring(0, 100) : ''}${p.descricao && p.descricao.length > 100 ? '...' : ''}</div>
                     <div class="card-actions">
                         <button class="btn-warning" onclick="editarPresente(${p.id})">✏️ Editar</button>
                         <button class="btn-danger" onclick="excluirPresente(${p.id})">🗑️ Excluir</button>
@@ -347,8 +653,20 @@
             `).join('');
         }
         
+        function getCategoriaIcon(categoria) {
+            const icons = {
+                cozinha: '🍳',
+                quarto: '🛏️',
+                sala: '🛋️',
+                banheiro: '🚿',
+                eletronicos: '📱',
+                viagem: '✈️'
+            };
+            return icons[categoria] || '🎁';
+        }
+        
         function abrirModalNovo() {
-            document.getElementById('modalTitle').textContent = 'Novo Presente';
+            document.getElementById('modalTitle').textContent = '✨ Novo Presente';
             document.getElementById('presenteForm').reset();
             document.getElementById('id').value = '';
             document.getElementById('modal').style.display = 'block';
@@ -358,7 +676,7 @@
             const presente = presentes.find(p => p.id === id);
             if (!presente) return;
             
-            document.getElementById('modalTitle').textContent = 'Editar Presente';
+            document.getElementById('modalTitle').textContent = '✏️ Editar Presente';
             document.getElementById('id').value = presente.id;
             document.getElementById('nome').value = presente.nome;
             document.getElementById('categoria').value = presente.categoria || '';

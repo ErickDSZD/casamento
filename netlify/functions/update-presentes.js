@@ -1,6 +1,3 @@
-const fs = require('fs').promises;
-const path = require('path');
-
 exports.handler = async (event) => {
     const headers = {
         'Access-Control-Allow-Origin': '*',
@@ -22,11 +19,16 @@ exports.handler = async (event) => {
     
     try {
         const { action, presente, id } = JSON.parse(event.body);
-        const dataPath = path.resolve(__dirname, '../../data/presentes.json');
         
-        // Ler dados atuais
-        const data = await fs.readFile(dataPath, 'utf8');
-        let jsonData = JSON.parse(data);
+        // Buscar dados atuais via fetch público
+        const siteUrl = process.env.URL || 'https://casamentoge.netlify.app';
+        const response = await fetch(`${siteUrl}/data/presentes.json`);
+        
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar dados: ${response.status}`);
+        }
+        
+        let jsonData = await response.json();
         
         // Ações
         if (action === 'create') {
@@ -40,20 +42,25 @@ exports.handler = async (event) => {
             jsonData.presentes = jsonData.presentes.filter(p => p.id !== id);
         }
         
-        // Salvar dados
-        await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2));
-        
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ success: true })
+            body: JSON.stringify({ 
+                success: true,
+                data: jsonData,
+                warning: 'Dados atualizados apenas na memória. Para persistência, configure um banco de dados.'
+            })
         };
+        
     } catch (error) {
         console.error('Erro:', error);
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: 'Erro ao atualizar dados' })
+            body: JSON.stringify({ 
+                error: 'Erro ao atualizar dados',
+                details: error.message 
+            })
         };
     }
 };
