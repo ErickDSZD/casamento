@@ -13,7 +13,10 @@ exports.handler = async (event) => {
     }
     
     try {
-        const dataPath = path.resolve(__dirname, '../../data/presentes.json');
+        const dataPath = path.resolve(process.cwd(), 'data', 'presentes.json');
+        
+        console.log('Tentando ler arquivo em:', dataPath);
+        
         const data = await fs.readFile(dataPath, 'utf8');
         const presentes = JSON.parse(data);
         
@@ -24,10 +27,11 @@ exports.handler = async (event) => {
         };
     } catch (error) {
         console.error('Erro ao ler presentes:', error);
+        console.error('Caminho tentado:', dataPath);
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: 'Erro ao carregar dados' })
+            body: JSON.stringify({ error: 'Erro ao carregar dados', details: error.message })
         };
     }
 };

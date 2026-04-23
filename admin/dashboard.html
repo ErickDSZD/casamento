@@ -287,15 +287,15 @@
     <script>
         let presentes = [];
         
-        function verificarAutenticacao() {
-            if (!sessionStorage.getItem('admin_authenticated')) {
-                window.location.href = '/admin/login.html';
-            }
-        }
+        // function verificarAutenticacao() {
+        //     if (!sessionStorage.getItem('admin_authenticated')) {
+        //         window.location.href = '/admin/';
+        //     }
+        // }
         
         function logout() {
             sessionStorage.removeItem('admin_authenticated');
-            window.location.href = '/admin/login.html';
+            window.location.href = '/admin/';
         }
         
         function mostrarMensagem(msg, isError = false) {
