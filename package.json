@@ -10,6 +10,5 @@
     "node-fetch": "^2.7.0"
   },
   "keywords": ["casamento", "presentes", "mercado-pago"],
-  "author": "Erick Zaniratto Duarte",
-  "license": "MIT"
+  "author": "Erick Zaniratto Duarte"
 }
