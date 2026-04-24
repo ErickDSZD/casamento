@@ -322,11 +322,12 @@
       font-family: var(--font-body);
       background: white;
       transition: all 0.3s ease;
+      min-height: 48px;
     }
 
-    .mp-card-field:focus-within {
-      border-color: var(--rosa);
-      box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
+    .mp-card-field iframe {
+      width: 100%;
+      border: none;
     }
 
     .mp-card-field.valid {
@@ -335,6 +336,23 @@
 
     .mp-card-field.invalid {
       border-color: #ef4444;
+    }
+
+    .cardholder-name-input,
+    .cpf-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(58, 31, 16, 0.2);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      transition: all 0.3s ease;
+    }
+
+    .cardholder-name-input:focus,
+    .cpf-input:focus {
+      outline: none;
+      border-color: var(--rosa);
+      box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
     }
 
     .form-group {
@@ -572,11 +590,6 @@
           </div>
 
           <div class="form-group">
-            <label>Nome no cartão</label>
-            <input type="text" id="cardholderName" placeholder="Como está no cartão">
-          </div>
-
-          <div class="form-group">
             <label>Data de validade</label>
             <div id="form-checkout__expirationDate" class="mp-card-field"></div>
           </div>
@@ -587,8 +600,13 @@
           </div>
 
           <div class="form-group">
+            <label>Nome no cartão</label>
+            <input type="text" id="cardholderName" class="cardholder-name-input" placeholder="Como está no cartão">
+          </div>
+
+          <div class="form-group">
             <label>CPF do titular</label>
-            <input type="text" id="docNumber" placeholder="123.456.789-00">
+            <input type="text" id="docNumber" class="cpf-input" placeholder="123.456.789-00">
           </div>
 
           <button class="btn-pagar" id="creditPaymentButton">Pagar com cartão de crédito</button>
@@ -598,11 +616,6 @@
           <div class="form-group">
             <label>Número do cartão</label>
             <div id="debit-form-checkout__cardNumber" class="mp-card-field"></div>
-          </div>
-
-          <div class="form-group">
-            <label>Nome no cartão</label>
-            <input type="text" id="debitCardholderName" placeholder="Como está no cartão">
           </div>
 
           <div class="form-group">
@@ -616,8 +629,13 @@
           </div>
 
           <div class="form-group">
+            <label>Nome no cartão</label>
+            <input type="text" id="debitCardholderName" class="cardholder-name-input" placeholder="Como está no cartão">
+          </div>
+
+          <div class="form-group">
             <label>CPF do titular</label>
-            <input type="text" id="debitDocNumber" placeholder="123.456.789-00">
+            <input type="text" id="debitDocNumber" class="cpf-input" placeholder="123.456.789-00">
           </div>
 
           <button class="btn-pagar" id="debitPaymentButton">Pagar com cartão de débito</button>
@@ -940,15 +958,16 @@
     let mp = null;
     let cardTokenCreated = false;
 
-    // Inicializar o SDK do Mercado Pago de forma correta
+    let creditCardFields = null;
+    let debitCardFields = null;
+
+    // Inicializar SDK do Mercado Pago v2
     async function initMercadoPago() {
       return new Promise((resolve, reject) => {
-        // Aguardar o SDK carregar
         if (typeof MercadoPago !== 'undefined') {
           mp = new MercadoPago('APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123');
           resolve(mp);
         } else {
-          // Se o SDK não estiver carregado, aguardar
           const checkInterval = setInterval(() => {
             if (typeof MercadoPago !== 'undefined') {
               clearInterval(checkInterval);
@@ -956,8 +975,131 @@
               resolve(mp);
             }
           }, 100);
+
+          setTimeout(() => {
+            clearInterval(checkInterval);
+            reject(new Error('Timeout loading Mercado Pago SDK'));
+          }, 10000);
         }
       });
+    }
+
+    // Inicializar campos de CRÉDITO
+    async function initCreditCardFields() {
+      if (!mp) {
+        await initMercadoPago();
+      }
+
+      // Limpar campos anteriores se existirem
+      if (creditCardFields) {
+        try {
+          creditCardFields.unmount();
+        } catch (e) { }
+        creditCardFields = null;
+      }
+
+      // Aguardar os containers existirem no DOM
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Criar os campos do cartão
+      creditCardFields = mp.fields({
+        cardNumber: {
+          id: 'form-checkout__cardNumber',
+          placeholder: '1234 5678 9012 3456'
+        },
+        expirationDate: {
+          id: 'form-checkout__expirationDate',
+          placeholder: 'MM/YY'
+        },
+        securityCode: {
+          id: 'form-checkout__securityCode',
+          placeholder: '123'
+        }
+      });
+
+      // Montar os campos
+      try {
+        await creditCardFields.mount();
+        console.log('Campos de crédito montados com sucesso');
+
+        // Adicionar listeners para validação visual
+        creditCardFields.on('validityChange', (event) => {
+          const fieldId = event.field;
+          const container = document.getElementById(`form-checkout__${fieldId}`);
+          if (container) {
+            if (event.isValid) {
+              container.classList.add('valid');
+              container.classList.remove('invalid');
+            } else {
+              container.classList.add('invalid');
+              container.classList.remove('valid');
+            }
+          }
+        });
+
+      } catch (error) {
+        console.error('Erro ao montar campos de crédito:', error);
+        throw error;
+      }
+    }
+
+    // Inicializar campos de DÉBITO
+    async function initDebitCardFields() {
+      if (!mp) {
+        await initMercadoPago();
+      }
+
+      // Limpar campos anteriores se existirem
+      if (debitCardFields) {
+        try {
+          debitCardFields.unmount();
+        } catch (e) { }
+        debitCardFields = null;
+      }
+
+      // Aguardar os containers existirem no DOM
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Criar os campos do cartão
+      debitCardFields = mp.fields({
+        cardNumber: {
+          id: 'debit-form-checkout__cardNumber',
+          placeholder: '1234 5678 9012 3456'
+        },
+        expirationDate: {
+          id: 'debit-form-checkout__expirationDate',
+          placeholder: 'MM/YY'
+        },
+        securityCode: {
+          id: 'debit-form-checkout__securityCode',
+          placeholder: '123'
+        }
+      });
+
+      // Montar os campos
+      try {
+        await debitCardFields.mount();
+        console.log('Campos de débito montados com sucesso');
+
+        // Adicionar listeners para validação visual
+        debitCardFields.on('validityChange', (event) => {
+          const fieldId = event.field;
+          const container = document.getElementById(`debit-form-checkout__${fieldId}`);
+          if (container) {
+            if (event.isValid) {
+              container.classList.add('valid');
+              container.classList.remove('invalid');
+            } else {
+              container.classList.add('invalid');
+              container.classList.remove('valid');
+            }
+          }
+        });
+
+      } catch (error) {
+        console.error('Erro ao montar campos de débito:', error);
+        throw error;
+      }
     }
 
     // Função para detectar a bandeira do cartão
@@ -997,8 +1139,6 @@
     }
 
     // Variáveis para controlar os campos de cartão
-    let creditCardFields = null;
-    let debitCardFields = null;
     let currentPaymentMethod = 'credit';
 
     // Inicializar os campos do cartão de CRÉDITO
@@ -1087,7 +1227,7 @@
 
     // Processar pagamento com cartão de crédito (versão corrigida)
     async function processCreditPayment() {
-      const cardholderName = document.getElementById('cardholderName').value;
+      const cardholderName = document.getElementById('cardholderName').value.trim();
       const docNumber = document.getElementById('docNumber').value;
 
       if (!cardholderName) {
@@ -1101,10 +1241,15 @@
         return;
       }
 
+      if (!creditCardFields) {
+        showToast('Sistema de pagamento não inicializado. Tente novamente.', 'error');
+        return;
+      }
+
       showToast('🔄 Validando dados do cartão...', 'info');
 
       try {
-        // Obter os dados dos campos do cartão
+        // Criar token usando os campos do cartão
         const cardToken = await creditCardFields.createCardToken({
           cardholderName: cardholderName,
           identificationType: 'CPF',
@@ -1114,9 +1259,16 @@
         console.log('Token gerado:', cardToken.id);
         showToast('🔄 Processando pagamento...', 'info');
 
-        // Detectar bandeira (você pode obter do campo também)
-        const cardNumberElement = document.getElementById('form-checkout__cardNumber');
-        const cardBrand = await creditCardFields.getCardBrand();
+        // Obter a bandeira do cartão detectada
+        let cardBrand = 'visa';
+        try {
+          const cardInfo = await creditCardFields.getCardInfo();
+          cardBrand = cardInfo.cardNumber?.paymentMethod?.id || 'visa';
+        } catch (e) {
+          console.warn('Não foi possível detectar bandeira, usando fallback visa');
+        }
+
+        const paymentMethodId = getPaymentMethodId(cardBrand, false);
 
         const response = await fetch(`${API_BASE}/create-card-payment`, {
           method: 'POST',
@@ -1125,7 +1277,7 @@
             amount: currentPresente.preco,
             description: currentPresente.nome,
             token: cardToken.id,
-            paymentMethodId: cardBrand || 'visa',
+            paymentMethodId: paymentMethodId,
             installments: 1,
             docNumber: cleanCPF,
             payerEmail: `convidado_${Date.now()}@temp.com`,
@@ -1152,7 +1304,7 @@
         console.error('Erro detalhado:', error);
         let errorMessage = error.message;
 
-        if (error.message.includes('invalid')) {
+        if (error.message.includes('invalid') || error.message.includes('Invalid')) {
           errorMessage = 'Dados do cartão inválidos. Verifique o número, data e CVV.';
         } else if (error.message.includes('card number')) {
           errorMessage = 'Número do cartão inválido.';
@@ -1166,7 +1318,7 @@
 
     // Processar pagamento com cartão de débito
     async function processDebitPayment() {
-      const cardholderName = document.getElementById('debitCardholderName').value;
+      const cardholderName = document.getElementById('debitCardholderName').value.trim();
       const docNumber = document.getElementById('debitDocNumber').value;
 
       if (!cardholderName) {
@@ -1180,6 +1332,11 @@
         return;
       }
 
+      if (!debitCardFields) {
+        showToast('Sistema de pagamento não inicializado. Tente novamente.', 'error');
+        return;
+      }
+
       showToast('🔄 Processando pagamento...', 'info');
 
       try {
@@ -1189,7 +1346,15 @@
           identificationNumber: cleanCPF
         });
 
-        const cardBrand = await debitCardFields.getCardBrand();
+        console.log('Token gerado para débito:', cardToken.id);
+
+        let cardBrand = 'visa';
+        try {
+          const cardInfo = await debitCardFields.getCardInfo();
+          cardBrand = cardInfo.cardNumber?.paymentMethod?.id || 'visa';
+        } catch (e) { }
+
+        const paymentMethodId = getPaymentMethodId(cardBrand, true);
 
         const response = await fetch(`${API_BASE}/create-card-payment`, {
           method: 'POST',
@@ -1198,7 +1363,7 @@
             amount: currentPresente.preco,
             description: currentPresente.nome,
             token: cardToken.id,
-            paymentMethodId: `${cardBrand}_debit`,
+            paymentMethodId: paymentMethodId,
             installments: 1,
             docNumber: cleanCPF,
             payerEmail: `convidado_${Date.now()}@temp.com`,
@@ -1220,52 +1385,26 @@
         }
 
       } catch (error) {
-        console.error('Erro no pagamento:', error);
+        console.error('Erro no pagamento débito:', error);
         showToast(`❌ Erro: ${error.message}`, 'error');
       }
     }
 
-    // Desmontar campos ao trocar de método ou fechar modal
+    // Desmontar campos
     function unmountCardFields() {
       if (creditCardFields) {
-        creditCardFields.unmount();
+        try {
+          creditCardFields.unmount();
+        } catch (e) { }
         creditCardFields = null;
       }
       if (debitCardFields) {
-        debitCardFields.unmount();
+        try {
+          debitCardFields.unmount();
+        } catch (e) { }
         debitCardFields = null;
       }
     }
-
-    // Atualizar o switch de métodos de pagamento
-    document.querySelectorAll('.payment-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const method = btn.dataset.method;
-
-        document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        document.querySelectorAll('.payment-content').forEach(content => content.classList.remove('active'));
-        document.getElementById(`${method}Content`).classList.add('active');
-
-        // Desmontar campos antigos e montar novos
-        unmountCardFields();
-
-        if (method === 'credit') {
-          await initCreditCardFields();
-        } else if (method === 'debit') {
-          await initDebitCardFields();
-        } else if (method === 'pix') {
-          // Resetar o conteúdo PIX
-          const pixPlaceholder = document.getElementById('pixPlaceholder');
-          const pixGeneratedContent = document.getElementById('pixGeneratedContent');
-          if (pixPlaceholder && pixGeneratedContent) {
-            pixPlaceholder.style.display = 'block';
-            pixGeneratedContent.style.display = 'none';
-          }
-        }
-      });
-    });
 
     // Funções de formatação de campos
     function formatCardNumber(value) {
@@ -1454,19 +1593,33 @@
     // Função para aplicar validação em tempo real ao mudar de aba
     function setupPaymentMethodSwitchObserver() {
       const paymentButtons = document.querySelectorAll('.payment-btn');
-
       paymentButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-          const method = this.dataset.method;
+        btn.removeEventListener('click', () => { });
+        btn.addEventListener('click', async () => {
+          const method = btn.dataset.method;
 
-          // Pequeno delay para garantir que o DOM foi atualizado
-          setTimeout(() => {
-            if (method === 'credit') {
-              setupCreditCardFormatting();
-            } else if (method === 'debit') {
-              setupDebitCardFormatting();
+          document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          document.querySelectorAll('.payment-content').forEach(content => content.classList.remove('active'));
+          document.getElementById(`${method}Content`).classList.add('active');
+
+          // Desmontar campos antigos
+          unmountCardFields();
+
+          // Montar novos campos conforme o método selecionado
+          if (method === 'credit') {
+            await initCreditCardFields();
+          } else if (method === 'debit') {
+            await initDebitCardFields();
+          } else if (method === 'pix') {
+            const pixPlaceholder = document.getElementById('pixPlaceholder');
+            const pixGeneratedContent = document.getElementById('pixGeneratedContent');
+            if (pixPlaceholder && pixGeneratedContent) {
+              pixPlaceholder.style.display = 'block';
+              pixGeneratedContent.style.display = 'none';
             }
-          }, 100);
+          }
         });
       });
     }
