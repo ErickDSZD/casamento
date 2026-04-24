@@ -38,7 +38,7 @@
       "id": 3,
       "nome": "Teste",
       "categoria": "quarto",
-      "preco": 0.10,
+      "preco": 1,
       "descricao": "Teste",
       "imagem": "/assets/images/jogo-cama.jpg",
       "icone": "🛏️",

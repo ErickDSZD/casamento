@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
-    /* ── RESET & BASE ─────────────────────────────── */
+    /* RESET & BASE */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -43,7 +43,7 @@
     img { display: block; max-width: 100%; }
     a   { color: inherit; text-decoration: none; }
 
-    /* ── UTILITY ──────────────────────────────────── */
+    /* UTILITY */
     .container {
       width: min(1200px, 92%);
       margin-inline: auto;
@@ -68,7 +68,7 @@
       margin: 1.5rem auto;
     }
 
-    /* ── NAV ──────────────────────────────────────── */
+    /* NAV */
     .nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -127,7 +127,7 @@
       transition: transform .3s, opacity .3s;
     }
 
-    /* ── HERO ─────────────────────────────────────── */
+    /* HERO */
     .hero {
       min-height: 100dvh;
       display: grid;
@@ -252,7 +252,7 @@
     .petal:nth-child(3) { width:90px;height:60px; background:var(--laranja); bottom:25%; left:3%; animation-duration:20s; animation-delay:-12s; transform:rotate(-30deg); }
     .petal:nth-child(4) { width:50px;height:35px; background:var(--terracota); bottom:15%; right:5%; animation-duration:25s; animation-delay:-5s; transform:rotate(60deg); }
 
-    /* ── WELCOME ──────────────────────────────────── */
+    /* WELCOME */
     .welcome {
       padding: var(--section-pad) 0;
       text-align: center;
@@ -309,7 +309,7 @@
       line-height: 1;
     }
 
-    /* ── STORY ────────────────────────────────────── */
+    /* STORY */
     .story {
       padding: var(--section-pad) 0;
       background: var(--creme-dark);
@@ -426,7 +426,7 @@
       letter-spacing: .03em;
     }
 
-    /* ── GALLERY ──────────────────────────────────── */
+    /* GALLERY */
     .gallery {
       padding: var(--section-pad) 0;
     }
@@ -504,7 +504,7 @@
       text-transform: uppercase;
     }
 
-    /* ── COUNTDOWN ────────────────────────────────── */
+    /* COUNTDOWN */
     .countdown {
       padding: 5rem 0;
       background: linear-gradient(135deg, var(--marrom) 0%, #5A2A14 100%);
@@ -572,7 +572,7 @@
       opacity: .6;
     }
 
-    /* ── FOOTER ───────────────────────────────────── */
+    /* FOOTER */
     .footer {
       padding: 3rem 0;
       background: var(--creme-dark);
@@ -598,7 +598,7 @@
       letter-spacing: .4rem;
     }
 
-    /* ── ANIMATIONS ───────────────────────────────── */
+    /* ANIMATIONS */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -629,7 +629,7 @@
     .reveal-delay-2 { transition-delay: .2s; }
     .reveal-delay-3 { transition-delay: .35s; }
 
-    /* ── RESPONSIVE ───────────────────────────────── */
+    /* RESPONSIVE */
     @media (max-width: 900px) {
       .nav__links { display: none; }
       .nav__links.open {
@@ -774,49 +774,51 @@
           <h2 class="story__title">Como tudo <em>começou</em></h2>
 
           <p class="story__text">
-            Era uma tarde ensolarada de março de 2020 quando Giovanna e Erick se conheceram em uma
-            pequena livraria no centro da cidade. Ele procurava um livro de poesia; ela
-            trabalhava ali aos fins de semana. O acaso — ou o destino — os colocou lado a lado
-            na mesma prateleira.
+            Conheci a Giovanna em 2022, quando começamos a estudar na mesma escola e, ainda por cima, na mesma sala. 
+            Depois de um tempo, passamos a conversar e nos aproximar mais. Foi então que começamos a nos apaixonar 
+            e a planejar nossa vida. Naquela época, tínhamos 15 anos, mas já falávamos que um dia iríamos casar — 
+            e esse sempre foi o nosso plano.
           </p>
 
           <blockquote class="story__quote">
-            "Eu soube que era especial quando ela citou Drummond de cor, com os olhos fechados."
+            “Desde o início, sabíamos que era para sempre. Deus nos uniu com um propósito.”
           </blockquote>
 
           <p class="story__text">
-            Depois de meses de conversas, passeios ao entardecer e muitas xícaras de café,
-            Erick pediu Giovanna em namoro numa noite de dezembro, com estrelas no céu e guitarras
-            ao fundo. Desde então, cada dia é uma nova página dessa história linda.
+            Começamos a namorar oficialmente em 21 de março de 2023, mas foi em 13 de novembro de 2022 que, 
+            de coração, já tínhamos a intenção de namorar e casar. Giovanna sempre me falou sobre Deus 
+            e me ensinou cada coisa necessária para a fé cristã. Foi assim que comecei a frequentar a igreja, 
+            e, após um ano, Deus me chamou nas águas do santo batismo. Sou grato a ela por tudo o que fez por mim, 
+            pelo nosso amor e por nos entendermos tão bem.
           </p>
 
           <div class="timeline" role="list" aria-label="Linha do tempo do casal">
             <div class="timeline__item" role="listitem">
-              <span class="timeline__year">2020</span>
+              <span class="timeline__year">2022</span>
               <div class="timeline__event">
-                <strong>Primeiro encontro</strong>
-                Numa livraria, entre livros e poesia.
+                <strong>Nos conhecemos</strong>
+                Na mesma sala da escola. A amizade virou amor.
               </div>
             </div>
             <div class="timeline__item" role="listitem">
-              <span class="timeline__year">2021</span>
+              <span class="timeline__year">13/11/2022</span>
               <div class="timeline__event">
-                <strong>Primeiro aniversário juntos</strong>
-                Uma viagem surpresa para o litoral.
+                <strong>A intenção</strong>
+                Já sabíamos: namorar e casar.
               </div>
             </div>
             <div class="timeline__item" role="listitem">
-              <span class="timeline__year">2024</span>
+              <span class="timeline__year">21/03/2023</span>
               <div class="timeline__event">
-                <strong>O pedido</strong>
-                Sob as luzes de Paris, ele abriu a caixinha.
+                <strong>Namoro oficial</strong>
+                Um sim que veio do coração.
               </div>
             </div>
             <div class="timeline__item" role="listitem">
               <span class="timeline__year">2026</span>
               <div class="timeline__event">
                 <strong>O grande dia ♡</strong>
-                14 de junho, para sempre.
+                21 de novembro — para sempre.
               </div>
             </div>
           </div>
@@ -911,13 +913,13 @@
 
   <!-- ░░ JS ░░ -->
   <script>
-    /* ── NAV scroll ── */
+    /* NAV scroll */
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 40);
     });
 
-    /* ── Mobile menu ── */
+    /* Mobile menu */
     const toggle = document.getElementById('navToggle');
     const links  = document.getElementById('navLinks');
     toggle.addEventListener('click', () => {
@@ -940,14 +942,14 @@
       toggle.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
     }));
 
-    /* ── Scroll reveal ── */
+    /* Scroll reveal */
     const revealEls = document.querySelectorAll('.reveal');
     const observer  = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
     }, { threshold: 0.12 });
     revealEls.forEach(el => observer.observe(el));
 
-    /* ── Countdown ── */
+    /* Countdown */
     const target = new Date("2026-11-21T18:00:00");
     function updateCountdown() {
       const diff = target - Date.now();

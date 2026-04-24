@@ -26,9 +26,10 @@ exports.handler = async (event, context) => {
       token, 
       paymentMethodId,
       installments = 1,
-      payerEmail,
       docNumber,
-      cardBrand  // ← Receber a bandeira
+      payerEmail,
+      cardBrand,
+      paymentType = 'credit'
     } = JSON.parse(event.body);
     
     const accessToken = process.env.MP_ACCESS_TOKEN_PRODUCTION;
@@ -37,33 +38,15 @@ exports.handler = async (event, context) => {
       throw new Error('Access Token não configurado');
     }
 
-    // Mapeamento de payment_method_id válidos
-    const validPaymentMethods = {
-      visa: 'visa',
-      master: 'master',
-      amex: 'amex',
-      elo: 'elo',
-      hipercard: 'hipercard',
-      diners: 'diners',
-      visa_debit: 'visa_debit',
-      master_debit: 'master_debit'
-    };
-
-    // Validar o payment_method_id
-    let finalPaymentMethodId = paymentMethodId;
-    if (!validPaymentMethods[paymentMethodId]) {
-      console.warn(`Payment method ${paymentMethodId} inválido, usando fallback para visa`);
-      finalPaymentMethodId = 'visa';
-    }
-
+    // Preparar dados do pagamento conforme documentação do Checkout Transparente
     const paymentData = {
       transaction_amount: parseFloat(amount),
       description: description,
-      payment_method_id: finalPaymentMethodId,
+      payment_method_id: paymentMethodId,
       token: token,
       installments: installments,
       payer: {
-        email: payerEmail || 'convidado@casamento.com',
+        email: payerEmail,
         identification: {
           type: 'CPF',
           number: docNumber.replace(/\D/g, '')
@@ -71,19 +54,23 @@ exports.handler = async (event, context) => {
       },
       metadata: {
         presente_nome: description,
-        payment_type: 'card',
-        card_brand: cardBrand || 'unknown'
+        card_brand: cardBrand,
+        payment_type: paymentType
       }
     };
 
-    // Gerar chave de idempotência
-    const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}-${description.replace(/\s/g, '')}`;
+    // Adicionar campos específicos para débito se necessário
+    if (paymentType === 'debit') {
+      paymentData.transaction_type = 'debit';
+    }
 
-    console.log('Criando pagamento com cartão:', { 
+    const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+
+    console.log('Enviando pagamento:', { 
       amount, 
-      description, 
-      paymentMethodId: finalPaymentMethodId,
-      cardBrand 
+      paymentMethodId,
+      cardBrand,
+      paymentType
     });
 
     const response = await fetch('https://api.mercadopago.com/v1/payments', {
@@ -99,11 +86,18 @@ exports.handler = async (event, context) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Erro Mercado Pago:', data);
+      console.error('Erro detalhado Mercado Pago:', data);
+      
+      // Mensagens de erro mais amigáveis
+      if (data.status === 400) {
+        const errorMessage = data.cause?.[0]?.description || data.message;
+        throw new Error(`Dados inválidos: ${errorMessage}`);
+      }
+      
       throw new Error(data.message || 'Erro ao processar pagamento');
     }
 
-    console.log('Pagamento com cartão criado:', data.id, 'Status:', data.status);
+    console.log('Pagamento criado com sucesso:', data.id, 'Status:', data.status);
 
     return {
       statusCode: 200,
@@ -112,7 +106,8 @@ exports.handler = async (event, context) => {
         success: true,
         paymentId: data.id,
         status: data.status,
-        statusDetail: data.status_detail
+        statusDetail: data.status_detail,
+        paymentType: data.payment_type_id
       })
     };
 
