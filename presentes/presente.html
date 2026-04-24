@@ -322,11 +322,12 @@
       font-family: var(--font-body);
       background: white;
       transition: all 0.3s ease;
+      min-height: 48px;
     }
 
-    .mp-card-field:focus-within {
-      border-color: var(--rosa);
-      box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
+    .mp-card-field iframe {
+      width: 100%;
+      border: none;
     }
 
     .mp-card-field.valid {
@@ -335,6 +336,23 @@
 
     .mp-card-field.invalid {
       border-color: #ef4444;
+    }
+
+    .cardholder-name-input,
+    .cpf-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(58, 31, 16, 0.2);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      transition: all 0.3s ease;
+    }
+
+    .cardholder-name-input:focus,
+    .cpf-input:focus {
+      outline: none;
+      border-color: var(--rosa);
+      box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
     }
 
     .form-group {
@@ -572,11 +590,6 @@
           </div>
 
           <div class="form-group">
-            <label>Nome no cartão</label>
-            <input type="text" id="cardholderName" placeholder="Como está no cartão">
-          </div>
-
-          <div class="form-group">
             <label>Data de validade</label>
             <div id="form-checkout__expirationDate" class="mp-card-field"></div>
           </div>
@@ -587,8 +600,13 @@
           </div>
 
           <div class="form-group">
+            <label>Nome no cartão</label>
+            <input type="text" id="cardholderName" class="cardholder-name-input" placeholder="Como está no cartão">
+          </div>
+
+          <div class="form-group">
             <label>CPF do titular</label>
-            <input type="text" id="docNumber" placeholder="123.456.789-00">
+            <input type="text" id="docNumber" class="cpf-input" placeholder="123.456.789-00">
           </div>
 
           <button class="btn-pagar" id="creditPaymentButton">Pagar com cartão de crédito</button>
@@ -598,11 +616,6 @@
           <div class="form-group">
             <label>Número do cartão</label>
             <div id="debit-form-checkout__cardNumber" class="mp-card-field"></div>
-          </div>
-
-          <div class="form-group">
-            <label>Nome no cartão</label>
-            <input type="text" id="debitCardholderName" placeholder="Como está no cartão">
           </div>
 
           <div class="form-group">
@@ -616,8 +629,13 @@
           </div>
 
           <div class="form-group">
+            <label>Nome no cartão</label>
+            <input type="text" id="debitCardholderName" class="cardholder-name-input" placeholder="Como está no cartão">
+          </div>
+
+          <div class="form-group">
             <label>CPF do titular</label>
-            <input type="text" id="debitDocNumber" placeholder="123.456.789-00">
+            <input type="text" id="debitDocNumber" class="cpf-input" placeholder="123.456.789-00">
           </div>
 
           <button class="btn-pagar" id="debitPaymentButton">Pagar com cartão de débito</button>
@@ -936,35 +954,119 @@
       }
     }
 
-    // Configuração do Mercado Pago
+    // ----- MERCADO PAGO CORRIGIDO -----
     let mp = null;
-    let cardTokenCreated = false;
+    let creditCardFields = null;
+    let debitCardFields = null;
 
-    // Inicializar o SDK do Mercado Pago de forma correta
+    // Inicializa o SDK e aguarda o método fields estar disponível
     async function initMercadoPago() {
+      if (mp && typeof mp.fields === 'function') return mp;
+
       return new Promise((resolve, reject) => {
-        // Aguardar o SDK carregar
-        if (typeof MercadoPago !== 'undefined') {
-          mp = new MercadoPago('APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123');
-          resolve(mp);
-        } else {
-          // Se o SDK não estiver carregado, aguardar
-          const checkInterval = setInterval(() => {
-            if (typeof MercadoPago !== 'undefined') {
-              clearInterval(checkInterval);
+        const checkSdk = () => {
+          if (typeof MercadoPago !== 'undefined') {
+            try {
               mp = new MercadoPago('APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123');
-              resolve(mp);
+              // Pequena pausa para garantir que o SDK registre o método fields
+              setTimeout(() => {
+                if (mp && typeof mp.fields === 'function') {
+                  resolve(mp);
+                } else {
+                  reject(new Error('SDK do Mercado Pago não expôs o método fields'));
+                }
+              }, 100);
+            } catch (err) {
+              reject(err);
             }
-          }, 100);
+          } else {
+            setTimeout(checkSdk, 100);
+          }
+        };
+        checkSdk();
+        setTimeout(() => reject(new Error('Timeout ao carregar Mercado Pago')), 10000);
+      });
+    }
+
+    // Inicializa os campos de CRÉDITO
+    async function initCreditCardFields() {
+      await initMercadoPago();
+      if (!mp || typeof mp.fields !== 'function') {
+        throw new Error('Método fields não disponível. Recarregue a página.');
+      }
+      // Desmonta campos antigos se existirem
+      if (creditCardFields) {
+        try { creditCardFields.unmount(); } catch (e) {}
+        creditCardFields = null;
+      }
+      // Aguarda os containers no DOM
+      const containers = ['cardNumber', 'expirationDate', 'securityCode'];
+      for (const field of containers) {
+        const el = document.getElementById(`form-checkout__${field}`);
+        if (!el) throw new Error(`Container #form-checkout__${field} não encontrado`);
+      }
+      // Cria os campos
+      creditCardFields = mp.fields({
+        cardNumber: { id: 'form-checkout__cardNumber', placeholder: '1234 5678 9012 3456' },
+        expirationDate: { id: 'form-checkout__expirationDate', placeholder: 'MM/YY' },
+        securityCode: { id: 'form-checkout__securityCode', placeholder: '123' }
+      });
+      await creditCardFields.mount();
+      // Validação visual
+      creditCardFields.on('validityChange', (event) => {
+        const container = document.getElementById(`form-checkout__${event.field}`);
+        if (container) {
+          container.classList.toggle('valid', event.isValid);
+          container.classList.toggle('invalid', !event.isValid);
         }
       });
     }
 
-    // Função para detectar a bandeira do cartão
-    function detectCardBrand(cardNumber) {
-      const cleanNumber = cardNumber.replace(/\D/g, '');
+    // Inicializa os campos de DÉBITO
+    async function initDebitCardFields() {
+      await initMercadoPago();
+      if (!mp || typeof mp.fields !== 'function') {
+        throw new Error('Método fields não disponível. Recarregue a página.');
+      }
+      if (debitCardFields) {
+        try { debitCardFields.unmount(); } catch (e) {}
+        debitCardFields = null;
+      }
+      const containers = ['cardNumber', 'expirationDate', 'securityCode'];
+      for (const field of containers) {
+        const el = document.getElementById(`debit-form-checkout__${field}`);
+        if (!el) throw new Error(`Container #debit-form-checkout__${field} não encontrado`);
+      }
+      debitCardFields = mp.fields({
+        cardNumber: { id: 'debit-form-checkout__cardNumber', placeholder: '1234 5678 9012 3456' },
+        expirationDate: { id: 'debit-form-checkout__expirationDate', placeholder: 'MM/YY' },
+        securityCode: { id: 'debit-form-checkout__securityCode', placeholder: '123' }
+      });
+      await debitCardFields.mount();
+      debitCardFields.on('validityChange', (event) => {
+        const container = document.getElementById(`debit-form-checkout__${event.field}`);
+        if (container) {
+          container.classList.toggle('valid', event.isValid);
+          container.classList.toggle('invalid', !event.isValid);
+        }
+      });
+    }
 
-      // Regras de detecção de bandeira
+    // Desmonta todos os campos
+    function unmountCardFields() {
+      if (creditCardFields) {
+        try { creditCardFields.unmount(); } catch(e) {}
+        creditCardFields = null;
+      }
+      if (debitCardFields) {
+        try { debitCardFields.unmount(); } catch(e) {}
+        debitCardFields = null;
+      }
+    }
+
+    // Funções auxiliares para cartão
+    function detectCardBrand(cardNumber) {
+      const clean = cardNumber.replace(/\D/g, '');
       const patterns = {
         visa: /^4/,
         master: /^5[1-5]/,
@@ -973,19 +1075,14 @@
         hipercard: /^(606282|3841)/,
         diners: /^3(?:0[0-5]|[68])/
       };
-
       for (const [brand, pattern] of Object.entries(patterns)) {
-        if (pattern.test(cleanNumber)) {
-          return brand;
-        }
+        if (pattern.test(clean)) return brand;
       }
-
-      return 'visa'; // fallback
+      return 'visa';
     }
 
-    // Função para obter o payment_method_id correto
     function getPaymentMethodId(brand, isDebit = false) {
-      const methods = {
+      const map = {
         visa: isDebit ? 'visa_debit' : 'visa',
         master: isDebit ? 'master_debit' : 'master',
         amex: 'amex',
@@ -993,130 +1090,50 @@
         hipercard: 'hipercard',
         diners: 'diners'
       };
-      return methods[brand] || methods.visa;
+      return map[brand] || 'visa';
     }
 
-    // Variáveis para controlar os campos de cartão
-    let creditCardFields = null;
-    let debitCardFields = null;
-    let currentPaymentMethod = 'credit';
-
-    // Inicializar os campos do cartão de CRÉDITO
-    async function initCreditCardFields() {
-      if (!mp) {
-        await initMercadoPago();
-      }
-
-      // Criar os campos do cartão
-      creditCardFields = mp.fields({
-        cardNumber: {
-          id: 'form-checkout__cardNumber',
-          placeholder: '1234 5678 9012 3456'
-        },
-        expirationDate: {
-          id: 'form-checkout__expirationDate',
-          placeholder: 'MM/YY'
-        },
-        securityCode: {
-          id: 'form-checkout__securityCode',
-          placeholder: '123'
-        }
-      });
-
-      // Montar os campos
-      await creditCardFields.mount();
-
-      // Adicionar listeners para validação visual
-      creditCardFields.on('validityChange', (event) => {
-        const field = event.field;
-        const isValid = event.isValid;
-        const container = document.getElementById(`form-checkout__${field}`);
-        if (container) {
-          if (isValid) {
-            container.classList.add('valid');
-            container.classList.remove('invalid');
-          } else {
-            container.classList.add('invalid');
-            container.classList.remove('valid');
-          }
-        }
-      });
-    }
-
-    // Inicializar os campos do cartão de DÉBITO
-    async function initDebitCardFields() {
-      if (!mp) {
-        await initMercadoPago();
-      }
-
-      // Criar os campos do cartão
-      debitCardFields = mp.fields({
-        cardNumber: {
-          id: 'debit-form-checkout__cardNumber',
-          placeholder: '1234 5678 9012 3456'
-        },
-        expirationDate: {
-          id: 'debit-form-checkout__expirationDate',
-          placeholder: 'MM/YY'
-        },
-        securityCode: {
-          id: 'debit-form-checkout__securityCode',
-          placeholder: '123'
-        }
-      });
-
-      // Montar os campos
-      await debitCardFields.mount();
-
-      // Adicionar listeners para validação visual
-      debitCardFields.on('validityChange', (event) => {
-        const field = event.field;
-        const isValid = event.isValid;
-        const container = document.getElementById(`debit-form-checkout__${field}`);
-        if (container) {
-          if (isValid) {
-            container.classList.add('valid');
-            container.classList.remove('invalid');
-          } else {
-            container.classList.add('invalid');
-            container.classList.remove('valid');
-          }
-        }
-      });
-    }
-
-    // Processar pagamento com cartão de crédito (versão corrigida)
+    // Processar pagamento com cartão de crédito
     async function processCreditPayment() {
-      const cardholderName = document.getElementById('cardholderName').value;
-      const docNumber = document.getElementById('docNumber').value;
-
+      const cardholderName = document.getElementById('cardholderName').value.trim();
+      const docNumber = document.getElementById('docNumber').value.replace(/\D/g, '');
+      
       if (!cardholderName) {
         showToast('Preencha o nome do titular do cartão', 'error');
         return;
       }
-
-      const cleanCPF = docNumber.replace(/\D/g, '');
-      if (cleanCPF.length !== 11) {
+      
+      if (docNumber.length !== 11) {
         showToast('CPF inválido (deve conter 11 dígitos)', 'error');
+        return;
+      }
+      
+      if (!creditCardFields) {
+        showToast('Sistema de pagamento não inicializado. Tente novamente.', 'error');
         return;
       }
 
       showToast('🔄 Validando dados do cartão...', 'info');
 
       try {
-        // Obter os dados dos campos do cartão
         const cardToken = await creditCardFields.createCardToken({
           cardholderName: cardholderName,
           identificationType: 'CPF',
-          identificationNumber: cleanCPF
+          identificationNumber: docNumber
         });
 
         console.log('Token gerado:', cardToken.id);
         showToast('🔄 Processando pagamento...', 'info');
 
-        // Detectar bandeira (você pode obter do campo também)
-        const cardNumberElement = document.getElementById('form-checkout__cardNumber');
-        const cardBrand = await creditCardFields.getCardBrand();
+        let cardBrand = 'visa';
+        try {
+          const cardInfo = await creditCardFields.getCardInfo();
+          cardBrand = cardInfo.cardNumber?.paymentMethod?.id || 'visa';
+        } catch (e) {
+          console.warn('Não foi possível detectar bandeira, usando fallback visa');
+        }
+
+        const paymentMethodId = getPaymentMethodId(cardBrand, false);
 
         const response = await fetch(`${API_BASE}/create-card-payment`, {
           method: 'POST',
@@ -1125,9 +1142,9 @@
             amount: currentPresente.preco,
             description: currentPresente.nome,
             token: cardToken.id,
-            paymentMethodId: cardBrand || 'visa',
+            paymentMethodId: paymentMethodId,
             installments: 1,
-            docNumber: cleanCPF,
+            docNumber: docNumber,
             payerEmail: `convidado_${Date.now()}@temp.com`,
             cardBrand: cardBrand
           })
@@ -1152,7 +1169,7 @@
         console.error('Erro detalhado:', error);
         let errorMessage = error.message;
 
-        if (error.message.includes('invalid')) {
+        if (error.message.includes('invalid') || error.message.includes('Invalid')) {
           errorMessage = 'Dados do cartão inválidos. Verifique o número, data e CVV.';
         } else if (error.message.includes('card number')) {
           errorMessage = 'Número do cartão inválido.';
@@ -1166,17 +1183,21 @@
 
     // Processar pagamento com cartão de débito
     async function processDebitPayment() {
-      const cardholderName = document.getElementById('debitCardholderName').value;
-      const docNumber = document.getElementById('debitDocNumber').value;
-
+      const cardholderName = document.getElementById('debitCardholderName').value.trim();
+      const docNumber = document.getElementById('debitDocNumber').value.replace(/\D/g, '');
+      
       if (!cardholderName) {
         showToast('Preencha o nome do titular do cartão', 'error');
         return;
       }
-
-      const cleanCPF = docNumber.replace(/\D/g, '');
-      if (cleanCPF.length !== 11) {
+      
+      if (docNumber.length !== 11) {
         showToast('CPF inválido (deve conter 11 dígitos)', 'error');
+        return;
+      }
+      
+      if (!debitCardFields) {
+        showToast('Sistema de pagamento não inicializado. Tente novamente.', 'error');
         return;
       }
 
@@ -1186,10 +1207,18 @@
         const cardToken = await debitCardFields.createCardToken({
           cardholderName: cardholderName,
           identificationType: 'CPF',
-          identificationNumber: cleanCPF
+          identificationNumber: docNumber
         });
 
-        const cardBrand = await debitCardFields.getCardBrand();
+        console.log('Token gerado para débito:', cardToken.id);
+
+        let cardBrand = 'visa';
+        try {
+          const cardInfo = await debitCardFields.getCardInfo();
+          cardBrand = cardInfo.cardNumber?.paymentMethod?.id || 'visa';
+        } catch (e) { }
+
+        const paymentMethodId = getPaymentMethodId(cardBrand, true);
 
         const response = await fetch(`${API_BASE}/create-card-payment`, {
           method: 'POST',
@@ -1198,9 +1227,9 @@
             amount: currentPresente.preco,
             description: currentPresente.nome,
             token: cardToken.id,
-            paymentMethodId: `${cardBrand}_debit`,
+            paymentMethodId: paymentMethodId,
             installments: 1,
-            docNumber: cleanCPF,
+            docNumber: docNumber,
             payerEmail: `convidado_${Date.now()}@temp.com`,
             cardBrand: cardBrand,
             paymentType: 'debit'
@@ -1220,293 +1249,53 @@
         }
 
       } catch (error) {
-        console.error('Erro no pagamento:', error);
+        console.error('Erro no pagamento débito:', error);
         showToast(`❌ Erro: ${error.message}`, 'error');
       }
     }
 
-    // Desmontar campos ao trocar de método ou fechar modal
-    function unmountCardFields() {
-      if (creditCardFields) {
-        creditCardFields.unmount();
-        creditCardFields = null;
-      }
-      if (debitCardFields) {
-        debitCardFields.unmount();
-        debitCardFields = null;
-      }
-    }
-
-    // Atualizar o switch de métodos de pagamento
-    document.querySelectorAll('.payment-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const method = btn.dataset.method;
-
-        document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        document.querySelectorAll('.payment-content').forEach(content => content.classList.remove('active'));
-        document.getElementById(`${method}Content`).classList.add('active');
-
-        // Desmontar campos antigos e montar novos
-        unmountCardFields();
-
-        if (method === 'credit') {
-          await initCreditCardFields();
-        } else if (method === 'debit') {
-          await initDebitCardFields();
-        } else if (method === 'pix') {
-          // Resetar o conteúdo PIX
-          const pixPlaceholder = document.getElementById('pixPlaceholder');
-          const pixGeneratedContent = document.getElementById('pixGeneratedContent');
-          if (pixPlaceholder && pixGeneratedContent) {
-            pixPlaceholder.style.display = 'block';
-            pixGeneratedContent.style.display = 'none';
-          }
-        }
-      });
-    });
-
-    // Funções de formatação de campos
-    function formatCardNumber(value) {
-      // Remove tudo que não é número
-      let v = value.replace(/\D/g, '');
-      // Aplica a máscara: 1234 5678 9012 3456
-      v = v.replace(/(\d{4})(\d)/, '$1 $2');
-      v = v.replace(/(\d{4})(\d)/, '$1 $2');
-      v = v.replace(/(\d{4})(\d)/, '$1 $2');
-      return v;
-    }
-
-    function formatExpiryDate(value) {
-      // Remove tudo que não é número
-      let v = value.replace(/\D/g, '');
-      // Aplica a máscara: MM/AA
-      if (v.length >= 2) {
-        v = v.substring(0, 2) + '/' + v.substring(2, 4);
-      }
-      return v;
-    }
-
-    function formatCVV(value) {
-      // Apenas números, máximo 4 caracteres
-      return value.replace(/\D/g, '').substring(0, 4);
-    }
-
-    function formatCPF(value) {
-      // Remove tudo que não é número
-      let v = value.replace(/\D/g, '');
-      // Aplica a máscara: 123.456.789-00
-      if (v.length <= 3) {
-        return v;
-      } else if (v.length <= 6) {
-        return v.replace(/(\d{3})(\d)/, '$1.$2');
-      } else if (v.length <= 9) {
-        return v.replace(/(\d{3})(\d{3})(\d)/, '$1.$2.$3');
-      } else {
-        return v.replace(/(\d{3})(\d{3})(\d{3})(\d)/, '$1.$2.$3-$4').substring(0, 14);
-      }
-    }
-
-    function formatCardholderName(value) {
-      // Converte para maiúsculas e remove números
-      return value.replace(/[0-9]/g, '').toUpperCase();
-    }
-
-    // Configurar eventos de formatação para cartão de CRÉDITO
-    function setupCreditCardFormatting() {
-      const cardNumber = document.getElementById('cardNumber');
-      const expiryDate = document.getElementById('expirationDate');
-      const cvv = document.getElementById('securityCode');
-      const cpf = document.getElementById('docNumber');
-      const cardholderName = document.getElementById('cardholderName');
-
-      if (cardNumber) {
-        cardNumber.addEventListener('input', function (e) {
-          let cursorPosition = e.target.selectionStart;
-          let oldLength = this.value.length;
-          this.value = formatCardNumber(this.value);
-          let newLength = this.value.length;
-
-          // Ajusta a posição do cursor baseado na adição/remoção de espaços
-          if (newLength > oldLength) {
-            cursorPosition = cursorPosition + 1;
-          } else if (newLength < oldLength) {
-            cursorPosition = cursorPosition - 1;
-          }
-          e.target.setSelectionRange(cursorPosition, cursorPosition);
-        });
-      }
-
-      if (expiryDate) {
-        expiryDate.addEventListener('input', function (e) {
-          let cursorPosition = e.target.selectionStart;
-          let oldLength = this.value.length;
-          this.value = formatExpiryDate(this.value);
-          let newLength = this.value.length;
-
-          if (this.value.length === 2 && oldLength === 1) {
-            cursorPosition = 3;
-          }
-
-          e.target.setSelectionRange(cursorPosition, cursorPosition);
-        });
-      }
-
-      if (cvv) {
-        cvv.addEventListener('input', function (e) {
-          this.value = formatCVV(this.value);
-        });
-      }
-
-      if (cpf) {
-        cpf.addEventListener('input', function (e) {
-          let cursorPosition = e.target.selectionStart;
-          let oldLength = this.value.length;
-          this.value = formatCPF(this.value);
-          let newLength = this.value.length;
-
-          // Ajusta cursor baseado na adição de pontos e traço
-          if (newLength > oldLength) {
-            cursorPosition = cursorPosition + 1;
-          } else if (newLength < oldLength) {
-            cursorPosition = cursorPosition - 1;
-          }
-          e.target.setSelectionRange(cursorPosition, cursorPosition);
-        });
-      }
-
-      if (cardholderName) {
-        cardholderName.addEventListener('input', function (e) {
-          this.value = formatCardholderName(this.value);
-        });
-      }
-    }
-
-    // Configurar eventos de formatação para cartão de DÉBITO
-    function setupDebitCardFormatting() {
-      const cardNumber = document.getElementById('debitCardNumber');
-      const expiryDate = document.getElementById('debitExpirationDate');
-      const cvv = document.getElementById('debitSecurityCode');
-      const cpf = document.getElementById('debitDocNumber');
-      const cardholderName = document.getElementById('debitCardholderName');
-
-      if (cardNumber) {
-        cardNumber.addEventListener('input', function (e) {
-          let cursorPosition = e.target.selectionStart;
-          let oldLength = this.value.length;
-          this.value = formatCardNumber(this.value);
-          let newLength = this.value.length;
-
-          if (newLength > oldLength) {
-            cursorPosition = cursorPosition + 1;
-          } else if (newLength < oldLength) {
-            cursorPosition = cursorPosition - 1;
-          }
-          e.target.setSelectionRange(cursorPosition, cursorPosition);
-        });
-      }
-
-      if (expiryDate) {
-        expiryDate.addEventListener('input', function (e) {
-          let cursorPosition = e.target.selectionStart;
-          let oldLength = this.value.length;
-          this.value = formatExpiryDate(this.value);
-          let newLength = this.value.length;
-
-          if (this.value.length === 2 && oldLength === 1) {
-            cursorPosition = 3;
-          }
-
-          e.target.setSelectionRange(cursorPosition, cursorPosition);
-        });
-      }
-
-      if (cvv) {
-        cvv.addEventListener('input', function (e) {
-          this.value = formatCVV(this.value);
-        });
-      }
-
-      if (cpf) {
-        cpf.addEventListener('input', function (e) {
-          let cursorPosition = e.target.selectionStart;
-          let oldLength = this.value.length;
-          this.value = formatCPF(this.value);
-          let newLength = this.value.length;
-
-          if (newLength > oldLength) {
-            cursorPosition = cursorPosition + 1;
-          } else if (newLength < oldLength) {
-            cursorPosition = cursorPosition - 1;
-          }
-          e.target.setSelectionRange(cursorPosition, cursorPosition);
-        });
-      }
-
-      if (cardholderName) {
-        cardholderName.addEventListener('input', function (e) {
-          this.value = formatCardholderName(this.value);
-        });
-      }
-    }
-
-    // Função para aplicar validação em tempo real ao mudar de aba
-    function setupPaymentMethodSwitchObserver() {
-      const paymentButtons = document.querySelectorAll('.payment-btn');
-
-      paymentButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-          const method = this.dataset.method;
-
-          // Pequeno delay para garantir que o DOM foi atualizado
-          setTimeout(() => {
-            if (method === 'credit') {
-              setupCreditCardFormatting();
-            } else if (method === 'debit') {
-              setupDebitCardFormatting();
+    // Configurar troca de método de pagamento
+    function setupPaymentMethodSwitch() {
+      document.querySelectorAll('.payment-btn').forEach(btn => {
+        btn.removeEventListener('click', null);
+        btn.addEventListener('click', async () => {
+          const method = btn.dataset.method;
+          document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.querySelectorAll('.payment-content').forEach(c => c.classList.remove('active'));
+          document.getElementById(`${method}Content`).classList.add('active');
+          unmountCardFields();
+          if (method === 'credit') {
+            await initCreditCardFields();
+          } else if (method === 'debit') {
+            await initDebitCardFields();
+          } else if (method === 'pix') {
+            const pixPlaceholder = document.getElementById('pixPlaceholder');
+            const pixGeneratedContent = document.getElementById('pixGeneratedContent');
+            if (pixPlaceholder && pixGeneratedContent) {
+              pixPlaceholder.style.display = 'block';
+              pixGeneratedContent.style.display = 'none';
             }
-          }, 100);
+          }
         });
       });
     }
 
-    // Inicializar formatação quando o modal abrir
+    // Sobrescrever openModal para inicializar campos corretamente
     const originalOpenModal = openModal;
-    window.openModal = function () {
+    window.openModal = async function() {
       originalOpenModal();
-      unmountCardFields(); // Limpar campos anteriores
-
-      // Inicializar os campos do método ativo
-      setTimeout(async () => {
-        const activeMethod = document.querySelector('.payment-btn.active').dataset.method;
-        if (activeMethod === 'credit') {
-          await initCreditCardFields();
-        } else if (activeMethod === 'debit') {
-          await initDebitCardFields();
-        }
-      }, 100);
+      unmountCardFields();
+      await new Promise(r => setTimeout(r, 150));
+      const activeMethod = document.querySelector('.payment-btn.active').dataset.method;
+      if (activeMethod === 'credit') {
+        await initCreditCardFields();
+      } else if (activeMethod === 'debit') {
+        await initDebitCardFields();
+      }
     };
 
-    // Também configurar quando o documento carregar
-    document.addEventListener('DOMContentLoaded', () => {
-      setupCreditCardFormatting();
-      setupDebitCardFormatting();
-      setupPaymentMethodSwitchObserver();
-      carregarDetalhePresente();
-
-      // Configurar botões de pagamento
-      const creditButton = document.getElementById('creditPaymentButton');
-      const debitButton = document.getElementById('debitPaymentButton');
-
-      if (creditButton) {
-        creditButton.addEventListener('click', processCreditPayment);
-      }
-      if (debitButton) {
-        debitButton.addEventListener('click', processDebitPayment);
-      }
-    });
-
+    // Funções de utilidade
     function showToast(message, type = 'success') {
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
@@ -1538,6 +1327,22 @@
       div.textContent = str;
       return div.innerHTML;
     }
+
+    // Inicialização quando o documento carregar
+    document.addEventListener('DOMContentLoaded', () => {
+      setupPaymentMethodSwitch();
+      carregarDetalhePresente();
+
+      const creditButton = document.getElementById('creditPaymentButton');
+      const debitButton = document.getElementById('debitPaymentButton');
+
+      if (creditButton) {
+        creditButton.addEventListener('click', processCreditPayment);
+      }
+      if (debitButton) {
+        debitButton.addEventListener('click', processDebitPayment);
+      }
+    });
 
     // Fechar modal ao clicar fora
     window.onclick = function (event) {
