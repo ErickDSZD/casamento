@@ -21,7 +21,7 @@ exports.handler = async (event) => {
         const { action, presente, id } = JSON.parse(event.body);
         
         // Buscar dados atuais via fetch público
-        const siteUrl = process.env.URL || 'https://casamentoge.netlify.app';
+        const siteUrl = process.env.URL || 'https://erickegiovanna.netlify.app/';
         const response = await fetch(`${siteUrl}/data/presentes.json`);
         
         if (!response.ok) {

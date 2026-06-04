@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 exports.handler = async (event, context) => {
   const headers = {
-    'Access-Control-Allow-Origin': 'https://casamentoge.netlify.app',
+    'Access-Control-Allow-Origin': 'https://erickegiovanna.netlify.app/',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS'
   };
@@ -12,30 +12,50 @@ exports.handler = async (event, context) => {
   }
 
   if (event.httpMethod !== 'POST') {
-    return { 
-      statusCode: 405, 
+    return {
+      statusCode: 405,
       headers,
-      body: JSON.stringify({ error: 'Method Not Allowed' }) 
+      body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
 
   try {
-    const { 
-      amount, 
-      description, 
-      token, 
+    const {
+      amount,
+      description,
+      token,
       paymentMethodId,
       installments = 1,
-      docNumber,
+      issuerId,  // NOVO
+      identificationType = 'CPF',
+      identificationNumber,
       payerEmail,
       cardBrand,
       paymentType = 'credit'
     } = JSON.parse(event.body);
-    
+
+    // Adicionar issuer_id no paymentData se existir
+    if (issuerId) {
+      paymentData.issuer_id = parseInt(issuerId);
+    }
+
     const accessToken = process.env.MP_ACCESS_TOKEN_PRODUCTION;
-    
+
     if (!accessToken) {
       throw new Error('Access Token não configurado');
+    }
+
+    // Validação do número do documento
+    if (!identificationNumber) {
+      throw new Error('Número do documento é obrigatório');
+    }
+
+    // Limpa o número do documento (remove caracteres não numéricos)
+    const cleanDocNumber = identificationNumber.replace(/\D/g, '');
+
+    // Validação básica do documento (ajuste conforme necessário)
+    if (identificationType === 'CPF' && cleanDocNumber.length !== 11) {
+      throw new Error('CPF deve conter 11 dígitos');
     }
 
     // Preparar dados do pagamento conforme documentação do Checkout Transparente
@@ -44,12 +64,12 @@ exports.handler = async (event, context) => {
       description: description,
       payment_method_id: paymentMethodId,
       token: token,
-      installments: installments,
+      installments: parseInt(installments),
       payer: {
         email: payerEmail,
         identification: {
-          type: 'CPF',
-          number: docNumber.replace(/\D/g, '')
+          type: identificationType,
+          number: cleanDocNumber
         }
       },
       metadata: {
@@ -60,17 +80,31 @@ exports.handler = async (event, context) => {
     };
 
     // Adicionar campos específicos para débito se necessário
+    // De acordo com a documentação do Mercado Pago
     if (paymentType === 'debit') {
-      paymentData.transaction_type = 'debit';
+      // Para débito, o payment_method_id já deve ser algo como "visa_debit" ou "master_debit"
+      // Não é necessário transaction_type específico
+      paymentData.payment_method_id = paymentMethodId;
     }
 
-    const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+    // Para cartões de crédito, garantir que temos issuer_id (opcional, mas recomendado)
+    // Nota: O issuer_id pode ser obtido pelo front-end e enviado também
+    if (event.body.includes('issuerId')) {
+      const { issuerId } = JSON.parse(event.body);
+      if (issuerId) {
+        paymentData.issuer_id = parseInt(issuerId);
+      }
+    }
 
-    console.log('Enviando pagamento:', { 
-      amount, 
+    const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}-${description.substring(0, 20)}`;
+
+    console.log('Enviando pagamento:', {
+      amount,
       paymentMethodId,
       cardBrand,
-      paymentType
+      paymentType,
+      identificationType,
+      hasDocument: !!identificationNumber
     });
 
     const response = await fetch('https://api.mercadopago.com/v1/payments', {
@@ -86,18 +120,32 @@ exports.handler = async (event, context) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Erro detalhado Mercado Pago:', data);
-      
-      // Mensagens de erro mais amigáveis
+      console.error('Erro detalhado Mercado Pago:', JSON.stringify(data, null, 2));
+
+      // Mensagens de erro mais amigáveis baseadas na causa
+      if (data.cause && data.cause.length > 0) {
+        const causes = data.cause.map(c => c.description).join(', ');
+        throw new Error(`Erro no pagamento: ${causes}`);
+      }
+
       if (data.status === 400) {
         const errorMessage = data.cause?.[0]?.description || data.message;
         throw new Error(`Dados inválidos: ${errorMessage}`);
       }
-      
+
+      if (data.status === 401) {
+        throw new Error('Erro de autenticação. Verifique as credenciais.');
+      }
+
       throw new Error(data.message || 'Erro ao processar pagamento');
     }
 
-    console.log('Pagamento criado com sucesso:', data.id, 'Status:', data.status);
+    console.log('Pagamento criado com sucesso:', {
+      id: data.id,
+      status: data.status,
+      statusDetail: data.status_detail,
+      paymentType: data.payment_type_id
+    });
 
     return {
       statusCode: 200,
@@ -107,7 +155,8 @@ exports.handler = async (event, context) => {
         paymentId: data.id,
         status: data.status,
         statusDetail: data.status_detail,
-        paymentType: data.payment_type_id
+        paymentType: data.payment_type_id,
+        cardBrand: data.card?.payment_method?.id || cardBrand
       })
     };
 
@@ -116,9 +165,10 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ 
-        success: false, 
-        error: error.message || 'Erro interno ao processar pagamento' 
+      body: JSON.stringify({
+        success: false,
+        error: error.message || 'Erro interno ao processar pagamento',
+        type: error.name || 'InternalError'
       })
     };
   }

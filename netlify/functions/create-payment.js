@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 exports.handler = async (event, context) => {
   // Configuração CORS para permitir requisições do seu domínio
   const headers = {
-    'Access-Control-Allow-Origin': 'https://casamentoge.netlify.app/',
+    'Access-Control-Allow-Origin': 'https://erickegiovanna.netlify.app//',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS'
   };

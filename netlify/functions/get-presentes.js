@@ -14,7 +14,7 @@ exports.handler = async (event) => {
     
     try {
         // Busca o JSON público (já que ele está acessível)
-        const siteUrl = process.env.URL || 'https://casamentoge.netlify.app';
+        const siteUrl = process.env.URL || 'https://erickegiovanna.netlify.app/';
         const response = await fetch(`${siteUrl}/data/presentes.json`);
         
         if (!response.ok) {

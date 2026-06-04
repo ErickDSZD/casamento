@@ -1,873 +1,1624 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="../img/logo_laranja.png"
+      type="image/x-icon"
+    />
+    <title>Detalhe do Presente - Giovanna & Erick</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalhe do Presente - Casamento</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
-    rel="stylesheet" />
+    <!-- Mercado Pago SDK Produção -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
 
-  <!-- Mercado Pago SDK Produção -->
-  <script src="https://sdk.mercadopago.com/js/v2"></script>
-
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --rosa: #D63384;
-      --amarelo: #F3C623;
-      --laranja: #F05A28;
-      --terracota: #C85A2F;
-      --creme: #FDF6EE;
-      --creme-dark: #F5EBD8;
-      --marrom: #3A1F10;
-      --marrom-light: #6B3A22;
-      --font-display: 'Cormorant Garamond', Georgia, serif;
-      --font-body: 'Jost', sans-serif;
-    }
-
-    body {
-      background: var(--creme);
-      color: var(--marrom);
-      font-family: var(--font-body);
-      font-weight: 300;
-      line-height: 1.75;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      width: min(1200px, 92%);
-      margin-inline: auto;
-    }
-
-    /* Navbar */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 1.25rem 0;
-      background: rgba(253, 246, 238, .92);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 1px 0 rgba(58, 31, 16, .08);
-    }
-
-    .nav__inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav__logo {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-style: italic;
-      color: var(--marrom);
-    }
-
-    .nav__links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-
-    .nav__links a {
-      font-size: .72rem;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      font-weight: 400;
-      color: var(--marrom-light);
-      transition: color .2s;
-    }
-
-    .nav__links a:hover,
-    .nav__links a.active {
-      color: var(--rosa);
-    }
-
-    .nav__toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .nav__toggle span {
-      display: block;
-      width: 24px;
-      height: 1.5px;
-      background: var(--marrom);
-      transition: transform .3s, opacity .3s;
-    }
-
-    /* Detail Card */
-    .presente-detalhe {
-      min-height: 100vh;
-      padding: 6rem 0 5rem;
-      position: relative;
-    }
-
-    .detalhe-card {
-      background: #fff;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(58, 31, 16, .08);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-
-    .detalhe-imagem {
-      background: linear-gradient(135deg, #FDE8F3 0%, #F9C8E1 100%);
-      min-height: 500px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .detalhe-placeholder {
-      font-size: 8rem;
-      opacity: 0.7;
-    }
-
-    .detalhe-info {
-      padding: 2.5rem 2.5rem 2.5rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .detalhe-categoria {
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--terracota);
-      font-weight: 500;
-    }
-
-    .detalhe-info h1 {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 400;
-      color: var(--marrom);
-    }
-
-    .detalhe-ribbon {
-      display: inline-block;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.35rem 1rem;
-      border-radius: 99px;
-      width: fit-content;
-    }
-
-    .ribbon--priority {
-      background: var(--laranja);
-      color: #fff;
-    }
-
-    .ribbon--available {
-      background: rgba(243, 198, 35, 0.2);
-      color: #8a6800;
-    }
-
-    .ribbon--gifted {
-      background: rgba(214, 51, 132, 0.12);
-      color: var(--rosa);
-    }
-
-    .detalhe-preco {
-      background: linear-gradient(135deg, rgba(214, 51, 132, 0.05) 0%, rgba(243, 198, 35, 0.05) 100%);
-      padding: 1rem 1.25rem;
-      border-radius: 12px;
-    }
-
-    .detalhe-preco span {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--rosa);
-    }
-
-    .btn-presentear {
-      background: var(--rosa);
-      color: #fff;
-      border: none;
-      padding: 1rem 2rem;
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      border-radius: 99px;
-      cursor: pointer;
-      width: 100%;
-      transition: all 0.3s ease;
-    }
-
-    .btn-presentear:hover {
-      background: var(--terracota);
-      transform: translateY(-2px);
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: var(--creme);
-      border-radius: 24px;
-      width: 90%;
-      max-width: 500px;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-
-    .modal-header {
-      padding: 1.5rem;
-      border-bottom: 1px solid rgba(58, 31, 16, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-header h2 {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 400;
-    }
-
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--marrom-light);
-    }
-
-    .modal-body {
-      padding: 1.5rem;
-    }
-
-    .payment-methods {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .payment-btn {
-      flex: 1;
-      padding: 0.75rem;
-      background: transparent;
-      border: 1.5px solid rgba(58, 31, 16, 0.2);
-      border-radius: 12px;
-      cursor: pointer;
-      font-family: var(--font-body);
-    }
-
-    .payment-btn.active {
-      border-color: var(--rosa);
-      background: rgba(214, 51, 132, 0.1);
-      color: var(--rosa);
-    }
-
-    .payment-content {
-      display: none;
-    }
-
-    .payment-content.active {
-      display: block;
-    }
-
-    .mp-card-field {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1.5px solid rgba(58, 31, 16, 0.2);
-      border-radius: 12px;
-      font-family: var(--font-body);
-      background: white;
-      transition: all 0.3s ease;
-      min-height: 48px;
-    }
-
-    .mp-card-field iframe {
-      width: 100%;
-      border: none;
-    }
-
-    .mp-card-field.valid {
-      border-color: #10b981;
-    }
-
-    .mp-card-field.invalid {
-      border-color: #ef4444;
-    }
-
-    .cardholder-name-input,
-    .cpf-input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1.5px solid rgba(58, 31, 16, 0.2);
-      border-radius: 12px;
-      font-family: var(--font-body);
-      transition: all 0.3s ease;
-    }
-
-    .cardholder-name-input:focus,
-    .cpf-input:focus {
-      outline: none;
-      border-color: var(--rosa);
-      box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1.5px solid rgba(58, 31, 16, 0.2);
-      border-radius: 12px;
-      font-family: var(--font-body);
-    }
-
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--rosa);
-      box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
-    }
-
-    .form-group input.invalid {
-      border-color: #ef4444;
-    }
-
-    .form-group input.valid {
-      border-color: #10b981;
-    }
-
-    .form-group input::placeholder {
-      color: rgba(58, 31, 16, 0.3);
-      font-size: 0.85rem;
-    }
-
-    .btn-pagar {
-      width: 100%;
-      padding: 1rem;
-      background: var(--rosa);
-      color: #fff;
-      border: none;
-      border-radius: 99px;
-      font-family: var(--font-body);
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-
-    .qr-code {
-      text-align: center;
-      padding: 1rem;
-    }
-
-    .qr-code img {
-      margin: 0 auto;
-      width: 200px;
-      height: 200px;
-    }
-
-    .pix-code {
-      background: rgba(58, 31, 16, 0.05);
-      padding: 0.75rem;
-      border-radius: 12px;
-      font-family: monospace;
-      word-break: break-all;
-      margin: 1rem 0;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background: var(--marrom);
-      color: #fff;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      z-index: 1001;
-      animation: slideIn 0.3s ease;
-    }
-
-    .toast.success {
-      background: #10b981;
-    }
-
-    .toast.error {
-      background: #ef4444;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    /* FOOTER */
-    .footer {
-      padding: 3rem 0;
-      background: var(--creme-dark);
-      text-align: center;
-      border-top: 1px solid rgba(58, 31, 16, .07);
-    }
-
-    .footer__names {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-size: 2rem;
-      color: var(--marrom);
-      margin-bottom: .4rem;
-    }
-
-    .footer__date {
-      font-size: .7rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--marrom-light);
-    }
-
-    .footer__hearts {
-      font-size: 1.1rem;
-      margin: 1rem 0 .5rem;
-      letter-spacing: .4rem;
-    }
-
-    @media (max-width: 900px) {
-      .nav__links {
-        display: none;
+      @font-face {
+        font-family: "Oleragie";
+        src: url("../fonts/Oleragie.otf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
       }
 
-      .nav__links.open {
-        display: flex;
-        flex-direction: column;
+      @font-face {
+        font-family: "Satoshi";
+        src: url("../fonts/Satoshi-Variable.ttf") format("truetype");
+        font-weight: 300 900;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      :root {
+        /* CORES PADRÃO DO SITE */
+        --rosa-protagonista: #e83a6d;
+        --laranja-energia: #ed4b14;
+        --amarelo-alegria: #feb423;
+        --creme-suavidade: #fee3b4;
+        --marrom-base: #3a2a1f;
+        --marrom-claro: #5e4130;
+        --terracota: #d96c2b;
+        --branco: #ffffff;
+
+        --font-titulos:
+          "Oleragie", "Playfair Display", Georgia, "Times New Roman", serif;
+        --font-paragrafos:
+          "Satoshi", "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+
+        --section-pad: clamp(4rem, 8vw, 7rem);
+      }
+
+      body {
+        background: var(--creme-suavidade);
+        color: var(--marrom-base);
+        font-family: var(--font-paragrafos);
+        font-weight: 300;
+        line-height: 1.75;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1200px, 92%);
+        margin-inline: auto;
+      }
+
+      /* Navbar - com fundo transparente para logo branco */
+      .nav {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        bottom: 0;
-        background: var(--creme);
-        justify-content: center;
+        z-index: 100;
+        padding: 1.25rem 0;
+        background: var(--laranja-energia);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .nav__inner {
+        display: flex;
         align-items: center;
-        z-index: 99;
+        justify-content: space-between;
+      }
+
+      .nav__logo {
+        display: block;
+        line-height: 0;
+      }
+
+      .nav__logo-image {
+        height: 45px;
+        width: auto;
+        display: block;
+        transition: transform 0.3s ease;
+        filter: brightness(0) invert(1);
+      }
+
+      .nav__logo-image:hover {
+        transform: scale(1.02);
+      }
+
+      .nav__links {
+        display: flex;
+        gap: 2.5rem;
+        list-style: none;
+      }
+
+      .nav__links a {
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-weight: 500;
+        font-family: var(--font-paragrafos);
+        color: var(--branco);
+        transition: color 0.2s;
+        position: relative;
+        padding-bottom: 4px;
+      }
+
+      .nav__links a:hover,
+      .nav__links a.active {
+        color: var(--amarelo-alegria);
+      }
+
+      .nav__links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1.5px;
+        background: var(--amarelo-alegria);
+        transition: width 0.3s ease;
+      }
+
+      .nav__links a:hover::after {
+        width: 100%;
       }
 
       .nav__toggle {
-        display: flex;
-        z-index: 101;
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 4px;
+      }
+
+      .nav__toggle span {
+        display: block;
+        width: 24px;
+        height: 1.5px;
+        background: var(--branco);
+        transition:
+          transform 0.3s,
+          opacity 0.3s;
+      }
+
+      .presente-detalhe {
+        min-height: 80vh;
+        padding: 8rem 0 3rem;
+        position: relative;
       }
 
       .detalhe-card {
-        grid-template-columns: 1fr;
+        background: var(--branco);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(58, 42, 31, 0.08);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+      }
+
+      .detalhe-imagem {
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .detalhe-imagem img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .detalhe-placeholder {
+        font-size: 8rem;
+        opacity: 0.7;
       }
 
       .detalhe-info {
-        padding: 2rem;
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .detalhe-categoria {
+        font-size: 0.7rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--terracota);
+        font-weight: 500;
+        display: inline-block;
+      }
+
+      .detalhe-info h1 {
+        font-family: var(--font-paragrafos);
+        font-size: 2rem;
+        line-height: 1;
+        font-weight: 600;
+        color: var(--marrom-base);
+      }
+
+      .detalhe-ribbon {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 0.35rem 1rem;
+        border-radius: 99px;
+        width: fit-content;
+      }
+
+      .ribbon--priority {
+        background: var(--laranja-energia);
+        color: var(--branco);
+      }
+
+      .ribbon--available {
+        background: rgba(254, 180, 35, 0.2);
+        color: #8a6800;
+      }
+
+      .ribbon--gifted {
+        background: rgba(232, 58, 109, 0.12);
+        color: var(--rosa-protagonista);
+      }
+
+      .detalhe-preco {
+        background: linear-gradient(
+          135deg,
+          rgba(232, 58, 109, 0.05) 0%,
+          rgba(254, 180, 35, 0.05) 100%
+        );
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .detalhe-preco strong {
+        font-family: var(--font-paragrafos);
+        font-weight: 600;
+        color: var(--marrom-base);
+      }
+
+      .detalhe-preco span {
+        font-family: var(--font-paragrafos);
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--rosa-protagonista);
+      }
+
+      .detalhe-descricao {
+        font-family: var(--font-paragrafos);
+        color: var(--marrom-claro);
+        line-height: 1.6;
+        font-size: 1rem;
+      }
+
+      .detalhe-especificacoes {
+        margin-top: 0.5rem;
+      }
+
+      .detalhe-especificacoes h3 {
+        font-family: var(--font-paragrafos);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: var(--marrom-base);
+      }
+
+      .detalhe-especificacoes ul {
+        list-style: none;
+        padding-left: 1rem;
+      }
+
+      .detalhe-especificacoes li {
+        margin-bottom: 0.5rem;
+        position: relative;
+        font-size: 0.9rem;
+        color: var(--marrom-claro);
+      }
+
+      .detalhe-especificacoes li::before {
+        content: "✦";
+        color: var(--rosa-protagonista);
+        position: absolute;
+        left: -1rem;
+      }
+
+      .detalhe-endereco {
+        background: linear-gradient(
+          135deg,
+          rgba(254, 180, 35, 0.08) 0%,
+          rgba(232, 58, 109, 0.08) 100%
+        );
+        border-radius: 16px;
+        padding: 1rem 1.25rem;
+        margin: 0.5rem 0;
+        border: 1px solid rgba(232, 58, 109, 0.2);
+      }
+
+      .endereco-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .endereco-header svg {
+        color: var(--rosa-protagonista);
+        stroke: var(--rosa-protagonista);
+      }
+
+      .endereco-header h3 {
+        font-family: var(--font-paragrafos);
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--marrom-base);
+        margin: 0;
+      }
+
+      .endereco-conteudo {
+        padding-left: 1.75rem;
+      }
+
+      .endereco-conteudo p {
+        font-size: 0.85rem;
+        color: var(--marrom-claro);
+        margin-bottom: 0.25rem;
+        line-height: 1.4;
+      }
+
+      .btn-copiar-endereco-mini {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: transparent;
+        border: 1px solid var(--rosa-protagonista);
+        color: var(--rosa-protagonista);
+        padding: 0.3rem 0.75rem;
+        border-radius: 99px;
+        font-family: var(--font-paragrafos);
+        font-size: 0.7rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 0.5rem;
+      }
+
+      .btn-copiar-endereco-mini:hover {
+        background: var(--rosa-protagonista);
+        color: var(--branco);
+      }
+
+      .btn-copiar-endereco-mini:hover svg {
+        stroke: var(--branco);
+      }
+
+      .detalhe-acoes {
+        margin-top: 0.5rem;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-group > * {
+        flex: 1;
+        min-width: 180px;
+      }
+
+      .btn-externo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background: transparent;
+        border: 2px solid var(--marrom-claro);
+        color: var(--marrom-claro);
+        padding: 1rem 2rem;
+        font-family: var(--font-paragrafos);
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        border-radius: 99px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+
+      .btn-externo:hover {
+        background: var(--marrom-claro);
+        color: var(--branco);
+        transform: translateY(-2px);
+        border-color: var(--marrom-claro);
+      }
+
+      .btn-externo:active {
+        transform: translateY(0);
+      }
+
+      .btn-presentear {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background: var(--rosa-protagonista);
+        color: var(--branco);
+        border: none;
+        padding: 1rem 2rem;
+        font-family: var(--font-paragrafos);
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        border-radius: 99px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .btn-presentear:hover {
+        background: var(--terracota);
+        transform: translateY(-2px);
+      }
+
+      .btn-presentear:active {
+        transform: translateY(0);
+      }
+
+      .btn-externo svg,
+      .btn-presentear svg {
+        flex-shrink: 0;
+      }
+
+      /* Responsivo para botões */
+      @media (max-width: 600px) {
+        .btn-group {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .btn-group > * {
+          min-width: auto;
+        }
+
+        .btn-externo,
+        .btn-presentear {
+          padding: 0.875rem 1.5rem;
+          font-size: 0.8rem;
+        }
+
+        .btn-externo svg,
+        .btn-presentear svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .btn-externo,
+        .btn-presentear {
+          padding: 0.75rem 1.25rem;
+          font-size: 0.75rem;
+        }
+
+        .btn-externo svg,
+        .btn-presentear svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      .mensagem-gifted {
+        text-align: center;
+        padding: 1rem;
+        background: rgba(232, 58, 109, 0.1);
+        border-radius: 12px;
+        color: var(--rosa-protagonista);
+        font-family: var(--font-paragrafos);
+        font-style: italic;
+      }
+
+      /* Loading State */
+      .loading {
+        text-align: center;
+        padding: 4rem;
+      }
+
+      .loading p {
+        color: var(--marrom-claro);
+        font-size: 1.1rem;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: var(--creme-suavidade);
+        border-radius: 24px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 85vh;
+        overflow-y: auto;
+      }
+
+      .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(58, 42, 31, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h2 {
+        font-family: var(--font-titulos);
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--marrom-base);
+        margin-top: 1.5rem;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: var(--marrom-claro);
+      }
+
+      .modal-body {
+        padding: 1.5rem;
       }
 
       .payment-methods {
-        flex-direction: column;
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
       }
-    }
-  </style>
-</head>
 
-<body>
-  <!-- Navbar -->
-  <nav class="nav" id="nav">
-    <div class="container">
-      <div class="nav__inner">
-        <a href="../" class="nav__logo">G & E</a>
-        <button class="nav__toggle" id="navToggle" aria-label="Menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-        <ul class="nav__links" id="navLinks">
-          <li><a href="../">Início</a></li>
-          <li><a href="../presentes" class="active">Presentes</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+      .payment-btn {
+        flex: 1;
+        padding: 0.75rem;
+        background: transparent;
+        border: 1.5px solid rgba(58, 42, 31, 0.2);
+        border-radius: 12px;
+        cursor: pointer;
+        font-family: var(--font-paragrafos);
+        transition: all 0.3s ease;
+      }
 
-  <main class="presente-detalhe">
-    <div class="container">
-      <div id="detalheContent">
-        <div class="loading" style="text-align: center; padding: 4rem;">
-          <p>Carregando detalhes do presente...</p>
+      .payment-btn.active {
+        border-color: var(--rosa-protagonista);
+        background: rgba(232, 58, 109, 0.1);
+        color: var(--rosa-protagonista);
+      }
+
+      .payment-content {
+        display: none;
+      }
+
+      .payment-content.active {
+        display: block;
+      }
+
+      .mp-card-field {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1.5px solid rgba(58, 42, 31, 0.2);
+        border-radius: 12px;
+        font-family: var(--font-paragrafos);
+        background: white;
+        transition: all 0.3s ease;
+        min-height: 48px;
+      }
+
+      .mp-card-field iframe {
+        width: 100%;
+        height: 48px;
+        border: none;
+      }
+
+      .mp-card-field.valid {
+        border-color: #10b981;
+      }
+
+      .mp-card-field.invalid {
+        border-color: #ef4444;
+      }
+
+      .cardholder-name-input,
+      .cpf-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1.5px solid rgba(58, 42, 31, 0.2);
+        border-radius: 12px;
+        font-family: var(--font-paragrafos);
+        transition: all 0.3s ease;
+      }
+
+      .cardholder-name-input:focus,
+      .cpf-input:focus {
+        outline: none;
+        border-color: var(--rosa-protagonista);
+        box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--marrom-base);
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1.5px solid rgba(58, 42, 31, 0.2);
+        border-radius: 12px;
+        font-family: var(--font-paragrafos);
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--rosa-protagonista);
+        box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+      }
+
+      .form-group input.invalid {
+        border-color: #ef4444;
+      }
+
+      .form-group input.valid {
+        border-color: #10b981;
+      }
+
+      .form-group input::placeholder {
+        color: rgba(58, 42, 31, 0.3);
+        font-size: 0.85rem;
+      }
+
+      .form-select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1.5px solid rgba(58, 42, 31, 0.2);
+        border-radius: 12px;
+        font-family: var(--font-paragrafos);
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .form-select:focus {
+        outline: none;
+        border-color: var(--rosa-protagonista);
+        box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+      }
+
+      .email-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1.5px solid rgba(58, 42, 31, 0.2);
+        border-radius: 12px;
+        font-family: var(--font-paragrafos);
+        transition: all 0.3s ease;
+      }
+
+      .email-input:focus {
+        outline: none;
+        border-color: var(--rosa-protagonista);
+        box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+      }
+
+      .btn-pagar {
+        width: 100%;
+        padding: 1rem;
+        background: var(--rosa-protagonista);
+        color: var(--branco);
+        border: none;
+        border-radius: 99px;
+        font-family: var(--font-paragrafos);
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .btn-pagar:hover {
+        background: var(--terracota);
+        transform: translateY(-2px);
+      }
+
+      .qr-code {
+        text-align: center;
+        padding: 1rem;
+      }
+
+      .qr-code img {
+        margin: 0 auto;
+        width: 200px;
+        height: 200px;
+      }
+
+      .pix-code {
+        background: rgba(58, 42, 31, 0.05);
+        padding: 0.75rem;
+        border-radius: 12px;
+        font-family: monospace;
+        word-break: break-all;
+        margin: 1rem 0;
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--marrom-base);
+        color: var(--branco);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        z-index: 1001;
+        animation: slideIn 0.3s ease;
+      }
+
+      .toast.success {
+        background: #10b981;
+      }
+
+      .toast.error {
+        background: #ef4444;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* FOOTER */
+      .footer {
+        padding: 2rem 0 2.5rem;
+        background: var(--creme-suavidade);
+        text-align: center;
+        border-top: 1px solid rgba(58, 42, 31, 0.07);
+      }
+
+      .footer__names {
+        display: block;
+        width: 100%;
+        max-width: 1921px;
+        margin: 0 auto;
+        margin-bottom: 0.4rem;
+      }
+
+      .footer__names img {
+        width: 100%;
+        height: auto;
+        max-width: 240px;
+        display: inline-block;
+      }
+
+      .footer__date {
+        font-size: 0.85rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--rosa-protagonista);
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .nav__links {
+          display: none;
+        }
+
+        .nav__links.open {
+          display: flex;
+          flex-direction: column;
+          gap: 1.8rem;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: var(--creme-suavidade);
+          justify-content: center;
+          align-items: center;
+          z-index: 99;
+          width: 100vw;
+          height: 100vh;
+        }
+
+        .nav__links.open a {
+          color: var(--laranja-energia);
+          font-size: 1.1rem;
+        }
+
+        .nav__links.open a:hover {
+          color: var(--laranja-energia);
+        }
+
+        .nav__links.open a::after {
+          background: var(--laranja-energia);
+        }
+
+        .nav__toggle {
+          display: flex;
+          z-index: 101;
+        }
+
+        .nav__links.open ~ .nav__toggle span {
+          background: var(--laranja-energia) !important;
+        }
+
+        .nav__logo-image {
+          height: 38px;
+        }
+
+        /* Detalhe Card Responsivo */
+        .detalhe-card {
+          grid-template-columns: 1fr;
+          border-radius: 20px;
+        }
+
+        .detalhe-imagem {
+          min-height: 300px;
+        }
+
+        .detalhe-imagem img {
+          max-height: 300px;
+        }
+
+        .detalhe-placeholder {
+          font-size: 5rem;
+        }
+
+        .detalhe-info {
+          padding: 1.5rem;
+          gap: 1rem;
+        }
+
+        .detalhe-info h1 {
+          font-size: clamp(1.5rem, 5vw, 2rem);
+        }
+
+        .detalhe-preco span {
+          font-size: 1.5rem;
+        }
+
+        .detalhe-preco {
+          padding: 0.875rem 1rem;
+        }
+
+        .detalhe-especificacoes h3 {
+          font-size: 1.1rem;
+        }
+
+        .detalhe-especificacoes li {
+          font-size: 0.85rem;
+        }
+
+        .btn-presentear {
+          padding: 0.875rem 1.5rem;
+          font-size: 0.8rem;
+        }
+
+        .payment-methods {
+          flex-direction: column;
+        }
+
+        .modal-content {
+          width: 95%;
+          max-height: 90vh;
+        }
+
+        .modal-header {
+          padding: 1rem;
+        }
+
+        .modal-header h2 {
+          font-size: 1.25rem;
+        }
+
+        .modal-body {
+          padding: 1rem;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .detalhe-imagem {
+          min-height: 250px;
+        }
+
+        .detalhe-imagem img {
+          max-height: 250px;
+        }
+
+        .detalhe-placeholder {
+          font-size: 4rem;
+        }
+
+        .detalhe-info {
+          padding: 1.25rem;
+        }
+
+        .detalhe-info h1 {
+          font-size: 1.5rem;
+        }
+
+        .detalhe-categoria {
+          font-size: 0.65rem;
+        }
+
+        .detalhe-preco span {
+          font-size: 1.3rem;
+        }
+
+        .detalhe-preco strong {
+          font-size: 0.9rem;
+        }
+
+        .detalhe-descricao {
+          font-size: 0.9rem;
+        }
+
+        .detalhe-especificacoes h3 {
+          font-size: 1rem;
+        }
+
+        .detalhe-especificacoes li {
+          font-size: 0.8rem;
+        }
+
+        .detalhe-endereco {
+          padding: 0.875rem 1rem;
+        }
+
+        .endereco-header h3 {
+          font-size: 0.85rem;
+        }
+
+        .endereco-conteudo {
+          padding-left: 1.5rem;
+        }
+
+        .endereco-conteudo p {
+          font-size: 0.8rem;
+        }
+
+        .btn-copiar-endereco-mini {
+          padding: 0.25rem 0.65rem;
+          font-size: 0.65rem;
+        }
+
+        .btn-presentear {
+          padding: 0.75rem 1.25rem;
+          font-size: 0.75rem;
+        }
+
+        .mensagem-gifted {
+          font-size: 0.85rem;
+          padding: 0.875rem;
+        }
+
+        /* Modal mobile */
+        .modal-content {
+          width: 95%;
+          border-radius: 20px;
+        }
+
+        .payment-methods {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .payment-btn {
+          padding: 0.625rem;
+          font-size: 0.8rem;
+        }
+
+        .form-group label {
+          font-size: 0.8rem;
+        }
+
+        .form-group input,
+        .cardholder-name-input,
+        .cpf-input,
+        .mp-card-field {
+          padding: 0.625rem;
+          font-size: 0.85rem;
+        }
+
+        .btn-pagar {
+          padding: 0.875rem;
+          font-size: 0.8rem;
+        }
+
+        .toast {
+          bottom: 1rem;
+          right: 1rem;
+          left: 1rem;
+          padding: 0.75rem 1rem;
+          font-size: 0.85rem;
+        }
+      }
+
+      /* Ajuste para telas muito pequenas */
+      @media (max-width: 380px) {
+        .detalhe-info {
+          padding: 1rem;
+        }
+
+        .detalhe-info h1 {
+          font-size: 1.3rem;
+        }
+
+        .detalhe-preco span {
+          font-size: 1.2rem;
+        }
+
+        .btn-presentear {
+          padding: 0.7rem 1rem;
+          font-size: 0.7rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="nav" id="nav">
+      <div class="container">
+        <div class="nav__inner">
+          <a href="#" class="nav__logo">
+            <img
+              src="../img/logo_branco.png"
+              alt="Giovanna & Erick"
+              class="nav__logo-image"
+            />
+          </a>
+          <ul class="nav__links" id="navLinks">
+            <li><a href="../">Início</a></li>
+            <li><a href="../presentes">Presentes</a></li>
+          </ul>
+          <button class="nav__toggle" id="navToggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
       </div>
-    </div>
-  </main>
+    </nav>
 
-  <!-- Modal de Pagamento -->
-  <div id="paymentModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Presentear este item</h2>
-        <button class="modal-close" onclick="closeModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="payment-methods">
-          <button class="payment-btn active" data-method="pix">💳 PIX</button>
-          <button class="payment-btn" data-method="credit">💳 Cartão de Crédito</button>
-          <button class="payment-btn" data-method="debit">💳 Cartão de Débito</button>
+    <main class="presente-detalhe">
+      <div class="container">
+        <div id="detalheContent">
+          <div class="loading" style="text-align: center; padding: 4rem">
+            <p>Carregando detalhes do presente...</p>
+          </div>
         </div>
+      </div>
+    </main>
 
-        <div id="pixContent" class="payment-content active">
-          <div id="pixPlaceholder" style="text-align: center; padding: 2rem;">
-            <p style="margin-bottom: 1.5rem;">💰 Clique no botão abaixo para gerar o PIX</p>
-            <button class="btn-pagar" onclick="generatePixQRCode()" style="background: var(--rosa);">
-              Gerar QR Code PIX
+    <!-- Modal de Pagamento -->
+    <div id="paymentModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Presentear com o valor</h2>
+          <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="payment-methods">
+            <button class="payment-btn active" data-method="pix">PIX</button>
+            <button class="payment-btn" data-method="credit">
+              Cartão de Crédito
+            </button>
+            <button class="payment-btn" data-method="debit">
+              Cartão de Débito
             </button>
           </div>
-          <div id="pixGeneratedContent" style="display: none;">
-            <div class="qr-code" id="qrCodeContainer"></div>
-            <div class="pix-code" id="pixCode"></div>
-            <button class="btn-pagar" onclick="copyPixCode()">Copiar código PIX</button>
-          </div>
-        </div>
 
-        <div id="creditContent" class="payment-content">
-          <div class="form-group">
-            <label>Número do cartão</label>
-            <div id="form-checkout__cardNumber" class="mp-card-field"></div>
-          </div>
-
-          <div class="form-group">
-            <label>Data de validade</label>
-            <div id="form-checkout__expirationDate" class="mp-card-field"></div>
-          </div>
-
-          <div class="form-group">
-            <label>CVV</label>
-            <div id="form-checkout__securityCode" class="mp-card-field"></div>
-          </div>
-
-          <div class="form-group">
-            <label>Nome no cartão</label>
-            <input type="text" id="cardholderName" class="cardholder-name-input" placeholder="Como está no cartão">
+          <div id="pixContent" class="payment-content active">
+            <div id="pixPlaceholder" style="text-align: center; padding: 2rem">
+              <p style="margin-bottom: 1.5rem">
+                Clique no botão abaixo para gerar o PIX
+              </p>
+              <button
+                class="btn-pagar"
+                onclick="generatePixQRCode()"
+                style="background: var(--rosa-protagonista)"
+              >
+                Gerar QR Code PIX
+              </button>
+            </div>
+            <div id="pixGeneratedContent" style="display: none">
+              <div class="qr-code" id="qrCodeContainer"></div>
+              <div class="pix-code" id="pixCode"></div>
+              <button class="btn-pagar" onclick="copyPixCode()">
+                Copiar código PIX
+              </button>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>CPF do titular</label>
-            <input type="text" id="docNumber" class="cpf-input" placeholder="123.456.789-00">
+          <div id="creditContent" class="payment-content">
+            <div class="form-group">
+              <label>Número do cartão</label>
+              <div id="form-checkout__cardNumber" class="mp-card-field"></div>
+            </div>
+
+            <div class="form-group">
+              <label>Data de validade</label>
+              <div
+                id="form-checkout__expirationDate"
+                class="mp-card-field"
+              ></div>
+            </div>
+
+            <div class="form-group">
+              <label>CVV</label>
+              <div id="form-checkout__securityCode" class="mp-card-field"></div>
+            </div>
+
+            <div class="form-group">
+              <label>Nome no cartão</label>
+              <input
+                type="text"
+                id="form-checkout__cardholderName"
+                class="cardholder-name-input"
+                placeholder="Como está no cartão"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Banco emissor</label>
+              <select id="form-checkout__issuer" class="form-select">
+                <option value="" disabled selected>Selecione o banco</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Parcelas</label>
+              <select id="form-checkout__installments" class="form-select">
+                <option value="" disabled selected>
+                  Selecione as parcelas
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Tipo de documento</label>
+              <select
+                id="form-checkout__identificationType"
+                class="form-select"
+              >
+                <option value="" disabled selected>Selecione o tipo</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Número do documento</label>
+              <input
+                type="text"
+                id="form-checkout__identificationNumber"
+                class="cpf-input"
+                placeholder="Número do documento"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>E-mail</label>
+              <input
+                type="email"
+                id="form-checkout__email"
+                class="email-input"
+                placeholder="seu@email.com"
+              />
+            </div>
+
+            <!-- Campos ocultos necessários -->
+            <input id="token" name="token" type="hidden" />
+            <input id="paymentMethodId" name="paymentMethodId" type="hidden" />
+            <input
+              id="transactionAmount"
+              name="transactionAmount"
+              type="hidden"
+              value=""
+            />
+            <input id="description" name="description" type="hidden" value="" />
+
+            <button class="btn-pagar" id="creditPaymentButton">
+              Pagar com cartão de crédito
+            </button>
           </div>
 
-          <button class="btn-pagar" id="creditPaymentButton">Pagar com cartão de crédito</button>
-        </div>
+          <div id="debitContent" class="payment-content">
+            <div class="form-group">
+              <label>Número do cartão</label>
+              <div
+                id="debit-form-checkout__cardNumber"
+                class="mp-card-field"
+              ></div>
+            </div>
 
-        <div id="debitContent" class="payment-content">
-          <div class="form-group">
-            <label>Número do cartão</label>
-            <div id="debit-form-checkout__cardNumber" class="mp-card-field"></div>
+            <div class="form-group">
+              <label>Data de validade</label>
+              <div
+                id="debit-form-checkout__expirationDate"
+                class="mp-card-field"
+              ></div>
+            </div>
+
+            <div class="form-group">
+              <label>CVV</label>
+              <div
+                id="debit-form-checkout__securityCode"
+                class="mp-card-field"
+              ></div>
+            </div>
+
+            <div class="form-group">
+              <label>Nome no cartão</label>
+              <input
+                type="text"
+                id="debit-form-checkout__cardholderName"
+                class="cardholder-name-input"
+                placeholder="Como está no cartão"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Tipo de documento</label>
+              <select
+                id="debit-form-checkout__identificationType"
+                class="form-select"
+              >
+                <option value="" disabled selected>Selecione o tipo</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Número do documento</label>
+              <input
+                type="text"
+                id="debit-form-checkout__identificationNumber"
+                class="cpf-input"
+                placeholder="Número do documento"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>E-mail</label>
+              <input
+                type="email"
+                id="debit-form-checkout__email"
+                class="email-input"
+                placeholder="seu@email.com"
+              />
+            </div>
+
+            <!-- Campos ocultos necessários -->
+            <input id="debit-token" name="debit-token" type="hidden" />
+            <input
+              id="debit-paymentMethodId"
+              name="debit-paymentMethodId"
+              type="hidden"
+            />
+
+            <button class="btn-pagar" id="debitPaymentButton">
+              Pagar com cartão de débito
+            </button>
           </div>
-
-          <div class="form-group">
-            <label>Data de validade</label>
-            <div id="debit-form-checkout__expirationDate" class="mp-card-field"></div>
-          </div>
-
-          <div class="form-group">
-            <label>CVV</label>
-            <div id="debit-form-checkout__securityCode" class="mp-card-field"></div>
-          </div>
-
-          <div class="form-group">
-            <label>Nome no cartão</label>
-            <input type="text" id="debitCardholderName" class="cardholder-name-input" placeholder="Como está no cartão">
-          </div>
-
-          <div class="form-group">
-            <label>CPF do titular</label>
-            <input type="text" id="debitDocNumber" class="cpf-input" placeholder="123.456.789-00">
-          </div>
-
-          <button class="btn-pagar" id="debitPaymentButton">Pagar com cartão de débito</button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ░░ FOOTER ░░ -->
-  <footer class="footer" role="contentinfo">
-    <p class="footer__hearts" aria-hidden="true">🌸 💛 🧡</p>
-    <p class="footer__names">Giovanna & Erick</p>
-    <p class="footer__date">21 · Novembro · 2026 · Olímpia</p>
-  </footer>
+    <!-- FOOTER -->
+    <footer class="footer" role="contentinfo">
+      <p class="footer__names">
+        <img src="../img/nome_rosa.png" alt="Giovanna & Erick" />
+      </p>
+      <p class="footer__date">21 · Novembro · 2026 · Olímpia</p>
+    </footer>
 
-  <script>
-    // Configuração do Mercado Pago
-    let currentPresente = null;
-    let pollingInterval = null;
+    <script>
+      const toggle = document.getElementById("navToggle");
+      const links = document.getElementById("navLinks");
+      if (toggle && links) {
+        toggle.addEventListener("click", () => {
+          const open = links.classList.toggle("open");
+          toggle.setAttribute("aria-expanded", open);
+          const spans = toggle.querySelectorAll("span");
+          if (open) {
+            spans[0].style.transform = "translateY(6.8px) rotate(45deg)";
+            spans[1].style.opacity = "0";
+            spans[2].style.transform = "translateY(-6.5px) rotate(-45deg)";
+          } else {
+            spans.forEach((s) => {
+              s.style.transform = "";
+              s.style.opacity = "";
+            });
+          }
+        });
 
-    // URLs das Netlify Functions (caminho correto para sua estrutura)
-    const API_BASE = '/.netlify/functions';
+        links.querySelectorAll("a").forEach((a) =>
+          a.addEventListener("click", () => {
+            links.classList.remove("open");
+            toggle.setAttribute("aria-expanded", false);
+            toggle.querySelectorAll("span").forEach((s) => {
+              s.style.transform = "";
+              s.style.opacity = "";
+            });
+          }),
+        );
+      }
+    </script>
 
-    // Mobile menu
-    const toggle = document.getElementById('navToggle');
-    const links = document.getElementById('navLinks');
-    if (toggle && links) {
-      toggle.addEventListener('click', () => {
-        const open = links.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', open);
-        const spans = toggle.querySelectorAll('span');
-        if (open) {
-          spans[0].style.transform = 'translateY(6.5px) rotate(45deg)';
-          spans[1].style.opacity = '0';
-          spans[2].style.transform = 'translateY(-6.5px) rotate(-45deg)';
-        } else {
-          spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
-        }
-      });
+    <script>
+      let currentPresente = null;
+      let pollingInterval = null;
 
-      links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-        links.classList.remove('open');
-        toggle.setAttribute('aria-expanded', false);
-        toggle.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
-      }));
-    }
+      const API_BASE = "/.netlify/functions";
 
-    // Pega o ID da URL
-    function getIdFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('id');
-    }
-
-    // Carrega e exibe o presente específico
-    async function carregarDetalhePresente() {
-      const id = getIdFromURL();
-
-      if (!id) {
-        mostrarErro('ID do presente não informado.');
-        return;
+      function getIdFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("id");
       }
 
-      try {
-        // Caminho relativo para o JSON na pasta data
-        const response = await fetch('/data/presentes.json');
+      async function carregarDetalhePresente() {
+        const id = getIdFromURL();
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        const presente = data.presentes.find(p => p.id === parseInt(id));
-
-        if (!presente) {
-          mostrarErro('Presente não encontrado.');
+        if (!id) {
+          mostrarErro("ID do presente não informado.");
           return;
         }
 
-        currentPresente = presente;
-        renderizarDetalhe(presente);
+        try {
+          const response = await fetch("/data/presentes.json");
 
-      } catch (error) {
-        console.error('Erro:', error);
-        mostrarErro(`Erro ao carregar detalhes do presente. Detalhe: ${error.message}`);
-      }
-    }
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
 
-    function renderizarDetalhe(presente) {
-      const container = document.getElementById('detalheContent');
+          const data = await response.json();
+          const presente = data.presentes.find((p) => p.id === parseInt(id));
 
-      const statusInfo = {
-        priority: { class: 'ribbon--priority', text: 'Prioritário' },
-        available: { class: 'ribbon--available', text: 'Disponível' },
-        gifted: { class: 'ribbon--gifted', text: 'Presenteado ♡' }
-      }[presente.status] || { class: 'ribbon--available', text: 'Disponível' };
+          if (!presente) {
+            mostrarErro("Presente não encontrado.");
+            return;
+          }
 
-      const precoFormatado = presente.preco.toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-
-      const html = `
-        <article class="detalhe-card">
-          <div class="detalhe-imagem">
-            ${presente.imagem ?
-          `<img src="${presente.imagem}" alt="${escapeHTML(presente.nome)}">` :
-          `<div class="detalhe-placeholder" aria-hidden="true">${presente.icone || '🎁'}</div>`
+          currentPresente = presente;
+          renderizarDetalhe(presente);
+        } catch (error) {
+          console.error("Erro:", error);
+          mostrarErro(
+            `Erro ao carregar detalhes do presente. Detalhe: ${error.message}`,
+          );
         }
-          </div>
-          
-          <div class="detalhe-info">
-            <span class="detalhe-categoria">${capitalizar(presente.categoria)}</span>
-            <h1>${escapeHTML(presente.nome)}</h1>
-            <span class="detalhe-ribbon ${statusInfo.class}">${statusInfo.text}</span>
-            
-            <p class="detalhe-descricao">${escapeHTML(presente.descricao)}</p>
-            
-            <div class="detalhe-preco">
-              <strong>Valor:</strong> 
-              <span>R$ ${precoFormatado}</span>
-            </div>
-            
-            ${presente.detalhes && presente.detalhes.length > 0 ? `
-              <div class="detalhe-especificacoes">
-                <h3>Detalhes do produto</h3>
-                <ul>
-                  ${presente.detalhes.map(d => `<li>${escapeHTML(d)}</li>`).join('')}
-                </ul>
-              </div>
-            ` : ''}
-            
-            <div class="detalhe-acoes">
-              ${presente.status !== 'gifted' ? `
-                <button class="btn-presentear" data-id="${presente.id}" onclick="openModal()">
-                  Presentear este item
-                </button>
-              ` : `
-                <p class="mensagem-gifted">🎉 Este presente já foi adquirido por um convidado especial!</p>
-              `}
-            </div>
-          </div>
-        </article>
-      `;
-
-      container.innerHTML = html;
-    }
-
-    // Modal functions
-    function openModal() {
-      const modal = document.getElementById('paymentModal');
-      modal.classList.add('active');
-
-      // Resetar o conteúdo PIX para o estado inicial
-      const pixPlaceholder = document.getElementById('pixPlaceholder');
-      const pixGeneratedContent = document.getElementById('pixGeneratedContent');
-
-      if (pixPlaceholder && pixGeneratedContent) {
-        pixPlaceholder.style.display = 'block';
-        pixGeneratedContent.style.display = 'none';
       }
-    }
 
-    function closeModal() {
-      const modal = document.getElementById('paymentModal');
-      modal.classList.remove('active');
-      unmountCardFields(); // Importante: desmontar campos ao fechar
+      function renderizarDetalhe(presente) {
+        const container = document.getElementById("detalheContent");
 
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-        pollingInterval = null;
-      }
-    }
+        const statusInfo = {
+          priority: { class: "ribbon--priority", text: "Prioritário" },
+          available: { class: "ribbon--available", text: "Disponível" },
+          gifted: { class: "ribbon--gifted", text: "Presenteado ♡" },
+        }[presente.status] || {
+          class: "ribbon--available",
+          text: "Disponível",
+        };
 
-    // Payment method switching
-    document.querySelectorAll('.payment-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const method = btn.dataset.method;
-
-        document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        document.querySelectorAll('.payment-content').forEach(content => content.classList.remove('active'));
-        document.getElementById(`${method}Content`).classList.add('active');
-
-        if (method === 'pix') {
-          generatePixQRCode();
-        }
-      });
-    });
-
-    // Gerar PIX QR Code via Netlify Function
-    async function generatePixQRCode() {
-      // Mostrar loading e esconder placeholder
-      const pixPlaceholder = document.getElementById('pixPlaceholder');
-      const pixGeneratedContent = document.getElementById('pixGeneratedContent');
-      const qrContainer = document.getElementById('qrCodeContainer');
-      const pixCodeElement = document.getElementById('pixCode');
-
-      if (pixPlaceholder) pixPlaceholder.style.display = 'none';
-      if (pixGeneratedContent) pixGeneratedContent.style.display = 'block';
-
-      qrContainer.innerHTML = '<p>⏳ Gerando QR Code PIX...</p>';
-      pixCodeElement.innerHTML = '';
-
-      try {
-        const response = await fetch(`${API_BASE}/create-payment`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            amount: currentPresente.preco,
-            description: currentPresente.nome,
-            payerEmail: 'convidado@casamento.com',
-            payerName: 'Convidado',
-            presenteId: currentPresente.id
-          })
+        const precoFormatado = presente.preco.toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
         });
 
-        const data = await response.json();
+        // Verifica se tem link externo
+        const hasExternalLink =
+          presente.linkExterno && presente.linkExterno.trim() !== "";
 
-        if (data.success) {
-          // Exibir QR Code
-          if (data.qrCodeBase64) {
-            qrContainer.innerHTML = `
+        const html = `
+          <article class="detalhe-card">
+            <div class="detalhe-imagem">
+              ${
+                presente.imagem
+                  ? `<img src="${escapeHTML(presente.imagem)}" alt="${escapeHTML(presente.nome)}">`
+                  : `<div class="detalhe-placeholder" aria-hidden="true">${presente.icone || "🎁"}</div>`
+              }
+            </div>
+            
+            <div class="detalhe-info">
+              <span class="detalhe-categoria">${capitalizar(presente.categoria)}</span>
+              <h1>${escapeHTML(presente.nome)}</h1>
+              <span class="detalhe-ribbon ${statusInfo.class}">${statusInfo.text}</span>
+              
+              <p class="detalhe-descricao">${escapeHTML(presente.descricao)}</p>
+              
+              <div class="detalhe-preco">
+                <strong>Valor:</strong> 
+                <span>R$ ${precoFormatado}</span>
+              </div>
+              
+              ${
+                presente.detalhes && presente.detalhes.length > 0
+                  ? `
+                <div class="detalhe-especificacoes">
+                  <h3>Detalhes do produto</h3>
+                  <ul>
+                    ${presente.detalhes.map((d) => `<li>${escapeHTML(d)}</li>`).join("")}
+                  </ul>
+                </div>
+              `
+                  : ""
+              }
+              
+              <!-- Endereço de entrega -->
+              <div class="detalhe-endereco">
+                <div class="endereco-header">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <h3>Endereço para entrega</h3>
+                </div>
+                <div class="endereco-conteudo">
+                  <p>Rua Duque de Caxias, 815</p>
+                  <p>Olímpia - SP</p>
+                  <p>CEP: 15402-072</p>
+                  <button class="btn-copiar-endereco-mini" onclick="copiarEndereco()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copiar endereço
+                  </button>
+                </div>
+              </div>
+              
+              <div class="detalhe-acoes">
+                <div class="btn-group">
+                  ${
+                    hasExternalLink
+                      ? `<a href="${escapeHTML(presente.linkExterno)}" target="_blank" rel="noopener noreferrer" class="btn-externo">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <polyline points="15 3 21 3 21 9"/>
+                            <line x1="10" y1="14" x2="21" y2="3"/>
+                          </svg>
+                          Ver na loja
+                        </a>`
+                      : ""
+                  }
+                  ${
+                    presente.status !== "gifted"
+                      ? `<button class="btn-presentear" data-id="${presente.id}" onclick="openModal()">
+                          Presentear com o valor
+                        </button>`
+                      : `<p class="mensagem-gifted">Este presente já foi adquirido por um convidado especial!</p>`
+                  }
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+
+        container.innerHTML = html;
+      }
+
+      function openModal() {
+        const modal = document.getElementById("paymentModal");
+        modal.classList.add("active");
+
+        const pixPlaceholder = document.getElementById("pixPlaceholder");
+        const pixGeneratedContent = document.getElementById(
+          "pixGeneratedContent",
+        );
+
+        if (pixPlaceholder && pixGeneratedContent) {
+          pixPlaceholder.style.display = "block";
+          pixGeneratedContent.style.display = "none";
+        }
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("paymentModal");
+        modal.classList.remove("active");
+        unmountCardFields();
+
+        if (pollingInterval) {
+          clearInterval(pollingInterval);
+          pollingInterval = null;
+        }
+      }
+
+      document.querySelectorAll(".payment-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const method = btn.dataset.method;
+
+          document
+            .querySelectorAll(".payment-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          document
+            .querySelectorAll(".payment-content")
+            .forEach((content) => content.classList.remove("active"));
+          document.getElementById(`${method}Content`).classList.add("active");
+
+          if (method === "pix") {
+            const pixPlaceholder = document.getElementById("pixPlaceholder");
+            const pixGeneratedContent = document.getElementById(
+              "pixGeneratedContent",
+            );
+            if (pixPlaceholder && pixGeneratedContent) {
+              pixPlaceholder.style.display = "block";
+              pixGeneratedContent.style.display = "none";
+            }
+          }
+        });
+      });
+
+      async function generatePixQRCode() {
+        const pixPlaceholder = document.getElementById("pixPlaceholder");
+        const pixGeneratedContent = document.getElementById(
+          "pixGeneratedContent",
+        );
+        const qrContainer = document.getElementById("qrCodeContainer");
+        const pixCodeElement = document.getElementById("pixCode");
+
+        if (pixPlaceholder) pixPlaceholder.style.display = "none";
+        if (pixGeneratedContent) pixGeneratedContent.style.display = "block";
+
+        qrContainer.innerHTML = "<p>Gerando QR Code PIX...</p>";
+        pixCodeElement.innerHTML = "";
+
+        try {
+          const response = await fetch(`${API_BASE}/create-payment`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              amount: currentPresente.preco,
+              description: currentPresente.nome,
+              payerEmail: "zanirattoduarteerick@gmail.com",
+              payerName: "Convidado",
+              presenteId: currentPresente.id,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            if (data.qrCodeBase64) {
+              qrContainer.innerHTML = `
               <img src="data:image/jpeg;base64,${data.qrCodeBase64}" 
                   alt="QR Code PIX" 
                   style="width: 200px; height: 200px; margin: 0 auto;">
               <p style="margin-top: 1rem; font-size: 0.85rem;">Escaneie o QR Code com seu banco</p>
             `;
-          } else if (data.qrCode) {
-            qrContainer.innerHTML = `
+            } else if (data.qrCode) {
+              qrContainer.innerHTML = `
               <div style="background: #000; padding: 1rem; border-radius: 12px;">
                 <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(data.qrCode)}" 
                     alt="QR Code PIX" 
@@ -875,493 +1626,945 @@
               </div>
               <p style="margin-top: 1rem; font-size: 0.85rem;">Escaneie o QR Code com seu banco</p>
             `;
+            }
+
+            pixCodeElement.textContent = data.pixCode || data.qrCode;
+            startPaymentPolling(data.paymentId);
+            showToast("PIX gerado! Escaneie o QR Code para pagar", "success");
+          } else {
+            throw new Error(data.error || "Erro ao gerar PIX");
           }
-
-          pixCodeElement.textContent = data.pixCode || data.qrCode;
-
-          // Iniciar polling para verificar pagamento
-          startPaymentPolling(data.paymentId);
-
-          showToast('✅ PIX gerado! Escaneie o QR Code para pagar', 'success');
-        } else {
-          throw new Error(data.error || 'Erro ao gerar PIX');
-        }
-
-      } catch (error) {
-        console.error('Erro ao gerar PIX:', error);
-        qrContainer.innerHTML = `
-          <p style="color: red;">❌ Erro ao gerar PIX</p>
+        } catch (error) {
+          console.error("Erro ao gerar PIX:", error);
+          qrContainer.innerHTML = `
+          <p style="color: red;">Erro ao gerar PIX</p>
           <p style="font-size: 0.85rem;">${error.message}</p>
-          <button onclick="generatePixQRCode()" style="margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer; background: var(--rosa); color: white; border: none; border-radius: 8px;">
+          <button onclick="generatePixQRCode()" style="margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer; background: var(--rosa-protagonista); color: white; border: none; border-radius: 8px;">
             Tentar novamente
           </button>
         `;
-        showToast('Erro ao gerar pagamento PIX. Tente novamente.', 'error');
+          showToast("Erro ao gerar pagamento PIX. Tente novamente.", "error");
+        }
       }
-    }
 
-    // Polling para verificar status do pagamento
-    function startPaymentPolling(paymentId) {
-      if (pollingInterval) clearInterval(pollingInterval);
+      function startPaymentPolling(paymentId) {
+        if (pollingInterval) clearInterval(pollingInterval);
 
-      let attempts = 0;
-      const maxAttempts = 60; // 5 minutos (5s * 60)
+        let attempts = 0;
+        const maxAttempts = 60;
 
-      pollingInterval = setInterval(async () => {
-        attempts++;
+        pollingInterval = setInterval(async () => {
+          attempts++;
 
-        try {
-          const response = await fetch(`${API_BASE}/check-payment?id=${paymentId}`);
-          const data = await response.json();
+          try {
+            const response = await fetch(
+              `${API_BASE}/check-payment?id=${paymentId}`,
+            );
+            const data = await response.json();
 
-          if (data.success) {
-            if (data.status === 'approved') {
-              clearInterval(pollingInterval);
-              pollingInterval = null;
-              showToast('🎉 Pagamento confirmado! Obrigado por presentear!', 'success');
-              closeModal();
-              setTimeout(() => window.location.reload(), 2000);
-            } else if (data.status === 'rejected') {
-              clearInterval(pollingInterval);
-              pollingInterval = null;
-              showToast('❌ Pagamento recusado. Tente novamente.', 'error');
-            } else if (data.status === 'pending') {
-              if (attempts % 6 === 0) { // A cada 30 segundos
-                console.log('Aguardando confirmação do pagamento...');
+            if (data.success) {
+              if (data.status === "approved") {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+                showToast(
+                  "Pagamento confirmado! Obrigado por presentear!",
+                  "success",
+                );
+                closeModal();
+                setTimeout(() => window.location.reload(), 2000);
+              } else if (data.status === "rejected") {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+                showToast("Pagamento recusado. Tente novamente.", "error");
               }
             }
-          }
 
-          if (attempts >= maxAttempts) {
-            clearInterval(pollingInterval);
-            pollingInterval = null;
-            showToast('⏰ Tempo limite. Verifique seu email para confirmação.', 'info');
-          }
-
-        } catch (error) {
-          console.error('Erro ao verificar status:', error);
-        }
-      }, 5000);
-    }
-
-    function copyPixCode() {
-      const pixCode = document.getElementById('pixCode').textContent;
-      if (pixCode) {
-        navigator.clipboard.writeText(pixCode);
-        showToast('Código PIX copiado!', 'success');
-      } else {
-        showToast('Nenhum código PIX disponível', 'error');
-      }
-    }
-
-    // ----- MERCADO PAGO CORRIGIDO -----
-    let mp = null;
-    let creditCardFields = null;
-    let debitCardFields = null;
-
-    // Inicializa o SDK e aguarda o método fields estar disponível
-    async function initMercadoPago() {
-      if (mp && typeof mp.fields === 'function') return mp;
-
-      return new Promise((resolve, reject) => {
-        const checkSdk = () => {
-          if (typeof MercadoPago !== 'undefined') {
-            try {
-              mp = new MercadoPago('APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123');
-              // Pequena pausa para garantir que o SDK registre o método fields
-              setTimeout(() => {
-                if (mp && typeof mp.fields === 'function') {
-                  resolve(mp);
-                } else {
-                  reject(new Error('SDK do Mercado Pago não expôs o método fields'));
-                }
-              }, 100);
-            } catch (err) {
-              reject(err);
+            if (attempts >= maxAttempts) {
+              clearInterval(pollingInterval);
+              pollingInterval = null;
             }
-          } else {
-            setTimeout(checkSdk, 100);
+          } catch (error) {
+            console.error("Erro ao verificar status:", error);
           }
-        };
-        checkSdk();
-        setTimeout(() => reject(new Error('Timeout ao carregar Mercado Pago')), 10000);
-      });
-    }
+        }, 5000);
+      }
 
-    // Inicializa os campos de CRÉDITO
-    async function initCreditCardFields() {
-      await initMercadoPago();
-      if (!mp || typeof mp.fields !== 'function') {
-        throw new Error('Método fields não disponível. Recarregue a página.');
-      }
-      // Desmonta campos antigos se existirem
-      if (creditCardFields) {
-        try { creditCardFields.unmount(); } catch (e) {}
-        creditCardFields = null;
-      }
-      // Aguarda os containers no DOM
-      const containers = ['cardNumber', 'expirationDate', 'securityCode'];
-      for (const field of containers) {
-        const el = document.getElementById(`form-checkout__${field}`);
-        if (!el) throw new Error(`Container #form-checkout__${field} não encontrado`);
-      }
-      // Cria os campos
-      creditCardFields = mp.fields({
-        cardNumber: { id: 'form-checkout__cardNumber', placeholder: '1234 5678 9012 3456' },
-        expirationDate: { id: 'form-checkout__expirationDate', placeholder: 'MM/YY' },
-        securityCode: { id: 'form-checkout__securityCode', placeholder: '123' }
-      });
-      await creditCardFields.mount();
-      // Validação visual
-      creditCardFields.on('validityChange', (event) => {
-        const container = document.getElementById(`form-checkout__${event.field}`);
-        if (container) {
-          container.classList.toggle('valid', event.isValid);
-          container.classList.toggle('invalid', !event.isValid);
+      function copyPixCode() {
+        const pixCode = document.getElementById("pixCode").textContent;
+        if (pixCode) {
+          navigator.clipboard.writeText(pixCode);
+          showToast("Código PIX copiado!", "success");
+        } else {
+          showToast("Nenhum código PIX disponível", "error");
         }
-      });
-    }
+      }
 
-    // Inicializa os campos de DÉBITO
-    async function initDebitCardFields() {
-      await initMercadoPago();
-      if (!mp || typeof mp.fields !== 'function') {
-        throw new Error('Método fields não disponível. Recarregue a página.');
-      }
-      if (debitCardFields) {
-        try { debitCardFields.unmount(); } catch (e) {}
-        debitCardFields = null;
-      }
-      const containers = ['cardNumber', 'expirationDate', 'securityCode'];
-      for (const field of containers) {
-        const el = document.getElementById(`debit-form-checkout__${field}`);
-        if (!el) throw new Error(`Container #debit-form-checkout__${field} não encontrado`);
-      }
-      debitCardFields = mp.fields({
-        cardNumber: { id: 'debit-form-checkout__cardNumber', placeholder: '1234 5678 9012 3456' },
-        expirationDate: { id: 'debit-form-checkout__expirationDate', placeholder: 'MM/YY' },
-        securityCode: { id: 'debit-form-checkout__securityCode', placeholder: '123' }
-      });
-      await debitCardFields.mount();
-      debitCardFields.on('validityChange', (event) => {
-        const container = document.getElementById(`debit-form-checkout__${event.field}`);
-        if (container) {
-          container.classList.toggle('valid', event.isValid);
-          container.classList.toggle('invalid', !event.isValid);
+      let mp = null;
+      let creditCardFields = null;
+      let debitCardFields = null;
+
+      async function initMercadoPago() {
+        if (typeof MercadoPago !== "undefined") {
+          mp = new MercadoPago("APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123");
+          return mp;
         }
-      });
-    }
-
-    // Desmonta todos os campos
-    function unmountCardFields() {
-      if (creditCardFields) {
-        try { creditCardFields.unmount(); } catch(e) {}
-        creditCardFields = null;
-      }
-      if (debitCardFields) {
-        try { debitCardFields.unmount(); } catch(e) {}
-        debitCardFields = null;
-      }
-    }
-
-    // Funções auxiliares para cartão
-    function detectCardBrand(cardNumber) {
-      const clean = cardNumber.replace(/\D/g, '');
-      const patterns = {
-        visa: /^4/,
-        master: /^5[1-5]/,
-        amex: /^3[47]/,
-        elo: /^(4011|4312|4389|4514|4576|5041|5066|5090|6277|6362|6363|650)/,
-        hipercard: /^(606282|3841)/,
-        diners: /^3(?:0[0-5]|[68])/
-      };
-      for (const [brand, pattern] of Object.entries(patterns)) {
-        if (pattern.test(clean)) return brand;
-      }
-      return 'visa';
-    }
-
-    function getPaymentMethodId(brand, isDebit = false) {
-      const map = {
-        visa: isDebit ? 'visa_debit' : 'visa',
-        master: isDebit ? 'master_debit' : 'master',
-        amex: 'amex',
-        elo: 'elo',
-        hipercard: 'hipercard',
-        diners: 'diners'
-      };
-      return map[brand] || 'visa';
-    }
-
-    // Processar pagamento com cartão de crédito
-    async function processCreditPayment() {
-      const cardholderName = document.getElementById('cardholderName').value.trim();
-      const docNumber = document.getElementById('docNumber').value.replace(/\D/g, '');
-      
-      if (!cardholderName) {
-        showToast('Preencha o nome do titular do cartão', 'error');
-        return;
-      }
-      
-      if (docNumber.length !== 11) {
-        showToast('CPF inválido (deve conter 11 dígitos)', 'error');
-        return;
-      }
-      
-      if (!creditCardFields) {
-        showToast('Sistema de pagamento não inicializado. Tente novamente.', 'error');
-        return;
-      }
-
-      if (!creditCardFields) {
-        showToast('Sistema de pagamento não inicializado. Tente novamente.', 'error');
-        return;
-      }
-
-      showToast('🔄 Validando dados do cartão...', 'info');
-
-      try {
-        const cardToken = await creditCardFields.createCardToken({
-          cardholderName: cardholderName,
-          identificationType: 'CPF',
-          identificationNumber: docNumber
+        return new Promise((resolve) => {
+          const check = setInterval(() => {
+            if (typeof MercadoPago !== "undefined") {
+              clearInterval(check);
+              mp = new MercadoPago(
+                "APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123",
+              );
+              resolve(mp);
+            }
+          }, 100);
         });
+      }
 
-        console.log('Token gerado:', cardToken.id);
-        showToast('🔄 Processando pagamento...', 'info');
+      // Variáveis globais adicionais
+      let identificationTypes = [];
 
-        let cardBrand = 'visa';
+      // Função para buscar os tipos de documento disponíveis
+      async function getIdentificationTypes() {
         try {
-          const cardInfo = await creditCardFields.getCardInfo();
-          cardBrand = cardInfo.cardNumber?.paymentMethod?.id || 'visa';
+          await initMercadoPago();
+          const identificationTypesList = await mp.getIdentificationTypes();
+          identificationTypes = identificationTypesList;
+
+          // Preenche os selects de tipo de documento (crédito e débito)
+          const creditSelect = document.getElementById(
+            "form-checkout__identificationType",
+          );
+          const debitSelect = document.getElementById(
+            "debit-form-checkout__identificationType",
+          );
+
+          if (creditSelect)
+            createSelectOptions(creditSelect, identificationTypesList);
+          if (debitSelect)
+            createSelectOptions(debitSelect, identificationTypesList);
+
+          return identificationTypesList;
         } catch (e) {
-          console.warn('Não foi possível detectar bandeira, usando fallback visa');
+          console.error("Error getting identificationTypes: ", e);
+          return [];
         }
+      }
 
-        const paymentMethodId = getPaymentMethodId(cardBrand, false);
+      // Função auxiliar para preencher selects
+      function createSelectOptions(
+        elem,
+        options,
+        labelsAndKeys = { label: "name", value: "id" },
+      ) {
+        if (!elem) return;
 
-        const response = await fetch(`${API_BASE}/create-card-payment`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: currentPresente.preco,
-            description: currentPresente.nome,
-            token: cardToken.id,
-            paymentMethodId: paymentMethodId,
-            installments: 1,
-            docNumber: docNumber,
-            payerEmail: `convidado_${Date.now()}@temp.com`,
-            cardBrand: cardBrand
-          })
-        });
+        const { label, value } = labelsAndKeys;
+        const currentValue = elem.value;
 
-        const data = await response.json();
+        // Preserva o placeholder se existir
+        const hasPlaceholder =
+          elem.options.length === 1 && elem.options[0].disabled;
 
-        if (data.success && data.status === 'approved') {
-          showToast(`✅ Pagamento aprovado! Obrigado por presentear!`, 'success');
-          setTimeout(() => {
-            closeModal();
-            window.location.reload();
-          }, 2000);
-        } else if (data.status === 'pending') {
-          showToast('⏳ Pagamento pendente. Acompanhe no seu email.', 'info');
-          startPaymentPolling(data.paymentId);
+        if (hasPlaceholder) {
+          elem.innerHTML = "";
+          const placeholder = document.createElement("option");
+          placeholder.value = "";
+          placeholder.disabled = true;
+          placeholder.selected = true;
+          placeholder.textContent =
+            elem.options[0]?.textContent || "Selecione uma opção";
+          elem.appendChild(placeholder);
         } else {
-          throw new Error(data.statusDetail || data.error || 'Pagamento não aprovado');
+          // Limpa opções existentes mantendo placeholder se houver
+          const placeholder = elem.querySelector("option[disabled][selected]");
+          elem.innerHTML = "";
+          if (placeholder) elem.appendChild(placeholder.cloneNode(true));
         }
 
-      } catch (error) {
-        console.error('Erro detalhado:', error);
-        let errorMessage = error.message;
+        // Adiciona novas opções
+        options.forEach((option) => {
+          const optValue = option[value];
+          const optLabel = option[label];
 
-        if (error.message.includes('invalid') || error.message.includes('Invalid')) {
-          errorMessage = 'Dados do cartão inválidos. Verifique o número, data e CVV.';
-        } else if (error.message.includes('card number')) {
-          errorMessage = 'Número do cartão inválido.';
-        } else if (error.message.includes('expiration')) {
-          errorMessage = 'Data de validade inválida.';
-        }
+          const opt = document.createElement("option");
+          opt.value = optValue;
+          opt.textContent = optLabel;
 
-        showToast(`❌ ${errorMessage}`, 'error');
-      }
-    }
+          // Restaura valor selecionado anteriormente se possível
+          if (currentValue && optValue == currentValue) {
+            opt.selected = true;
+          }
 
-    // Processar pagamento com cartão de débito
-    async function processDebitPayment() {
-      const cardholderName = document.getElementById('debitCardholderName').value.trim();
-      const docNumber = document.getElementById('debitDocNumber').value.replace(/\D/g, '');
-      
-      if (!cardholderName) {
-        showToast('Preencha o nome do titular do cartão', 'error');
-        return;
-      }
-      
-      if (docNumber.length !== 11) {
-        showToast('CPF inválido (deve conter 11 dígitos)', 'error');
-        return;
-      }
-      
-      if (!debitCardFields) {
-        showToast('Sistema de pagamento não inicializado. Tente novamente.', 'error');
-        return;
-      }
-
-      if (!debitCardFields) {
-        showToast('Sistema de pagamento não inicializado. Tente novamente.', 'error');
-        return;
-      }
-
-      showToast('🔄 Processando pagamento...', 'info');
-
-      try {
-        const cardToken = await debitCardFields.createCardToken({
-          cardholderName: cardholderName,
-          identificationType: 'CPF',
-          identificationNumber: docNumber
+          elem.appendChild(opt);
         });
-
-        console.log('Token gerado para débito:', cardToken.id);
-
-        let cardBrand = 'visa';
-        try {
-          const cardInfo = await debitCardFields.getCardInfo();
-          cardBrand = cardInfo.cardNumber?.paymentMethod?.id || 'visa';
-        } catch (e) { }
-
-        const paymentMethodId = getPaymentMethodId(cardBrand, true);
-
-        const response = await fetch(`${API_BASE}/create-card-payment`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: currentPresente.preco,
-            description: currentPresente.nome,
-            token: cardToken.id,
-            paymentMethodId: paymentMethodId,
-            installments: 1,
-            docNumber: docNumber,
-            payerEmail: `convidado_${Date.now()}@temp.com`,
-            cardBrand: cardBrand,
-            paymentType: 'debit'
-          })
-        });
-
-        const data = await response.json();
-
-        if (data.success && data.status === 'approved') {
-          showToast(`✅ Pagamento aprovado! Obrigado por presentear!`, 'success');
-          setTimeout(() => {
-            closeModal();
-            window.location.reload();
-          }, 2000);
-        } else {
-          throw new Error(data.statusDetail || data.error || 'Pagamento não aprovado');
-        }
-
-      } catch (error) {
-        console.error('Erro no pagamento débito:', error);
-        showToast(`❌ Erro: ${error.message}`, 'error');
       }
-    }
 
-    // Configurar troca de método de pagamento
-    function setupPaymentMethodSwitch() {
-      document.querySelectorAll('.payment-btn').forEach(btn => {
-        btn.removeEventListener('click', null);
-        btn.addEventListener('click', async () => {
-          const method = btn.dataset.method;
-          document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          document.querySelectorAll('.payment-content').forEach(c => c.classList.remove('active'));
-          document.getElementById(`${method}Content`).classList.add('active');
-          unmountCardFields();
-          if (method === 'credit') {
-            await initCreditCardFields();
-          } else if (method === 'debit') {
-            await initDebitCardFields();
-          } else if (method === 'pix') {
-            const pixPlaceholder = document.getElementById('pixPlaceholder');
-            const pixGeneratedContent = document.getElementById('pixGeneratedContent');
-            if (pixPlaceholder && pixGeneratedContent) {
-              pixPlaceholder.style.display = 'block';
-              pixGeneratedContent.style.display = 'none';
+      // Função para obter métodos de pagamento e configurar bandeira/parcelas
+      let currentBin = null;
+      let creditIssuerElement = null;
+      let creditInstallmentsElement = null;
+      let debitIssuerElement = null;
+      let debitInstallmentsElement = null;
+
+      async function setupCardBinListener(
+        cardNumberElement,
+        paymentMethodElementId,
+        issuerElementId,
+        installmentsElementId,
+      ) {
+        if (!cardNumberElement) return;
+
+        cardNumberElement.on("binChange", async (data) => {
+          const { bin } = data;
+          const paymentMethodElement = document.getElementById(
+            paymentMethodElementId,
+          );
+          const issuerElement = document.getElementById(issuerElementId);
+          const installmentsElement = document.getElementById(
+            installmentsElementId,
+          );
+
+          try {
+            if (!bin && paymentMethodElement) {
+              clearSelectsAndSetPlaceholders(
+                issuerElement,
+                installmentsElement,
+              );
+              paymentMethodElement.value = "";
             }
+
+            if (bin && bin !== currentBin) {
+              const { results } = await mp.getPaymentMethods({ bin });
+              const paymentMethod = results[0];
+
+              if (paymentMethod && paymentMethodElement) {
+                paymentMethodElement.value = paymentMethod.id;
+                updatePCIFieldsSettings(
+                  paymentMethod,
+                  cardNumberElement,
+                  securityCodeElement,
+                );
+
+                // Atualiza opções de emissor e parcelas
+                if (issuerElement)
+                  await updateIssuer(paymentMethod, bin, issuerElement);
+                if (installmentsElement)
+                  await updateInstallments(
+                    paymentMethod,
+                    bin,
+                    installmentsElement,
+                  );
+              }
+            }
+
+            currentBin = bin;
+          } catch (e) {
+            console.error("error getting payment methods: ", e);
           }
         });
-      });
-    }
-
-    // Sobrescrever openModal para inicializar campos corretamente
-    const originalOpenModal = openModal;
-    window.openModal = async function() {
-      originalOpenModal();
-      unmountCardFields();
-      await new Promise(r => setTimeout(r, 150));
-      const activeMethod = document.querySelector('.payment-btn.active').dataset.method;
-      if (activeMethod === 'credit') {
-        await initCreditCardFields();
-      } else if (activeMethod === 'debit') {
-        await initDebitCardFields();
       }
-    };
 
-    // Funções de utilidade
-    function showToast(message, type = 'success') {
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      toast.textContent = message;
-      document.body.appendChild(toast);
+      function clearSelectsAndSetPlaceholders(
+        issuerElement,
+        installmentsElement,
+      ) {
+        if (issuerElement) {
+          clearHTMLSelectChildrenFrom(issuerElement);
+          createSelectElementPlaceholder(issuerElement, "Banco emissor");
+        }
 
-      setTimeout(() => {
-        toast.remove();
-      }, 4000);
-    }
+        if (installmentsElement) {
+          clearHTMLSelectChildrenFrom(installmentsElement);
+          createSelectElementPlaceholder(installmentsElement, "Parcelas");
+        }
+      }
 
-    function mostrarErro(mensagem) {
-      document.getElementById('detalheContent').innerHTML = `
+      function clearHTMLSelectChildrenFrom(element) {
+        if (!element) return;
+        const currOptions = [...element.children];
+        currOptions.forEach((child) => child.remove());
+      }
+
+      function createSelectElementPlaceholder(element, placeholder) {
+        if (!element) return;
+        const optionElement = document.createElement("option");
+        optionElement.textContent = placeholder;
+        optionElement.setAttribute("selected", "");
+        optionElement.setAttribute("disabled", "");
+        element.appendChild(optionElement);
+      }
+
+      function updatePCIFieldsSettings(
+        paymentMethod,
+        cardNumberElement,
+        securityCodeElement,
+      ) {
+        if (
+          !paymentMethod ||
+          !paymentMethod.settings ||
+          !paymentMethod.settings[0]
+        )
+          return;
+
+        const { settings } = paymentMethod;
+        const cardNumberSettings = settings[0]?.card_number;
+        const securityCodeSettings = settings[0]?.security_code;
+
+        if (cardNumberSettings && cardNumberElement) {
+          cardNumberElement.update({ settings: cardNumberSettings });
+        }
+
+        if (securityCodeSettings && securityCodeElement) {
+          securityCodeElement.update({ settings: securityCodeSettings });
+        }
+      }
+
+      async function updateIssuer(paymentMethod, bin, issuerElement) {
+        const { additional_info_needed, issuer } = paymentMethod;
+        let issuerOptions = [issuer];
+
+        if (
+          additional_info_needed &&
+          additional_info_needed.includes("issuer_id")
+        ) {
+          issuerOptions = await getIssuers(paymentMethod, bin);
+        }
+
+        if (issuerElement) {
+          createSelectOptions(issuerElement, issuerOptions);
+        }
+      }
+
+      async function getIssuers(paymentMethodId, bin) {
+        try {
+          const response = await fetch(`${API_BASE}/get-issuers`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ paymentMethodId, bin }),
+          });
+          const data = await response.json();
+          return data.issuers || [];
+        } catch (e) {
+          console.error("error getting issuers: ", e);
+          return [];
+        }
+      }
+
+      async function getInstallments(amount, bin, paymentMethodId) {
+        try {
+          const response = await fetch(`${API_BASE}/get-installments`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount, bin, paymentMethodId }),
+          });
+          const data = await response.json();
+          return data.installments || [];
+        } catch (e) {
+          console.error("error getting installments: ", e);
+          return [];
+        }
+      }
+
+      // Configurar listener para detectar bandeira do cartão e atualizar issuer/parcelas
+      async function setupCardBinListener(cardNumberElement, type = "credit") {
+        if (!cardNumberElement) return;
+
+        const issuerElementId =
+          type === "credit"
+            ? "form-checkout__issuer"
+            : "debit-form-checkout__issuer";
+        const installmentsElementId =
+          type === "credit"
+            ? "form-checkout__installments"
+            : "debit-form-checkout__installments";
+        const paymentMethodIdInputId =
+          type === "credit" ? "paymentMethodId" : "debit-paymentMethodId";
+
+        const issuerElement = document.getElementById(issuerElementId);
+        const installmentsElement = document.getElementById(
+          installmentsElementId,
+        );
+        const paymentMethodIdInput = document.getElementById(
+          paymentMethodIdInputId,
+        );
+
+        cardNumberElement.on("binChange", async (data) => {
+          const { bin } = data;
+
+          try {
+            if (!bin) {
+              // Limpar selects quando não há bin
+              if (issuerElement)
+                clearSelectAndSetPlaceholder(
+                  issuerElement,
+                  "Selecione o banco",
+                );
+              if (installmentsElement)
+                clearSelectAndSetPlaceholder(
+                  installmentsElement,
+                  "Selecione as parcelas",
+                );
+              if (paymentMethodIdInput) paymentMethodIdInput.value = "";
+              return;
+            }
+
+            if (bin !== currentBin) {
+              // Buscar métodos de pagamento baseado no bin
+              const { results } = await mp.getPaymentMethods({ bin });
+              const paymentMethod = results[0];
+
+              if (paymentMethod) {
+                // Atualizar payment_method_id
+                if (paymentMethodIdInput)
+                  paymentMethodIdInput.value = paymentMethod.id;
+
+                // Atualizar settings dos campos (validações)
+                updatePCIFieldsSettings(
+                  paymentMethod,
+                  cardNumberElement,
+                  type === "credit"
+                    ? creditCardFields?.securityCode
+                    : debitCardFields?.securityCode,
+                );
+
+                // Buscar e preencher bancos emissores (apenas para crédito)
+                if (
+                  type === "credit" &&
+                  paymentMethod.additional_info_needed?.includes("issuer_id")
+                ) {
+                  const issuers = await getIssuers(paymentMethod.id, bin);
+                  if (issuerElement && issuers.length > 0) {
+                    createSelectOptions(issuerElement, issuers, {
+                      label: "name",
+                      value: "id",
+                    });
+                  }
+                }
+
+                // Buscar e preencher parcelas (apenas para crédito)
+                if (type === "credit") {
+                  const amount = currentPresente?.preco || 100;
+                  const installmentsData = await getInstallments(
+                    amount,
+                    bin,
+                    paymentMethod.id,
+                  );
+                  if (installmentsElement && installmentsData.length > 0) {
+                    const installmentOptions =
+                      installmentsData[0]?.payer_costs || [];
+                    createSelectOptions(
+                      installmentsElement,
+                      installmentOptions,
+                      { label: "recommended_message", value: "installments" },
+                    );
+                  }
+                }
+              }
+
+              currentBin = bin;
+            }
+          } catch (e) {
+            console.error("error in binChange: ", e);
+          }
+        });
+      }
+
+      // Função auxiliar para limpar select e adicionar placeholder
+      function clearSelectAndSetPlaceholder(element, placeholder) {
+        if (!element) return;
+        element.innerHTML = "";
+        const option = document.createElement("option");
+        option.value = "";
+        option.disabled = true;
+        option.selected = true;
+        option.textContent = placeholder;
+        element.appendChild(option);
+      }
+
+      async function updateInstallments(
+        paymentMethod,
+        bin,
+        installmentsElement,
+      ) {
+        try {
+          const amount = currentPresente ? currentPresente.preco : 100;
+          const installments = await mp.getInstallments({
+            amount: amount,
+            bin: bin,
+            paymentTypeId: "credit_card",
+          });
+
+          if (installments && installments[0] && installments[0].payer_costs) {
+            const installmentOptions = installments[0].payer_costs;
+            const installmentOptionsKeys = {
+              label: "recommended_message",
+              value: "installments",
+            };
+            createSelectOptions(
+              installmentsElement,
+              installmentOptions,
+              installmentOptionsKeys,
+            );
+          }
+        } catch (error) {
+          console.error("error getting installments: ", error);
+        }
+      }
+
+      async function initCreditCardFields() {
+        await initMercadoPago();
+        await getIdentificationTypes();
+
+        if (creditCardFields) {
+          try {
+            creditCardFields.cardNumber?.unmount();
+            creditCardFields.expirationDate?.unmount();
+            creditCardFields.securityCode?.unmount();
+          } catch (e) {}
+          creditCardFields = null;
+        }
+
+        // Criar os campos
+        const cardNumber = mp.fields
+          .create("cardNumber", {
+            placeholder: "Número do cartão",
+          })
+          .mount("form-checkout__cardNumber");
+
+        const expirationDate = mp.fields
+          .create("expirationDate", {
+            placeholder: "MM/YY",
+          })
+          .mount("form-checkout__expirationDate");
+
+        const securityCode = mp.fields
+          .create("securityCode", {
+            placeholder: "Código de segurança",
+          })
+          .mount("form-checkout__securityCode");
+
+        creditCardFields = { cardNumber, expirationDate, securityCode };
+
+        // Configurar listener para detectar bandeira do cartão e atualizar parcelas
+        await setupCardBinListener(cardNumber, "credit");
+      }
+
+      async function initDebitCardFields() {
+        await initMercadoPago();
+        await getIdentificationTypes(); // Busca tipos de documento ao inicializar
+
+        if (debitCardFields) {
+          try {
+            debitCardFields.cardNumber?.unmount();
+            debitCardFields.expirationDate?.unmount();
+            debitCardFields.securityCode?.unmount();
+          } catch (e) {}
+          debitCardFields = null;
+        }
+
+        // Criar os campos
+        const cardNumber = mp.fields
+          .create("cardNumber", {
+            placeholder: "Número do cartão",
+          })
+          .mount("debit-form-checkout__cardNumber");
+
+        const expirationDate = mp.fields
+          .create("expirationDate", {
+            placeholder: "MM/YY",
+          })
+          .mount("debit-form-checkout__expirationDate");
+
+        const securityCode = mp.fields
+          .create("securityCode", {
+            placeholder: "Código de segurança",
+          })
+          .mount("debit-form-checkout__securityCode");
+
+        debitCardFields = { cardNumber, expirationDate, securityCode };
+      }
+
+      async function initDebitCardFields() {
+        await initMercadoPago();
+        await getIdentificationTypes(); // Busca tipos de documento ao inicializar
+
+        if (debitCardFields) {
+          try {
+            debitCardFields.cardNumber?.unmount();
+            debitCardFields.expirationDate?.unmount();
+            debitCardFields.securityCode?.unmount();
+          } catch (e) {}
+          debitCardFields = null;
+        }
+
+        // Criar os campos
+        const cardNumber = mp.fields
+          .create("cardNumber", {
+            placeholder: "Número do cartão",
+          })
+          .mount("debit-form-checkout__cardNumber");
+
+        const expirationDate = mp.fields
+          .create("expirationDate", {
+            placeholder: "MM/YY",
+          })
+          .mount("debit-form-checkout__expirationDate");
+
+        const securityCode = mp.fields
+          .create("securityCode", {
+            placeholder: "Código de segurança",
+          })
+          .mount("debit-form-checkout__securityCode");
+
+        debitCardFields = { cardNumber, expirationDate, securityCode };
+      }
+
+      function unmountCardFields() {
+        if (creditCardFields) {
+          try {
+            if (creditCardFields.cardNumber)
+              creditCardFields.cardNumber.unmount();
+            if (creditCardFields.expirationDate)
+              creditCardFields.expirationDate.unmount();
+            if (creditCardFields.securityCode)
+              creditCardFields.securityCode.unmount();
+          } catch (e) {}
+          creditCardFields = null;
+        }
+        if (debitCardFields) {
+          try {
+            if (debitCardFields.cardNumber)
+              debitCardFields.cardNumber.unmount();
+            if (debitCardFields.expirationDate)
+              debitCardFields.expirationDate.unmount();
+            if (debitCardFields.securityCode)
+              debitCardFields.securityCode.unmount();
+          } catch (e) {}
+          debitCardFields = null;
+        }
+      }
+
+      async function processCreditPayment() {
+        const cardholderName = document.getElementById(
+          "form-checkout__cardholderName",
+        ).value;
+        const identificationType = document.getElementById(
+          "form-checkout__identificationType",
+        ).value;
+        const identificationNumber = document
+          .getElementById("form-checkout__identificationNumber")
+          .value.replace(/\D/g, "");
+        const email = document.getElementById("form-checkout__email").value;
+        const issuerId = document.getElementById(
+          "form-checkout__issuer",
+        )?.value;
+        const installments = parseInt(
+          document.getElementById("form-checkout__installments")?.value || "1",
+        );
+
+        // Validações
+        if (!cardholderName) {
+          showToast("Preencha o nome do titular do cartão", "error");
+          return;
+        }
+
+        if (!identificationType || identificationType === "") {
+          showToast("Selecione o tipo de documento", "error");
+          return;
+        }
+
+        if (!identificationNumber || identificationNumber.length < 11) {
+          showToast("Número de documento inválido", "error");
+          return;
+        }
+
+        if (!email || !email.includes("@")) {
+          showToast("Preencha um e-mail válido", "error");
+          return;
+        }
+
+        if (installments > 1 && !issuerId) {
+          showToast("Selecione o banco emissor para parcelamento", "error");
+          return;
+        }
+
+        if (!creditCardFields) {
+          showToast(
+            "Sistema de pagamento não inicializado. Tente novamente.",
+            "error",
+          );
+          return;
+        }
+
+        showToast("Processando pagamento...", "info");
+
+        try {
+          // Cria o token do cartão
+          const cardToken = await mp.fields.createCardToken({
+            cardholderName: cardholderName,
+            identificationType: identificationType,
+            identificationNumber: identificationNumber,
+          });
+
+          // Obtém a bandeira do cartão
+          let cardBrand = "visa";
+          try {
+            const cardInfo = await mp.fields.getCardInfo();
+            cardBrand = cardInfo.cardNumber?.paymentMethod?.id || "visa";
+          } catch (e) {}
+
+          const paymentMethodId =
+            cardBrand === "visa"
+              ? "visa"
+              : cardBrand === "master"
+                ? "master"
+                : cardBrand === "amex"
+                  ? "amex"
+                  : "visa";
+
+          const response = await fetch(`${API_BASE}/create-card-payment`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              amount: currentPresente.preco,
+              description: currentPresente.nome,
+              token: cardToken.id,
+              paymentMethodId: paymentMethodId,
+              installments: installments,
+              issuerId: issuerId || undefined,
+              identificationType: identificationType,
+              identificationNumber: identificationNumber,
+              payerEmail: email,
+              cardBrand: cardBrand,
+              paymentType: "credit",
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.status === "approved") {
+            showToast(
+              "Pagamento aprovado! Obrigado por presentear!",
+              "success",
+            );
+            setTimeout(() => {
+              closeModal();
+              window.location.reload();
+            }, 2000);
+          } else if (data.status === "in_process") {
+            showToast("Pagamento em processamento. Aguarde...", "info");
+            startPaymentPolling(data.paymentId);
+          } else {
+            throw new Error(
+              data.statusDetail || data.error || "Pagamento não aprovado",
+            );
+          }
+        } catch (error) {
+          console.error("Erro detalhado:", error);
+          showToast(`${error.message}`, "error");
+        }
+      }
+
+      // Função similar para débito
+      async function processDebitPayment() {
+        const cardholderName = document.getElementById(
+          "debit-form-checkout__cardholderName",
+        ).value;
+        const identificationType = document.getElementById(
+          "debit-form-checkout__identificationType",
+        ).value;
+        const identificationNumber = document
+          .getElementById("debit-form-checkout__identificationNumber")
+          .value.replace(/\D/g, "");
+        const email = document.getElementById(
+          "debit-form-checkout__email",
+        ).value;
+
+        // Validações
+        if (!cardholderName) {
+          showToast("Preencha o nome do titular do cartão", "error");
+          return;
+        }
+
+        if (!identificationType || identificationType === "") {
+          showToast("Selecione o tipo de documento", "error");
+          return;
+        }
+
+        if (!identificationNumber || identificationNumber.length < 11) {
+          showToast("Número de documento inválido", "error");
+          return;
+        }
+
+        if (!email || !email.includes("@")) {
+          showToast("Preencha um e-mail válido", "error");
+          return;
+        }
+
+        if (!debitCardFields) {
+          showToast(
+            "Sistema de pagamento não inicializado. Tente novamente.",
+            "error",
+          );
+          return;
+        }
+
+        showToast("Processando pagamento...", "info");
+
+        try {
+          const cardToken = await mp.fields.createCardToken({
+            cardholderName: cardholderName,
+            identificationType: identificationType,
+            identificationNumber: identificationNumber,
+          });
+
+          let cardBrand = "visa";
+          try {
+            const cardInfo = await mp.fields.getCardInfo();
+            cardBrand = cardInfo.cardNumber?.paymentMethod?.id || "visa";
+          } catch (e) {}
+
+          const paymentMethodId =
+            cardBrand === "visa"
+              ? "visa_debit"
+              : cardBrand === "master"
+                ? "master_debit"
+                : "visa_debit";
+
+          const response = await fetch(`${API_BASE}/create-card-payment`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              amount: currentPresente.preco,
+              description: currentPresente.nome,
+              token: cardToken.id,
+              paymentMethodId: paymentMethodId,
+              installments: 1,
+              identificationType: identificationType,
+              identificationNumber: identificationNumber,
+              payerEmail: email,
+              cardBrand: cardBrand,
+              paymentType: "debit",
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.status === "approved") {
+            showToast(
+              "Pagamento aprovado! Obrigado por presentear!",
+              "success",
+            );
+            setTimeout(() => {
+              closeModal();
+              window.location.reload();
+            }, 2000);
+          } else {
+            throw new Error(
+              data.statusDetail || data.error || "Pagamento não aprovado",
+            );
+          }
+        } catch (error) {
+          console.error("Erro no pagamento débito:", error);
+          showToast(`Erro: ${error.message}`, "error");
+        }
+      }
+
+      function setupPaymentMethodSwitch() {
+        document.querySelectorAll(".payment-btn").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const method = btn.dataset.method;
+            document
+              .querySelectorAll(".payment-btn")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            document
+              .querySelectorAll(".payment-content")
+              .forEach((c) => c.classList.remove("active"));
+            document.getElementById(`${method}Content`).classList.add("active");
+            unmountCardFields();
+            if (method === "credit") {
+              await initCreditCardFields();
+            } else if (method === "debit") {
+              await initDebitCardFields();
+            }
+          });
+        });
+      }
+
+      function showToast(message, type = "success") {
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.remove();
+        }, 4000);
+      }
+
+      function mostrarErro(mensagem) {
+        document.getElementById("detalheContent").innerHTML = `
         <div class="erro-detalhe" style="text-align: center; padding: 4rem; background: #fff; border-radius: 24px;">
-          <p>❌ ${mensagem}</p>
-          <a href="../" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--rosa); color: #fff; border-radius: 99px;">← Voltar para lista de presentes</a>
+          <p>${mensagem}</p>
+          <a href="../" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--rosa-protagonista); color: #fff; border-radius: 99px;">← Voltar para lista de presentes</a>
         </div>
       `;
-    }
-
-    function capitalizar(str) {
-      if (!str) return '';
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    function escapeHTML(str) {
-      if (!str) return '';
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    // Inicialização quando o documento carregar
-    document.addEventListener('DOMContentLoaded', () => {
-      setupPaymentMethodSwitch();
-      carregarDetalhePresente();
-
-      const creditButton = document.getElementById('creditPaymentButton');
-      const debitButton = document.getElementById('debitPaymentButton');
-
-      if (creditButton) {
-        creditButton.addEventListener('click', processCreditPayment);
       }
-      if (debitButton) {
-        debitButton.addEventListener('click', processDebitPayment);
-      }
-    });
 
-    // Fechar modal ao clicar fora
-    window.onclick = function (event) {
-      const modal = document.getElementById('paymentModal');
-      if (event.target === modal) {
-        closeModal();
+      function capitalizar(str) {
+        if (!str) return "";
+        return str.charAt(0).toUpperCase() + str.slice(1);
       }
-    }
-  </script>
-</body>
 
+      function escapeHTML(str) {
+        if (!str) return "";
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      function copiarEndereco() {
+        const enderecoCompleto = `Rua Duque de Caxias, 815\nOlímpia - SP\nCEP: 15402-072`;
+
+        navigator.clipboard
+          .writeText(enderecoCompleto)
+          .then(() => {
+            showToast("Endereço copiado com sucesso!", "success");
+          })
+          .catch(() => {
+            const textarea = document.createElement("textarea");
+            textarea.value = enderecoCompleto;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            showToast("Endereço copiado com sucesso!", "success");
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        setupPaymentMethodSwitch();
+        carregarDetalhePresente();
+
+        const creditButton = document.getElementById("creditPaymentButton");
+        const debitButton = document.getElementById("debitPaymentButton");
+
+        if (creditButton) {
+          creditButton.addEventListener("click", processCreditPayment);
+        }
+        if (debitButton) {
+          debitButton.addEventListener("click", processDebitPayment);
+        }
+      });
+
+      window.onclick = function (event) {
+        const modal = document.getElementById("paymentModal");
+        if (event.target === modal) {
+          closeModal();
+        }
+      };
+    </script>
+  </body>
 </html>
