@@ -26,18 +26,13 @@ exports.handler = async (event, context) => {
       token,
       paymentMethodId,
       installments = 1,
-      issuerId,  // NOVO
+      issuerId,
       identificationType = 'CPF',
       identificationNumber,
       payerEmail,
       cardBrand,
       paymentType = 'credit'
     } = JSON.parse(event.body);
-
-    // Adicionar issuer_id no paymentData se existir
-    if (issuerId) {
-      paymentData.issuer_id = parseInt(issuerId);
-    }
 
     const accessToken = process.env.MP_ACCESS_TOKEN_PRODUCTION;
 
@@ -79,21 +74,14 @@ exports.handler = async (event, context) => {
       }
     };
 
-    // Adicionar campos específicos para débito se necessário
-    // De acordo com a documentação do Mercado Pago
-    if (paymentType === 'debit') {
-      // Para débito, o payment_method_id já deve ser algo como "visa_debit" ou "master_debit"
-      // Não é necessário transaction_type específico
-      paymentData.payment_method_id = paymentMethodId;
+    // Adicionar issuer_id no paymentData APÓS a declaração
+    if (issuerId) {
+      paymentData.issuer_id = parseInt(issuerId);
     }
 
-    // Para cartões de crédito, garantir que temos issuer_id (opcional, mas recomendado)
-    // Nota: O issuer_id pode ser obtido pelo front-end e enviado também
-    if (event.body.includes('issuerId')) {
-      const { issuerId } = JSON.parse(event.body);
-      if (issuerId) {
-        paymentData.issuer_id = parseInt(issuerId);
-      }
+    // Para débito, o payment_method_id já deve ser algo como "visa_debit" ou "master_debit"
+    if (paymentType === 'debit') {
+      paymentData.payment_method_id = paymentMethodId;
     }
 
     const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}-${description.substring(0, 20)}`;
@@ -122,7 +110,6 @@ exports.handler = async (event, context) => {
     if (!response.ok) {
       console.error('Erro detalhado Mercado Pago:', JSON.stringify(data, null, 2));
 
-      // Mensagens de erro mais amigáveis baseadas na causa
       if (data.cause && data.cause.length > 0) {
         const causes = data.cause.map(c => c.description).join(', ');
         throw new Error(`Erro no pagamento: ${causes}`);
