@@ -1,0 +1,214 @@
+{
+  "presentes": [
+    {
+      "id": 1,
+      "nome": "Ajude a noiva a tomar um chocolate quente",
+      "categoria": "lua de mel",
+      "preco": 30.98,
+      "descricao": "Contribua para um delicioso chocolate quente durante a viagem dos noivos.",
+      "imagem": "https://static.itdg.com.br/images/1200-630/afa6145892c1523fde9d4f8c956778db/chocolate-quente-cremoso-e-facil.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Chocolate quente especial",
+        "Momento romântico",
+        "Lua de mel"
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "Pague um café especial para os noivos",
+      "categoria": "lua de mel",
+      "preco": 75.37,
+      "descricao": "Ajude os noivos a desfrutarem de um café especial durante a viagem.",
+      "imagem": "https://i.pinimg.com/originals/e1/4b/7f/e14b7fa677a60d9996f5120dcc6d7398.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Café gourmet",
+        "Experiência gastronômica",
+        "Lua de mel"
+      ]
+    },
+    {
+      "id": 3,
+      "nome": "Contribua para um delicioso fondue",
+      "categoria": "lua de mel",
+      "preco": 185.67,
+      "descricao": "Ajude os noivos a aproveitarem uma noite especial com fondue.",
+      "imagem": "https://www.oetker.com.br/assets/recipes/assets/600a8c9b56af4aafa47cacbdd401cc17/1272x764/founde-de-chocolate.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Jantar romântico",
+        "Fondue tradicional",
+        "Campos do Jordão"
+      ]
+    },
+    {
+      "id": 4,
+      "nome": "Ajude a brindar nosso amor com uma taça de vinho",
+      "categoria": "lua de mel",
+      "preco": 65.12,
+      "descricao": "Contribua para um brinde especial celebrando o amor dos noivos.",
+      "imagem": "https://www.salton.com.br/upload/midia/blog-vinho-restaurante-3.png",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Taça de vinho",
+        "Brinde romântico",
+        "Lua de mel"
+      ]
+    },
+    {
+      "id": 5,
+      "nome": "Patrocine os morangos com chocolate",
+      "categoria": "lua de mel",
+      "preco": 115.22,
+      "descricao": "Ajude os noivos a saborearem uma sobremesa irresistível.",
+      "imagem": "https://guiadacozinha.com.br/wp-content/uploads/2020/11/shutterstock_276513608.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Sobremesa especial",
+        "Morangos com chocolate",
+        "Momento a dois"
+      ]
+    },
+    {
+      "id": 6,
+      "nome": "Ajude os noivos a passear de teleférico",
+      "categoria": "passeio",
+      "preco": 320.66,
+      "descricao": "Contribua para uma experiência incrível com vista panorâmica.",
+      "imagem": "https://turistik.com/wp-content/uploads/2023/08/Teleferico-Santiago-Mejores-Vistas-1.webp",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Passeio turístico",
+        "Vista panorâmica",
+        "Campos do Jordão"
+      ]
+    },
+    {
+      "id": 7,
+      "nome": "Ajude a manter os noivos aquecidos no friozinho da serra",
+      "categoria": "lua de mel",
+      "preco": 133.27,
+      "descricao": "Contribua para que os noivos enfrentem o frio com muito conforto.",
+      "imagem": "https://verdiimoveis.com.br/media/verdiimoveis/2020/11/5d8238d39398a.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Conforto",
+        "Clima de montanha",
+        "Lua de mel"
+      ]
+    },
+    {
+      "id": 8,
+      "nome": "Ajude no combustível das aventuras em Campos",
+      "categoria": "transporte",
+      "preco": 453.62,
+      "descricao": "Contribua para os deslocamentos e passeios dos noivos.",
+      "imagem": "https://midias-totvs.totvs.com/wp-content/uploads/2022/04/como-economizar-combustivel.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Combustível",
+        "Passeios",
+        "Lua de mel"
+      ]
+    },
+    {
+      "id": 9,
+      "nome": "Ajude no cobertor para o noivo estar coberto de razão",
+      "categoria": "diversao",
+      "preco": 550.81,
+      "descricao": "Um presente divertido para manter o noivo aquecido e cheio de razão.",
+      "imagem": "https://i.pinimg.com/736x/1e/1a/34/1e1a3437458b1413190136a12c75ded0.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Presente divertido",
+        "Cobertor quentinho",
+        "Brincadeira entre os noivos"
+      ]
+    },
+    {
+      "id": 10,
+      "nome": "Ajude no corte de cabelo do noivo por 6 meses",
+      "categoria": "diversao",
+      "preco": 427.64,
+      "descricao": "Contribua para manter o noivo elegante durante meio ano.",
+      "imagem": "https://i.redd.it/49wcc0jo0y041.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Barbearia",
+        "Cuidados pessoais",
+        "6 meses de estilo"
+      ]
+    },
+    {
+      "id": 11,
+      "nome": "Ajude no band-aid para quando a noiva descer a lenha no noivo",
+      "categoria": "diversao",
+      "preco": 221.21,
+      "descricao": "Uma contribuição divertida para os momentos de sobrevivência do noivo.",
+      "imagem": "https://drogariacatarinense.vtexassets.com/arquivos/ids/191544-800-1067?v=638088919459470000&width=800&height=1067&aspect=true",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Presente engraçado",
+        "Kit sobrevivência",
+        "Humor do casal"
+      ]
+    },
+    {
+      "id": 12,
+      "nome": "Ajude na ração das cachorras enquanto os papais estarão na lua de mel",
+      "categoria": "pets",
+      "preco": 218.09,
+      "descricao": "Contribua para que as cachorrinhas sejam bem cuidadas durante a viagem.",
+      "imagem": "https://images.tcdn.com.br/img/img_prod/1118151/racao_special_dog_adultos_carne_2463_1_fbef7161b45e857e4c4278f417cf6abb.png",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Cuidado com os pets",
+        "Ração",
+        "Lua de mel"
+      ]
+    },
+    {
+      "id": 13,
+      "nome": "Levar alguém no casamento que não foi convidado",
+      "categoria": "diversao",
+      "preco": 1764.18,
+      "descricao": "Tem coragem? Esse é o valor da multa oficial da lista de presentes.",
+      "imagem": "https://gerarmemes.s3.us-east-2.amazonaws.com/memes/24d8c78f.webp",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Presente brincadeira",
+        "Multa fictícia",
+        "Valor premium"
+      ]
+    },
+    {
+      "id": 14,
+      "nome": "Ajude a criar memórias inesquecíveis",
+      "categoria": "lua de mel",
+      "preco": 0,
+      "descricao": "Contribua com qualquer valor para tornar a lua de mel ainda mais especial.",
+      "imagem": "/img/erick_gi.jpg",
+      "status": "available",
+      "linkExterno": "",
+      "detalhes": [
+        "Valor livre",
+        "Qualquer contribuição",
+        "Momentos inesquecíveis"
+      ]
+    }
+  ]
+}

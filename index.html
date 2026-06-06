@@ -195,7 +195,8 @@
       padding-bottom: 4px;
     }
 
-    .nav__links a:hover {
+    .nav__links a:hover,
+    .nav__links a.active {
       color: var(--amarelo-alegria);
     }
 
@@ -368,7 +369,7 @@
     }
 
     .welcome__title {
-      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-size: clamp(1.35rem, 1.55vw, 1.5rem);
       font-weight: 600;
       line-height: 2;
       letter-spacing: 0.02em;
@@ -381,7 +382,7 @@
     }
 
     .welcome__text {
-      max-width: 900px;
+      max-width: 620px;
       margin-inline: auto;
       color: var(--marrom-claro);
       font-size: 1.05rem;
@@ -563,7 +564,7 @@
       font-weight: 600;
       font-style: italic;
       letter-spacing: 0.25rem;
-      margin-bottom: 2.5rem;
+      margin-top: 2.5rem;
     }
 
     .countdown__units {
@@ -730,11 +731,13 @@
   <!-- NAV -->
   <nav class="nav" id="nav" role="navigation" aria-label="Menu principal">
     <div class="container nav__inner">
-      <a href="#" class="nav__logo">
+      <a href="" class="nav__logo">
         <img src="./img/logo_branco.png" alt="Giovanna & Erick" class="nav__logo-image" />
       </a>
       <ul class="nav__links" id="navLinks" role="list">
+        <li><a href="" class="active">Início</a></li>
         <li><a href="./presentes/">Presentes</a></li>
+        <li><a href="./luademel/">Lua de Mel</a></li>
       </ul>
       <button class="nav__toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -809,7 +812,6 @@
   <section class="countdown" id="contagem" aria-label="Contagem regressiva para o casamento">
     <div class="container countdown__inner">
       <span class="countdown__label">Faltam apenas</span>
-      <p class="countdown__title">Dias para o grande dia</p>
 
       <div class="countdown__units" id="countdownUnits" aria-live="polite" aria-atomic="true">
         <div class="countdown__unit">
@@ -832,6 +834,8 @@
           <span class="countdown__unit-label">segundos</span>
         </div>
       </div>
+
+      <p class="countdown__title">Dias para o grande dia</p>
     </div>
   </section>
 

@@ -1,1480 +1,2190 @@
 <!doctype html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="shortcut icon"
-      href="../img/logo_laranja.png"
-      type="image/x-icon"
-    />
-    <title>Detalhe do Presente - Giovanna & Erick</title>
 
-    <!-- Mercado Pago SDK Produção -->
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="../img/logo_laranja.png" type="image/x-icon" />
+  <title>Detalhe do Presente - Giovanna & Erick</title>
 
-    <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+  <!-- Mercado Pago SDK Produção -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
 
-      @font-face {
-        font-family: "Oleragie";
-        src: url("../fonts/Oleragie.otf") format("opentype");
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-      }
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      @font-face {
-        font-family: "Satoshi";
-        src: url("../fonts/Satoshi-Variable.ttf") format("truetype");
-        font-weight: 300 900;
-        font-style: normal;
-        font-display: swap;
-      }
+    @font-face {
+      font-family: "Oleragie";
+      src: url("../fonts/Oleragie.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
 
-      :root {
-        /* CORES PADRÃO DO SITE */
-        --rosa-protagonista: #e83a6d;
-        --laranja-energia: #ed4b14;
-        --amarelo-alegria: #feb423;
-        --creme-suavidade: #fee3b4;
-        --marrom-base: #3a2a1f;
-        --marrom-claro: #5e4130;
-        --terracota: #d96c2b;
-        --branco: #ffffff;
+    @font-face {
+      font-family: "Satoshi";
+      src: url("../fonts/Satoshi-Variable.ttf") format("truetype");
+      font-weight: 300 900;
+      font-style: normal;
+      font-display: swap;
+    }
 
-        --font-titulos:
-          "Oleragie", "Playfair Display", Georgia, "Times New Roman", serif;
-        --font-paragrafos:
-          "Satoshi", "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
+    :root {
+      /* CORES PADRÃO DO SITE */
+      --rosa-protagonista: #e83a6d;
+      --laranja-energia: #ed4b14;
+      --amarelo-alegria: #feb423;
+      --creme-suavidade: #fee3b4;
+      --marrom-base: #3a2a1f;
+      --marrom-claro: #5e4130;
+      --terracota: #d96c2b;
+      --branco: #ffffff;
 
-        --section-pad: clamp(4rem, 8vw, 7rem);
-      }
+      --font-titulos:
+        "Oleragie", "Playfair Display", Georgia, "Times New Roman", serif;
+      --font-paragrafos:
+        "Satoshi", "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
 
-      body {
-        background: var(--creme-suavidade);
-        color: var(--marrom-base);
-        font-family: var(--font-paragrafos);
-        font-weight: 300;
-        line-height: 1.75;
-      }
+      --section-pad: clamp(4rem, 8vw, 7rem);
+    }
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
+    body {
+      background: var(--creme-suavidade);
+      color: var(--marrom-base);
+      font-family: var(--font-paragrafos);
+      font-weight: 300;
+      line-height: 1.75;
+    }
 
-      .container {
-        width: min(1200px, 92%);
-        margin-inline: auto;
-      }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-      /* Navbar - com fundo transparente para logo branco */
-      .nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
-        padding: 1.25rem 0;
-        background: var(--laranja-energia);
-        backdrop-filter: blur(14px);
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
-      }
+    .container {
+      width: min(1200px, 92%);
+      margin-inline: auto;
+    }
 
-      .nav__inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
+    /* Navbar - com fundo transparente para logo branco */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.25rem 0;
+      background: var(--laranja-energia);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
 
-      .nav__logo {
-        display: block;
-        line-height: 0;
-      }
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-      .nav__logo-image {
-        height: 45px;
-        width: auto;
-        display: block;
-        transition: transform 0.3s ease;
-        filter: brightness(0) invert(1);
-      }
+    .nav__logo {
+      display: block;
+      line-height: 0;
+    }
 
-      .nav__logo-image:hover {
-        transform: scale(1.02);
-      }
+    .nav__logo-image {
+      height: 45px;
+      width: auto;
+      display: block;
+      transition: transform 0.3s ease;
+      filter: brightness(0) invert(1);
+    }
 
-      .nav__links {
-        display: flex;
-        gap: 2.5rem;
-        list-style: none;
-      }
+    .nav__logo-image:hover {
+      transform: scale(1.02);
+    }
 
-      .nav__links a {
-        font-size: 0.72rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        font-weight: 500;
-        font-family: var(--font-paragrafos);
-        color: var(--branco);
-        transition: color 0.2s;
-        position: relative;
-        padding-bottom: 4px;
-      }
+    .nav__links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
 
-      .nav__links a:hover,
-      .nav__links a.active {
-        color: var(--amarelo-alegria);
-      }
+    .nav__links a {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      font-family: var(--font-paragrafos);
+      color: var(--branco);
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 4px;
+    }
 
-      .nav__links a::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        height: 1.5px;
-        background: var(--amarelo-alegria);
-        transition: width 0.3s ease;
-      }
+    .nav__links a:hover,
+    .nav__links a.active {
+      color: var(--amarelo-alegria);
+    }
 
-      .nav__links a:hover::after {
-        width: 100%;
-      }
+    .nav__links a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--amarelo-alegria);
+      transition: width 0.3s ease;
+    }
 
-      .nav__toggle {
-        display: none;
-        flex-direction: column;
-        gap: 5px;
-        cursor: pointer;
-        background: none;
-        border: none;
-        padding: 4px;
-      }
+    .nav__links a:hover::after {
+      width: 100%;
+    }
 
-      .nav__toggle span {
-        display: block;
-        width: 24px;
-        height: 1.5px;
-        background: var(--branco);
-        transition:
-          transform 0.3s,
-          opacity 0.3s;
-      }
+    .nav__toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
 
-      .presente-detalhe {
-        min-height: 80vh;
-        padding: 8rem 0 3rem;
-        position: relative;
-      }
+    .nav__toggle span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--branco);
+      transition:
+        transform 0.3s,
+        opacity 0.3s;
+    }
 
-      .detalhe-card {
-        background: var(--branco);
-        border-radius: 24px;
-        overflow: hidden;
-        box-shadow: 0 20px 40px rgba(58, 42, 31, 0.08);
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-      }
+    .presente-detalhe {
+      min-height: 80vh;
+      padding: 8rem 0 3rem;
+      position: relative;
+    }
 
-      .detalhe-imagem {
-        min-height: 400px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+    .detalhe-card {
+      background: var(--branco);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(58, 42, 31, 0.08);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
 
-      .detalhe-imagem img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
+    .detalhe-imagem {
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-      .detalhe-placeholder {
-        font-size: 8rem;
-        opacity: 0.7;
-      }
+    .detalhe-imagem img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
-      .detalhe-info {
-        padding: 2.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-      }
+    .detalhe-placeholder {
+      font-size: 8rem;
+      opacity: 0.7;
+    }
 
-      .detalhe-categoria {
-        font-size: 0.7rem;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: var(--terracota);
-        font-weight: 500;
-        display: inline-block;
-      }
+    .detalhe-info {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
 
-      .detalhe-info h1 {
-        font-family: var(--font-paragrafos);
-        font-size: 2rem;
-        line-height: 1;
-        font-weight: 600;
-        color: var(--marrom-base);
-      }
+    .detalhe-categoria {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--terracota);
+      font-weight: 500;
+      display: inline-block;
+    }
 
-      .detalhe-ribbon {
-        display: inline-block;
-        font-size: 0.65rem;
-        font-weight: 500;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        padding: 0.35rem 1rem;
-        border-radius: 99px;
-        width: fit-content;
-      }
+    .detalhe-info h1 {
+      font-family: var(--font-paragrafos);
+      font-size: 2rem;
+      line-height: 1;
+      font-weight: 600;
+      color: var(--marrom-base);
+    }
 
-      .ribbon--priority {
-        background: var(--laranja-energia);
-        color: var(--branco);
-      }
+    .detalhe-ribbon {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 99px;
+      width: fit-content;
+    }
 
-      .ribbon--available {
-        background: rgba(254, 180, 35, 0.2);
-        color: #8a6800;
-      }
+    .ribbon--priority {
+      background: var(--laranja-energia);
+      color: var(--branco);
+    }
 
-      .ribbon--gifted {
-        background: rgba(232, 58, 109, 0.12);
-        color: var(--rosa-protagonista);
-      }
+    .ribbon--available {
+      background: rgba(254, 180, 35, 0.2);
+      color: #8a6800;
+    }
 
-      .detalhe-preco {
-        background: linear-gradient(
-          135deg,
+    .ribbon--gifted {
+      background: rgba(232, 58, 109, 0.12);
+      color: var(--rosa-protagonista);
+    }
+
+    .detalhe-preco {
+      background: linear-gradient(135deg,
           rgba(232, 58, 109, 0.05) 0%,
-          rgba(254, 180, 35, 0.05) 100%
-        );
-        padding: 1rem 1.25rem;
-        border-radius: 12px;
-        display: flex;
-        align-items: baseline;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-      }
+          rgba(254, 180, 35, 0.05) 100%);
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
 
-      .detalhe-preco strong {
-        font-family: var(--font-paragrafos);
-        font-weight: 600;
-        color: var(--marrom-base);
-      }
+    .detalhe-preco strong {
+      font-family: var(--font-paragrafos);
+      font-weight: 600;
+      color: var(--marrom-base);
+    }
 
-      .detalhe-preco span {
-        font-family: var(--font-paragrafos);
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--rosa-protagonista);
-      }
+    .detalhe-preco span {
+      font-family: var(--font-paragrafos);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--rosa-protagonista);
+    }
 
-      .detalhe-descricao {
-        font-family: var(--font-paragrafos);
-        color: var(--marrom-claro);
-        line-height: 1.6;
-        font-size: 1rem;
-      }
+    .detalhe-descricao {
+      font-family: var(--font-paragrafos);
+      color: var(--marrom-claro);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
 
-      .detalhe-especificacoes {
-        margin-top: 0.5rem;
-      }
+    .detalhe-especificacoes {
+      margin-top: 0.5rem;
+    }
 
-      .detalhe-especificacoes h3 {
-        font-family: var(--font-paragrafos);
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 0.75rem;
-        color: var(--marrom-base);
-      }
+    .detalhe-especificacoes h3 {
+      font-family: var(--font-paragrafos);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--marrom-base);
+    }
 
-      .detalhe-especificacoes ul {
-        list-style: none;
-        padding-left: 1rem;
-      }
+    .detalhe-especificacoes ul {
+      list-style: none;
+      padding-left: 1rem;
+    }
 
-      .detalhe-especificacoes li {
-        margin-bottom: 0.5rem;
-        position: relative;
-        font-size: 0.9rem;
-        color: var(--marrom-claro);
-      }
+    .detalhe-especificacoes li {
+      margin-bottom: 0.5rem;
+      position: relative;
+      font-size: 0.9rem;
+      color: var(--marrom-claro);
+    }
 
-      .detalhe-especificacoes li::before {
-        content: "✦";
-        color: var(--rosa-protagonista);
-        position: absolute;
-        left: -1rem;
-      }
+    .detalhe-especificacoes li::before {
+      content: "✦";
+      color: var(--rosa-protagonista);
+      position: absolute;
+      left: -1rem;
+    }
 
-      .detalhe-endereco {
-        background: linear-gradient(
-          135deg,
+    .detalhe-endereco {
+      background: linear-gradient(135deg,
           rgba(254, 180, 35, 0.08) 0%,
-          rgba(232, 58, 109, 0.08) 100%
-        );
-        border-radius: 16px;
-        padding: 1rem 1.25rem;
-        margin: 0.5rem 0;
-        border: 1px solid rgba(232, 58, 109, 0.2);
-      }
+          rgba(232, 58, 109, 0.08) 100%);
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      margin: 0.5rem 0;
+      border: 1px solid rgba(232, 58, 109, 0.2);
+    }
 
-      .endereco-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-      }
+    .endereco-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
 
-      .endereco-header svg {
-        color: var(--rosa-protagonista);
-        stroke: var(--rosa-protagonista);
-      }
+    .endereco-header svg {
+      color: var(--rosa-protagonista);
+      stroke: var(--rosa-protagonista);
+    }
 
-      .endereco-header h3 {
-        font-family: var(--font-paragrafos);
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--marrom-base);
-        margin: 0;
-      }
+    .endereco-header h3 {
+      font-family: var(--font-paragrafos);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--marrom-base);
+      margin: 0;
+    }
 
-      .endereco-conteudo {
-        padding-left: 1.75rem;
-      }
+    .endereco-conteudo {
+      padding-left: 1.75rem;
+    }
 
-      .endereco-conteudo p {
-        font-size: 0.85rem;
-        color: var(--marrom-claro);
-        margin-bottom: 0.25rem;
-        line-height: 1.4;
-      }
+    .endereco-conteudo p {
+      font-size: 0.85rem;
+      color: var(--marrom-claro);
+      margin-bottom: 0.25rem;
+      line-height: 1.4;
+    }
 
-      .btn-copiar-endereco-mini {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        background: transparent;
-        border: 1px solid var(--rosa-protagonista);
-        color: var(--rosa-protagonista);
-        padding: 0.3rem 0.75rem;
-        border-radius: 99px;
-        font-family: var(--font-paragrafos);
-        font-size: 0.7rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 0.5rem;
-      }
+    .btn-copiar-endereco-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: transparent;
+      border: 1px solid var(--rosa-protagonista);
+      color: var(--rosa-protagonista);
+      padding: 0.3rem 0.75rem;
+      border-radius: 99px;
+      font-family: var(--font-paragrafos);
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+    }
 
-      .btn-copiar-endereco-mini:hover {
-        background: var(--rosa-protagonista);
-        color: var(--branco);
-      }
+    .btn-copiar-endereco-mini:hover {
+      background: var(--rosa-protagonista);
+      color: var(--branco);
+    }
 
-      .btn-copiar-endereco-mini:hover svg {
-        stroke: var(--branco);
-      }
+    .btn-copiar-endereco-mini:hover svg {
+      stroke: var(--branco);
+    }
 
-      .detalhe-acoes {
-        margin-top: 0.5rem;
-      }
+    .detalhe-acoes {
+      margin-top: 0.5rem;
+    }
 
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-group>* {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .btn-externo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: transparent;
+      border: 2px solid var(--marrom-claro);
+      color: var(--marrom-claro);
+      padding: 1rem 2rem;
+      font-family: var(--font-paragrafos);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-externo:hover {
+      background: var(--marrom-claro);
+      color: var(--branco);
+      transform: translateY(-2px);
+      border-color: var(--marrom-claro);
+    }
+
+    .btn-externo:active {
+      transform: translateY(0);
+    }
+
+    .btn-presentear {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: var(--rosa-protagonista);
+      color: var(--branco);
+      border: none;
+      padding: 1rem 2rem;
+      font-family: var(--font-paragrafos);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-presentear:hover {
+      background: var(--terracota);
+      transform: translateY(-2px);
+    }
+
+    .btn-presentear:active {
+      transform: translateY(0);
+    }
+
+    .btn-externo svg,
+    .btn-presentear svg {
+      flex-shrink: 0;
+    }
+
+    /* Responsivo para botões */
+    @media (max-width: 600px) {
       .btn-group {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-
-      .btn-group > * {
-        flex: 1;
-        min-width: 180px;
-      }
-
-      .btn-externo {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        flex-direction: column;
         gap: 0.75rem;
-        background: transparent;
-        border: 2px solid var(--marrom-claro);
-        color: var(--marrom-claro);
-        padding: 1rem 2rem;
-        font-family: var(--font-paragrafos);
-        font-size: 0.85rem;
-        font-weight: 500;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        border-radius: 99px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
       }
 
-      .btn-externo:hover {
-        background: var(--marrom-claro);
-        color: var(--branco);
-        transform: translateY(-2px);
-        border-color: var(--marrom-claro);
+      .btn-group>* {
+        min-width: auto;
       }
 
-      .btn-externo:active {
-        transform: translateY(0);
-      }
-
+      .btn-externo,
       .btn-presentear {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        background: var(--rosa-protagonista);
-        color: var(--branco);
-        border: none;
-        padding: 1rem 2rem;
-        font-family: var(--font-paragrafos);
-        font-size: 0.85rem;
-        font-weight: 500;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        border-radius: 99px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 100%;
-      }
-
-      .btn-presentear:hover {
-        background: var(--terracota);
-        transform: translateY(-2px);
-      }
-
-      .btn-presentear:active {
-        transform: translateY(0);
+        padding: 0.875rem 1.5rem;
+        font-size: 0.8rem;
       }
 
       .btn-externo svg,
       .btn-presentear svg {
-        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    @media (max-width: 380px) {
+
+      .btn-externo,
+      .btn-presentear {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.75rem;
       }
 
-      /* Responsivo para botões */
-      @media (max-width: 600px) {
-        .btn-group {
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+      .btn-externo svg,
+      .btn-presentear svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
 
-        .btn-group > * {
-          min-width: auto;
-        }
+    .mensagem-gifted {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(232, 58, 109, 0.1);
+      border-radius: 12px;
+      color: var(--rosa-protagonista);
+      font-family: var(--font-paragrafos);
+      font-style: italic;
+    }
 
-        .btn-externo,
-        .btn-presentear {
-          padding: 0.875rem 1.5rem;
-          font-size: 0.8rem;
-        }
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 4rem;
+    }
 
-        .btn-externo svg,
-        .btn-presentear svg {
-          width: 18px;
-          height: 18px;
-        }
+    .loading p {
+      color: var(--marrom-claro);
+      font-size: 1.1rem;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--creme-suavidade);
+      border-radius: 24px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(58, 42, 31, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-family: var(--font-titulos);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--marrom-base);
+      margin-top: 1.5rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--marrom-claro);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .payment-methods {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .payment-btn {
+      flex: 1;
+      padding: 0.75rem;
+      background: transparent;
+      border: 1.5px solid rgba(58, 42, 31, 0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: var(--font-paragrafos);
+      transition: all 0.3s ease;
+    }
+
+    .payment-btn.active {
+      border-color: var(--rosa-protagonista);
+      background: rgba(232, 58, 109, 0.1);
+      color: var(--rosa-protagonista);
+    }
+
+    .payment-content {
+      display: none;
+    }
+
+    .payment-content.active {
+      display: block;
+    }
+
+    #pixEmail {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(58, 42, 31, 0.2);
+      border-radius: 12px;
+      font-family: var(--font-paragrafos);
+      transition: all 0.3s ease;
+    }
+
+    #pixEmail:focus {
+      outline: none;
+      border-color: var(--rosa-protagonista);
+      box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+    }
+
+    #pixEmail.invalid {
+      border-color: #ef4444;
+    }
+
+    #pixEmail.valid {
+      border-color: #10b981;
+    }
+
+    small {
+      font-size: 0.7rem;
+      color: var(--marrom-claro);
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    .mp-card-field.valid {
+      border-color: #10b981;
+    }
+
+    .mp-card-field.invalid {
+      border-color: #ef4444;
+    }
+
+    .cardholder-name-input,
+    .cpf-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(58, 42, 31, 0.2);
+      border-radius: 12px;
+      font-family: var(--font-paragrafos);
+      transition: all 0.3s ease;
+    }
+
+    .cardholder-name-input:focus,
+    .cpf-input:focus {
+      outline: none;
+      border-color: var(--rosa-protagonista);
+      box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--marrom-base);
+    }
+
+    .form-group input,
+    .form-group iframe {
+      width: 100%;
+      height: 48px;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(58, 42, 31, 0.2);
+      border-radius: 12px;
+      font-family: var(--font-paragrafos);
+      background-color: var(--branco);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--rosa-protagonista);
+      box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+    }
+
+    .form-group input.invalid {
+      border-color: #ef4444;
+    }
+
+    .form-group input.valid {
+      border-color: #10b981;
+    }
+
+    .form-group input::placeholder {
+      color: rgba(58, 42, 31, 0.3);
+      font-size: 0.85rem;
+    }
+
+    .form-select {
+      width: 100%;
+      height: 48px;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(58, 42, 31, 0.2);
+      border-radius: 12px;
+      font-family: var(--font-paragrafos);
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .form-select:focus {
+      outline: none;
+      border-color: var(--rosa-protagonista);
+      box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+    }
+
+    .email-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(58, 42, 31, 0.2);
+      border-radius: 12px;
+      font-family: var(--font-paragrafos);
+      transition: all 0.3s ease;
+    }
+
+    .email-input:focus {
+      outline: none;
+      border-color: var(--rosa-protagonista);
+      box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
+    }
+
+    .btn-pagar {
+      width: 100%;
+      padding: 1rem;
+      background: var(--rosa-protagonista);
+      color: var(--branco);
+      border: none;
+      border-radius: 99px;
+      font-family: var(--font-paragrafos);
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-pagar:hover {
+      background: var(--terracota);
+      transform: translateY(-2px);
+    }
+
+    .qr-code {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .qr-code img {
+      margin: 0 auto;
+      width: 200px;
+      height: 200px;
+    }
+
+    .pix-code {
+      background: rgba(58, 42, 31, 0.05);
+      padding: 0.75rem;
+      border-radius: 12px;
+      font-family: monospace;
+      word-break: break-all;
+      margin: 1rem 0;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--marrom-base);
+      color: var(--branco);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      z-index: 1001;
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast.success {
+      background: #10b981;
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
       }
 
-      @media (max-width: 380px) {
-        .btn-externo,
-        .btn-presentear {
-          padding: 0.75rem 1.25rem;
-          font-size: 0.75rem;
-        }
-
-        .btn-externo svg,
-        .btn-presentear svg {
-          width: 16px;
-          height: 16px;
-        }
+      to {
+        transform: translateX(0);
+        opacity: 1;
       }
+    }
 
-      .mensagem-gifted {
-        text-align: center;
-        padding: 1rem;
-        background: rgba(232, 58, 109, 0.1);
-        border-radius: 12px;
-        color: var(--rosa-protagonista);
-        font-family: var(--font-paragrafos);
-        font-style: italic;
-      }
+    /* FOOTER */
+    .footer {
+      padding: 2rem 0 2.5rem;
+      background: var(--creme-suavidade);
+      text-align: center;
+      border-top: 1px solid rgba(58, 42, 31, 0.07);
+    }
 
-      /* Loading State */
-      .loading {
-        text-align: center;
-        padding: 4rem;
-      }
+    .footer__names {
+      display: block;
+      width: 100%;
+      max-width: 1921px;
+      margin: 0 auto;
+      margin-bottom: 0.4rem;
+    }
 
-      .loading p {
-        color: var(--marrom-claro);
-        font-size: 1.1rem;
-      }
+    .footer__names img {
+      width: 100%;
+      height: auto;
+      max-width: 240px;
+      display: inline-block;
+    }
 
-      /* Modal */
-      .modal {
+    .footer__date {
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rosa-protagonista);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .nav__links {
         display: none;
+      }
+
+      .nav__links.open {
+        display: flex;
+        flex-direction: column;
+        gap: 1.8rem;
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(8px);
-        z-index: 1000;
+        right: 0;
+        bottom: 0;
+        background: var(--creme-suavidade);
         justify-content: center;
         align-items: center;
+        z-index: 99;
+        width: 100vw;
+        height: 100vh;
       }
 
-      .modal.active {
+      .nav__links.open a {
+        color: var(--laranja-energia);
+        font-size: 1.1rem;
+      }
+
+      .nav__links.open a:hover {
+        color: var(--laranja-energia);
+      }
+
+      .nav__links.open a::after {
+        background: var(--laranja-energia);
+      }
+
+      .nav__toggle {
         display: flex;
+        z-index: 101;
       }
 
-      .modal-content {
-        background: var(--creme-suavidade);
-        border-radius: 24px;
-        width: 90%;
-        max-width: 500px;
-        max-height: 85vh;
-        overflow-y: auto;
+      .nav__links.open~.nav__toggle span {
+        background: var(--laranja-energia) !important;
       }
 
-      .modal-header {
+      .nav__logo-image {
+        height: 38px;
+      }
+
+      /* Detalhe Card Responsivo */
+      .detalhe-card {
+        grid-template-columns: 1fr;
+        border-radius: 20px;
+      }
+
+      .detalhe-imagem {
+        min-height: 300px;
+      }
+
+      .detalhe-imagem img {
+        max-height: 300px;
+      }
+
+      .detalhe-placeholder {
+        font-size: 5rem;
+      }
+
+      .detalhe-info {
         padding: 1.5rem;
-        border-bottom: 1px solid rgba(58, 42, 31, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        gap: 1rem;
       }
 
-      .modal-header h2 {
-        font-family: var(--font-titulos);
-        font-size: 1rem;
-        font-weight: 500;
-        color: var(--marrom-base);
-        margin-top: 1.5rem;
+      .detalhe-info h1 {
+        font-size: clamp(1.5rem, 5vw, 2rem);
       }
 
-      .modal-close {
-        background: none;
-        border: none;
-        font-size: 1.8rem;
-        cursor: pointer;
-        color: var(--marrom-claro);
+      .detalhe-preco span {
+        font-size: 1.5rem;
       }
 
-      .modal-body {
-        padding: 1.5rem;
+      .detalhe-preco {
+        padding: 0.875rem 1rem;
+      }
+
+      .detalhe-especificacoes h3 {
+        font-size: 1.1rem;
+      }
+
+      .detalhe-especificacoes li {
+        font-size: 0.85rem;
+      }
+
+      .btn-presentear {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.8rem;
       }
 
       .payment-methods {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 2rem;
+        flex-direction: column;
+      }
+
+      .modal-content {
+        width: 95%;
+        max-height: 90vh;
+      }
+
+      .modal-header {
+        padding: 1rem;
+      }
+
+      .modal-header h2 {
+        font-size: 1.25rem;
+      }
+
+      .modal-body {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .detalhe-imagem {
+        min-height: 250px;
+      }
+
+      .detalhe-imagem img {
+        max-height: 250px;
+      }
+
+      .detalhe-placeholder {
+        font-size: 4rem;
+      }
+
+      .detalhe-info {
+        padding: 1.25rem;
+      }
+
+      .detalhe-info h1 {
+        font-size: 1.5rem;
+      }
+
+      .detalhe-categoria {
+        font-size: 0.65rem;
+      }
+
+      .detalhe-preco span {
+        font-size: 1.3rem;
+      }
+
+      .detalhe-preco strong {
+        font-size: 0.9rem;
+      }
+
+      .detalhe-descricao {
+        font-size: 0.9rem;
+      }
+
+      .detalhe-especificacoes h3 {
+        font-size: 1rem;
+      }
+
+      .detalhe-especificacoes li {
+        font-size: 0.8rem;
+      }
+
+      .detalhe-endereco {
+        padding: 0.875rem 1rem;
+      }
+
+      .endereco-header h3 {
+        font-size: 0.85rem;
+      }
+
+      .endereco-conteudo {
+        padding-left: 1.5rem;
+      }
+
+      .endereco-conteudo p {
+        font-size: 0.8rem;
+      }
+
+      .btn-copiar-endereco-mini {
+        padding: 0.25rem 0.65rem;
+        font-size: 0.65rem;
+      }
+
+      .btn-presentear {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.75rem;
+      }
+
+      .mensagem-gifted {
+        font-size: 0.85rem;
+        padding: 0.875rem;
+      }
+
+      /* Modal mobile */
+      .modal-content {
+        width: 95%;
+        border-radius: 20px;
+      }
+
+      .payment-methods {
+        flex-direction: column;
+        gap: 0.75rem;
       }
 
       .payment-btn {
-        flex: 1;
-        padding: 0.75rem;
-        background: transparent;
-        border: 1.5px solid rgba(58, 42, 31, 0.2);
-        border-radius: 12px;
-        cursor: pointer;
-        font-family: var(--font-paragrafos);
-        transition: all 0.3s ease;
-      }
-
-      .payment-btn.active {
-        border-color: var(--rosa-protagonista);
-        background: rgba(232, 58, 109, 0.1);
-        color: var(--rosa-protagonista);
-      }
-
-      .payment-content {
-        display: none;
-      }
-
-      .payment-content.active {
-        display: block;
-      }
-
-      .mp-card-field {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1.5px solid rgba(58, 42, 31, 0.2);
-        border-radius: 12px;
-        font-family: var(--font-paragrafos);
-        background: white;
-        transition: all 0.3s ease;
-        min-height: 48px;
-      }
-
-      .mp-card-field iframe {
-        width: 100%;
-        height: 48px;
-        border: none;
-      }
-
-      .mp-card-field.valid {
-        border-color: #10b981;
-      }
-
-      .mp-card-field.invalid {
-        border-color: #ef4444;
-      }
-
-      .cardholder-name-input,
-      .cpf-input {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1.5px solid rgba(58, 42, 31, 0.2);
-        border-radius: 12px;
-        font-family: var(--font-paragrafos);
-        transition: all 0.3s ease;
-      }
-
-      .cardholder-name-input:focus,
-      .cpf-input:focus {
-        outline: none;
-        border-color: var(--rosa-protagonista);
-        box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
-      }
-
-      .form-group {
-        margin-bottom: 1rem;
+        padding: 0.625rem;
+        font-size: 0.8rem;
       }
 
       .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+      }
+
+      .form-group input,
+      .cardholder-name-input,
+      .cpf-input,
+      .mp-card-field {
+        padding: 0.625rem;
         font-size: 0.85rem;
-        font-weight: 500;
-        color: var(--marrom-base);
-      }
-
-      .form-group input {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1.5px solid rgba(58, 42, 31, 0.2);
-        border-radius: 12px;
-        font-family: var(--font-paragrafos);
-      }
-
-      .form-group input:focus {
-        outline: none;
-        border-color: var(--rosa-protagonista);
-        box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
-      }
-
-      .form-group input.invalid {
-        border-color: #ef4444;
-      }
-
-      .form-group input.valid {
-        border-color: #10b981;
-      }
-
-      .form-group input::placeholder {
-        color: rgba(58, 42, 31, 0.3);
-        font-size: 0.85rem;
-      }
-
-      .form-select {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1.5px solid rgba(58, 42, 31, 0.2);
-        border-radius: 12px;
-        font-family: var(--font-paragrafos);
-        background: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .form-select:focus {
-        outline: none;
-        border-color: var(--rosa-protagonista);
-        box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
-      }
-
-      .email-input {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1.5px solid rgba(58, 42, 31, 0.2);
-        border-radius: 12px;
-        font-family: var(--font-paragrafos);
-        transition: all 0.3s ease;
-      }
-
-      .email-input:focus {
-        outline: none;
-        border-color: var(--rosa-protagonista);
-        box-shadow: 0 0 0 3px rgba(232, 58, 109, 0.1);
       }
 
       .btn-pagar {
-        width: 100%;
-        padding: 1rem;
-        background: var(--rosa-protagonista);
-        color: var(--branco);
-        border: none;
-        border-radius: 99px;
-        font-family: var(--font-paragrafos);
-        font-weight: 500;
-        cursor: pointer;
-        margin-top: 1rem;
-        transition: all 0.3s ease;
-      }
-
-      .btn-pagar:hover {
-        background: var(--terracota);
-        transform: translateY(-2px);
-      }
-
-      .qr-code {
-        text-align: center;
-        padding: 1rem;
-      }
-
-      .qr-code img {
-        margin: 0 auto;
-        width: 200px;
-        height: 200px;
-      }
-
-      .pix-code {
-        background: rgba(58, 42, 31, 0.05);
-        padding: 0.75rem;
-        border-radius: 12px;
-        font-family: monospace;
-        word-break: break-all;
-        margin: 1rem 0;
+        padding: 0.875rem;
+        font-size: 0.8rem;
       }
 
       .toast {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        background: var(--marrom-base);
-        color: var(--branco);
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        z-index: 1001;
-        animation: slideIn 0.3s ease;
-      }
-
-      .toast.success {
-        background: #10b981;
-      }
-
-      .toast.error {
-        background: #ef4444;
-      }
-
-      @keyframes slideIn {
-        from {
-          transform: translateX(100%);
-          opacity: 0;
-        }
-
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-
-      /* FOOTER */
-      .footer {
-        padding: 2rem 0 2.5rem;
-        background: var(--creme-suavidade);
-        text-align: center;
-        border-top: 1px solid rgba(58, 42, 31, 0.07);
-      }
-
-      .footer__names {
-        display: block;
-        width: 100%;
-        max-width: 1921px;
-        margin: 0 auto;
-        margin-bottom: 0.4rem;
-      }
-
-      .footer__names img {
-        width: 100%;
-        height: auto;
-        max-width: 240px;
-        display: inline-block;
-      }
-
-      .footer__date {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        padding: 0.75rem 1rem;
         font-size: 0.85rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: var(--rosa-protagonista);
+      }
+    }
+
+    /* Ajuste para telas muito pequenas */
+    @media (max-width: 380px) {
+      .detalhe-info {
+        padding: 1rem;
       }
 
-      /* RESPONSIVE */
-      @media (max-width: 900px) {
-        .nav__links {
-          display: none;
-        }
-
-        .nav__links.open {
-          display: flex;
-          flex-direction: column;
-          gap: 1.8rem;
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: var(--creme-suavidade);
-          justify-content: center;
-          align-items: center;
-          z-index: 99;
-          width: 100vw;
-          height: 100vh;
-        }
-
-        .nav__links.open a {
-          color: var(--laranja-energia);
-          font-size: 1.1rem;
-        }
-
-        .nav__links.open a:hover {
-          color: var(--laranja-energia);
-        }
-
-        .nav__links.open a::after {
-          background: var(--laranja-energia);
-        }
-
-        .nav__toggle {
-          display: flex;
-          z-index: 101;
-        }
-
-        .nav__links.open ~ .nav__toggle span {
-          background: var(--laranja-energia) !important;
-        }
-
-        .nav__logo-image {
-          height: 38px;
-        }
-
-        /* Detalhe Card Responsivo */
-        .detalhe-card {
-          grid-template-columns: 1fr;
-          border-radius: 20px;
-        }
-
-        .detalhe-imagem {
-          min-height: 300px;
-        }
-
-        .detalhe-imagem img {
-          max-height: 300px;
-        }
-
-        .detalhe-placeholder {
-          font-size: 5rem;
-        }
-
-        .detalhe-info {
-          padding: 1.5rem;
-          gap: 1rem;
-        }
-
-        .detalhe-info h1 {
-          font-size: clamp(1.5rem, 5vw, 2rem);
-        }
-
-        .detalhe-preco span {
-          font-size: 1.5rem;
-        }
-
-        .detalhe-preco {
-          padding: 0.875rem 1rem;
-        }
-
-        .detalhe-especificacoes h3 {
-          font-size: 1.1rem;
-        }
-
-        .detalhe-especificacoes li {
-          font-size: 0.85rem;
-        }
-
-        .btn-presentear {
-          padding: 0.875rem 1.5rem;
-          font-size: 0.8rem;
-        }
-
-        .payment-methods {
-          flex-direction: column;
-        }
-
-        .modal-content {
-          width: 95%;
-          max-height: 90vh;
-        }
-
-        .modal-header {
-          padding: 1rem;
-        }
-
-        .modal-header h2 {
-          font-size: 1.25rem;
-        }
-
-        .modal-body {
-          padding: 1rem;
-        }
+      .detalhe-info h1 {
+        font-size: 1.3rem;
       }
 
-      @media (max-width: 600px) {
-        .detalhe-imagem {
-          min-height: 250px;
-        }
-
-        .detalhe-imagem img {
-          max-height: 250px;
-        }
-
-        .detalhe-placeholder {
-          font-size: 4rem;
-        }
-
-        .detalhe-info {
-          padding: 1.25rem;
-        }
-
-        .detalhe-info h1 {
-          font-size: 1.5rem;
-        }
-
-        .detalhe-categoria {
-          font-size: 0.65rem;
-        }
-
-        .detalhe-preco span {
-          font-size: 1.3rem;
-        }
-
-        .detalhe-preco strong {
-          font-size: 0.9rem;
-        }
-
-        .detalhe-descricao {
-          font-size: 0.9rem;
-        }
-
-        .detalhe-especificacoes h3 {
-          font-size: 1rem;
-        }
-
-        .detalhe-especificacoes li {
-          font-size: 0.8rem;
-        }
-
-        .detalhe-endereco {
-          padding: 0.875rem 1rem;
-        }
-
-        .endereco-header h3 {
-          font-size: 0.85rem;
-        }
-
-        .endereco-conteudo {
-          padding-left: 1.5rem;
-        }
-
-        .endereco-conteudo p {
-          font-size: 0.8rem;
-        }
-
-        .btn-copiar-endereco-mini {
-          padding: 0.25rem 0.65rem;
-          font-size: 0.65rem;
-        }
-
-        .btn-presentear {
-          padding: 0.75rem 1.25rem;
-          font-size: 0.75rem;
-        }
-
-        .mensagem-gifted {
-          font-size: 0.85rem;
-          padding: 0.875rem;
-        }
-
-        /* Modal mobile */
-        .modal-content {
-          width: 95%;
-          border-radius: 20px;
-        }
-
-        .payment-methods {
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
-        .payment-btn {
-          padding: 0.625rem;
-          font-size: 0.8rem;
-        }
-
-        .form-group label {
-          font-size: 0.8rem;
-        }
-
-        .form-group input,
-        .cardholder-name-input,
-        .cpf-input,
-        .mp-card-field {
-          padding: 0.625rem;
-          font-size: 0.85rem;
-        }
-
-        .btn-pagar {
-          padding: 0.875rem;
-          font-size: 0.8rem;
-        }
-
-        .toast {
-          bottom: 1rem;
-          right: 1rem;
-          left: 1rem;
-          padding: 0.75rem 1rem;
-          font-size: 0.85rem;
-        }
+      .detalhe-preco span {
+        font-size: 1.2rem;
       }
 
-      /* Ajuste para telas muito pequenas */
-      @media (max-width: 380px) {
-        .detalhe-info {
-          padding: 1rem;
-        }
-
-        .detalhe-info h1 {
-          font-size: 1.3rem;
-        }
-
-        .detalhe-preco span {
-          font-size: 1.2rem;
-        }
-
-        .btn-presentear {
-          padding: 0.7rem 1rem;
-          font-size: 0.7rem;
-        }
+      .btn-presentear {
+        padding: 0.7rem 1rem;
+        font-size: 0.7rem;
       }
-    </style>
-  </head>
+    }
+  </style>
+</head>
 
-  <body>
-    <!-- Navbar -->
-    <nav class="nav" id="nav">
-      <div class="container">
-        <div class="nav__inner">
-          <a href="#" class="nav__logo">
-            <img
-              src="../img/logo_branco.png"
-              alt="Giovanna & Erick"
-              class="nav__logo-image"
-            />
-          </a>
-          <ul class="nav__links" id="navLinks">
-            <li><a href="../">Início</a></li>
-            <li><a href="../presentes">Presentes</a></li>
-          </ul>
-          <button class="nav__toggle" id="navToggle" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
+<body>
+  <!-- Navbar -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav__inner">
+        <a href="" class="nav__logo">
+          <img src="../img/logo_branco.png" alt="Giovanna & Erick" class="nav__logo-image" />
+        </a>
+        <ul class="nav__links" id="navLinks">
+          <li><a href="../">Início</a></li>
+          <li><a href="../presentes">Presentes</a></li>
+          <li><a href="../luademel/">Lua de Mel</a></li>
+        </ul>
+        <button class="nav__toggle" id="navToggle" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <main class="presente-detalhe">
-      <div class="container">
-        <div id="detalheContent">
-          <div class="loading" style="text-align: center; padding: 4rem">
-            <p>Carregando detalhes do presente...</p>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Modal de Pagamento -->
-    <div id="paymentModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Presentear com o valor</h2>
-          <button class="modal-close" onclick="closeModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="payment-methods">
-            <button class="payment-btn active" data-method="pix">PIX</button>
-            <button class="payment-btn" data-method="credit">
-              Cartão de Crédito
-            </button>
-            <button class="payment-btn" data-method="debit">
-              Cartão de Débito
-            </button>
-          </div>
-
-          <div id="pixContent" class="payment-content active">
-            <div id="pixPlaceholder" style="text-align: center; padding: 2rem">
-              <p style="margin-bottom: 1.5rem">
-                Clique no botão abaixo para gerar o PIX
-              </p>
-              <button
-                class="btn-pagar"
-                onclick="generatePixQRCode()"
-                style="background: var(--rosa-protagonista)"
-              >
-                Gerar QR Code PIX
-              </button>
-            </div>
-            <div id="pixGeneratedContent" style="display: none">
-              <div class="qr-code" id="qrCodeContainer"></div>
-              <div class="pix-code" id="pixCode"></div>
-              <button class="btn-pagar" onclick="copyPixCode()">
-                Copiar código PIX
-              </button>
-            </div>
-          </div>
-
-          <div id="creditContent" class="payment-content">
-            <div class="form-group">
-              <label>Número do cartão</label>
-              <div id="form-checkout__cardNumber" class="mp-card-field"></div>
-            </div>
-
-            <div class="form-group">
-              <label>Data de validade</label>
-              <div
-                id="form-checkout__expirationDate"
-                class="mp-card-field"
-              ></div>
-            </div>
-
-            <div class="form-group">
-              <label>CVV</label>
-              <div id="form-checkout__securityCode" class="mp-card-field"></div>
-            </div>
-
-            <div class="form-group">
-              <label>Nome no cartão</label>
-              <input
-                type="text"
-                id="form-checkout__cardholderName"
-                class="cardholder-name-input"
-                placeholder="Como está no cartão"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Banco emissor</label>
-              <select id="form-checkout__issuer" class="form-select">
-                <option value="" disabled selected>Selecione o banco</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Parcelas</label>
-              <select id="form-checkout__installments" class="form-select">
-                <option value="" disabled selected>
-                  Selecione as parcelas
-                </option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Tipo de documento</label>
-              <select
-                id="form-checkout__identificationType"
-                class="form-select"
-              >
-                <option value="" disabled selected>Selecione o tipo</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Número do documento</label>
-              <input
-                type="text"
-                id="form-checkout__identificationNumber"
-                class="cpf-input"
-                placeholder="Número do documento"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>E-mail</label>
-              <input
-                type="email"
-                id="form-checkout__email"
-                class="email-input"
-                placeholder="seu@email.com"
-              />
-            </div>
-
-            <!-- Campos ocultos necessários -->
-            <input id="token" name="token" type="hidden" />
-            <input id="paymentMethodId" name="paymentMethodId" type="hidden" />
-            <input
-              id="transactionAmount"
-              name="transactionAmount"
-              type="hidden"
-              value=""
-            />
-            <input id="description" name="description" type="hidden" value="" />
-
-            <button class="btn-pagar" id="creditPaymentButton">
-              Pagar com cartão de crédito
-            </button>
-          </div>
-
-          <div id="debitContent" class="payment-content">
-            <div class="form-group">
-              <label>Número do cartão</label>
-              <div
-                id="debit-form-checkout__cardNumber"
-                class="mp-card-field"
-              ></div>
-            </div>
-
-            <div class="form-group">
-              <label>Data de validade</label>
-              <div
-                id="debit-form-checkout__expirationDate"
-                class="mp-card-field"
-              ></div>
-            </div>
-
-            <div class="form-group">
-              <label>CVV</label>
-              <div
-                id="debit-form-checkout__securityCode"
-                class="mp-card-field"
-              ></div>
-            </div>
-
-            <div class="form-group">
-              <label>Nome no cartão</label>
-              <input
-                type="text"
-                id="debit-form-checkout__cardholderName"
-                class="cardholder-name-input"
-                placeholder="Como está no cartão"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Tipo de documento</label>
-              <select
-                id="debit-form-checkout__identificationType"
-                class="form-select"
-              >
-                <option value="" disabled selected>Selecione o tipo</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Número do documento</label>
-              <input
-                type="text"
-                id="debit-form-checkout__identificationNumber"
-                class="cpf-input"
-                placeholder="Número do documento"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>E-mail</label>
-              <input
-                type="email"
-                id="debit-form-checkout__email"
-                class="email-input"
-                placeholder="seu@email.com"
-              />
-            </div>
-
-            <!-- Campos ocultos necessários -->
-            <input id="debit-token" name="debit-token" type="hidden" />
-            <input
-              id="debit-paymentMethodId"
-              name="debit-paymentMethodId"
-              type="hidden"
-            />
-
-            <button class="btn-pagar" id="debitPaymentButton">
-              Pagar com cartão de débito
-            </button>
-          </div>
+  <main class="presente-detalhe">
+    <div class="container">
+      <div id="detalheContent">
+        <div class="loading" style="text-align: center; padding: 4rem">
+          <p>Carregando detalhes do presente...</p>
         </div>
       </div>
     </div>
+  </main>
 
-    <!-- FOOTER -->
-    <footer class="footer" role="contentinfo">
-      <p class="footer__names">
-        <img src="../img/nome_rosa.png" alt="Giovanna & Erick" />
-      </p>
-      <p class="footer__date">21 · Novembro · 2026 · Olímpia</p>
-    </footer>
+  <!-- Modal de Pagamento -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Presentear com o valor</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="payment-methods">
+          <button class="payment-btn active" data-method="pix">PIX</button>
+          <button class="payment-btn" data-method="credit">
+            Cartão de Crédito
+          </button>
+          <button class="payment-btn" data-method="debit">
+            Cartão de Débito
+          </button>
+        </div>
 
-    <script>
-      const toggle = document.getElementById("navToggle");
-      const links = document.getElementById("navLinks");
-      if (toggle && links) {
-        toggle.addEventListener("click", () => {
-          const open = links.classList.toggle("open");
-          toggle.setAttribute("aria-expanded", open);
-          const spans = toggle.querySelectorAll("span");
-          if (open) {
-            spans[0].style.transform = "translateY(6.8px) rotate(45deg)";
-            spans[1].style.opacity = "0";
-            spans[2].style.transform = "translateY(-6.5px) rotate(-45deg)";
-          } else {
-            spans.forEach((s) => {
-              s.style.transform = "";
-              s.style.opacity = "";
-            });
-          }
-        });
-
-        links.querySelectorAll("a").forEach((a) =>
-          a.addEventListener("click", () => {
-            links.classList.remove("open");
-            toggle.setAttribute("aria-expanded", false);
-            toggle.querySelectorAll("span").forEach((s) => {
-              s.style.transform = "";
-              s.style.opacity = "";
-            });
-          }),
-        );
-      }
-    </script>
-
-    <script>
-      let currentPresente = null;
-      let pollingInterval = null;
-
-      const API_BASE = "/.netlify/functions";
-
-      function getIdFromURL() {
-        const params = new URLSearchParams(window.location.search);
-        return params.get("id");
-      }
-
-      async function carregarDetalhePresente() {
-        const id = getIdFromURL();
-
-        if (!id) {
-          mostrarErro("ID do presente não informado.");
-          return;
-        }
-
-        try {
-          const response = await fetch("/data/presentes.json");
-
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
-
-          const data = await response.json();
-          const presente = data.presentes.find((p) => p.id === parseInt(id));
-
-          if (!presente) {
-            mostrarErro("Presente não encontrado.");
-            return;
-          }
-
-          currentPresente = presente;
-          renderizarDetalhe(presente);
-        } catch (error) {
-          console.error("Erro:", error);
-          mostrarErro(
-            `Erro ao carregar detalhes do presente. Detalhe: ${error.message}`,
-          );
-        }
-      }
-
-      function renderizarDetalhe(presente) {
-        const container = document.getElementById("detalheContent");
-
-        const statusInfo = {
-          priority: { class: "ribbon--priority", text: "Prioritário" },
-          available: { class: "ribbon--available", text: "Disponível" },
-          gifted: { class: "ribbon--gifted", text: "Presenteado ♡" },
-        }[presente.status] || {
-          class: "ribbon--available",
-          text: "Disponível",
-        };
-
-        const precoFormatado = presente.preco.toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
-
-        // Verifica se tem link externo
-        const hasExternalLink =
-          presente.linkExterno && presente.linkExterno.trim() !== "";
-
-        const html = `
-          <article class="detalhe-card">
-            <div class="detalhe-imagem">
-              ${
-                presente.imagem
-                  ? `<img src="${escapeHTML(presente.imagem)}" alt="${escapeHTML(presente.nome)}">`
-                  : `<div class="detalhe-placeholder" aria-hidden="true">${presente.icone || "🎁"}</div>`
-              }
+        <div id="pixContent" class="payment-content active">
+          <div id="pixPlaceholder">
+            <div class="form-group">
+              <label for="pixEmail">E-mail para receber a confirmação</label>
+              <input type="email" id="pixEmail" class="email-input" placeholder="seu@email.com" required />
+              <small style="font-size: 0.7rem; color: var(--marrom-claro); display: block; margin-top: 0.25rem;">
+                O comprovante de pagamento será enviado para este e-mail
+              </small>
             </div>
             
+            <button class="btn-pagar" onclick="generatePixQRCode()" style="background: var(--rosa-protagonista)">
+              Gerar QR Code PIX
+            </button>
+          </div>
+
+          <div id="pixGeneratedContent" style="display: none">
+            <div class="qr-code" id="qrCodeContainer"></div>
+            <div class="pix-code" id="pixCode"></div>
+            <button class="btn-pagar" onclick="copyPixCode()">
+              Copiar código PIX
+            </button>
+          </div>
+        </div>
+
+        <div id="creditContent" class="payment-content">
+          <div class="form-group">
+            <label>Número do cartão</label>
+            <div id="form-checkout__cardNumber" class="mp-card-field"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Data de validade</label>
+            <div id="form-checkout__expirationDate" class="mp-card-field"></div>
+          </div>
+
+          <div class="form-group">
+            <label>CVV</label>
+            <div id="form-checkout__securityCode" class="mp-card-field"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Nome no cartão</label>
+            <input type="text" id="form-checkout__cardholderName" class="cardholder-name-input"
+              placeholder="Como está no cartão" />
+          </div>
+
+          <div class="form-group">
+            <label>Banco emissor</label>
+            <select id="form-checkout__issuer" class="form-select">
+              <option value="" disabled selected>Selecione o banco</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Parcelas</label>
+            <select id="form-checkout__installments" class="form-select">
+              <option value="" disabled selected>
+                Selecione as parcelas
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de documento</label>
+            <select id="form-checkout__identificationType" class="form-select">
+              <option value="" disabled selected>Selecione o tipo</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Número do documento</label>
+            <input type="text" id="form-checkout__identificationNumber" class="cpf-input"
+              placeholder="Número do documento" />
+          </div>
+
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" id="form-checkout__email" class="email-input" placeholder="seu@email.com" />
+          </div>
+
+          <!-- Campos ocultos necessários -->
+          <input id="token" name="token" type="hidden" />
+          <input id="paymentMethodId" name="paymentMethodId" type="hidden" />
+          <input id="transactionAmount" name="transactionAmount" type="hidden" value="" />
+          <input id="description" name="description" type="hidden" value="" />
+
+          <button class="btn-pagar" id="creditPaymentButton">
+            Pagar com cartão de crédito
+          </button>
+        </div>
+
+        <div id="debitContent" class="payment-content">
+          <div class="form-group">
+            <label>Número do cartão</label>
+            <div id="debit-form-checkout__cardNumber" class="mp-card-field"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Data de validade</label>
+            <div id="debit-form-checkout__expirationDate" class="mp-card-field"></div>
+          </div>
+
+          <div class="form-group">
+            <label>CVV</label>
+            <div id="debit-form-checkout__securityCode" class="mp-card-field"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Nome no cartão</label>
+            <input type="text" id="debit-form-checkout__cardholderName" class="cardholder-name-input"
+              placeholder="Como está no cartão" />
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de documento</label>
+            <select id="debit-form-checkout__identificationType" class="form-select">
+              <option value="" disabled selected>Selecione o tipo</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Número do documento</label>
+            <input type="text" id="debit-form-checkout__identificationNumber" class="cpf-input"
+              placeholder="Número do documento" />
+          </div>
+
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" id="debit-form-checkout__email" class="email-input" placeholder="seu@email.com" />
+          </div>
+
+          <!-- Campos ocultos necessários -->
+          <input id="debit-token" name="debit-token" type="hidden" />
+          <input id="debit-paymentMethodId" name="debit-paymentMethodId" type="hidden" />
+
+          <button class="btn-pagar" id="debitPaymentButton">
+            Pagar com cartão de débito
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__names">
+      <img src="../img/nome_rosa.png" alt="Giovanna & Erick" />
+    </p>
+    <p class="footer__date">21 · Novembro · 2026 · Olímpia</p>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById("navToggle");
+    const links = document.getElementById("navLinks");
+    if (toggle && links) {
+      toggle.addEventListener("click", () => {
+        const open = links.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", open);
+        const spans = toggle.querySelectorAll("span");
+        if (open) {
+          spans[0].style.transform = "translateY(6.8px) rotate(45deg)";
+          spans[1].style.opacity = "0";
+          spans[2].style.transform = "translateY(-6.5px) rotate(-45deg)";
+        } else {
+          spans.forEach((s) => {
+            s.style.transform = "";
+            s.style.opacity = "";
+          });
+        }
+      });
+
+      links.querySelectorAll("a").forEach((a) =>
+        a.addEventListener("click", () => {
+          links.classList.remove("open");
+          toggle.setAttribute("aria-expanded", false);
+          toggle.querySelectorAll("span").forEach((s) => {
+            s.style.transform = "";
+            s.style.opacity = "";
+          });
+        }),
+      );
+    }
+  </script>
+
+  <script>
+    // VARIÁVEIS GLOBAIS
+    let currentPresente = null;
+    let pollingInterval = null;
+    let mp = null;
+    let creditCardFields = null;
+    let debitCardFields = null;
+    let currentBin = null;
+    let identificationTypes = [];
+
+    const API_BASE = "/.netlify/functions";
+
+    // NÚMERO DO WHATSAPP (sem espaços, apenas números)
+    const WHATSAPP_NUMBER = "5517996181324";
+
+    // FUNÇÃO PARA ABRIR WHATSAPP COM MENSAGEM DO PRESENTE
+    function abrirWhatsapp(linkExterno, nomePresente) {
+      // Obtém a URL completa da página atual
+      const urlAtual = window.location.href;
+      
+      // Cria a mensagem personalizada
+      const mensagem = `Olá! Gostaria de comprar o presente *${nomePresente}* e gostaria de removê-lo da lista de presentes. Segue o link do presente: ${linkExterno}`;
+      
+      // Codifica a mensagem para URL
+      const mensagemCodificada = encodeURIComponent(mensagem);
+      
+      // Cria o link do WhatsApp
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensagemCodificada}`;
+      
+      // Abre o WhatsApp em uma nova aba
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // FUNÇÕES AUXILIARES
+    function getIdFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("id");
+    }
+
+    function capitalizar(str) {
+      if (!str) return "";
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function escapeHTML(str) {
+      if (!str) return "";
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    function mostrarErro(mensagem) {
+      document.getElementById("detalheContent").innerHTML = `
+          <div class="erro-detalhe" style="text-align: center; padding: 4rem; background: #fff; border-radius: 24px;">
+            <p>${mensagem}</p>
+            <a href="../" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--rosa-protagonista); color: #fff; border-radius: 99px;">← Voltar para lista de presentes</a>
+          </div>
+        `;
+    }
+
+    function copiarEndereco() {
+      const enderecoCompleto = `Rua Duque de Caxias, 815\nOlímpia - SP\nCEP: 15402-072`;
+      navigator.clipboard.writeText(enderecoCompleto)
+        .then(() => showToast("Endereço copiado com sucesso!", "success"))
+        .catch(() => {
+          const textarea = document.createElement("textarea");
+          textarea.value = enderecoCompleto;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+          showToast("Endereço copiado com sucesso!", "success");
+        });
+    }
+
+    // MÁSCARA DE CPF/CNPJ
+    function applyDocumentMask(input) {
+      let value = input.value.replace(/\D/g, '');
+
+      // Verifica se é CNPJ (14 dígitos) ou CPF (11 dígitos)
+      if (value.length > 14) value = value.slice(0, 14);
+
+      if (value.length <= 11) {
+        // Máscara de CPF: 000.000.000-00
+        if (value.length <= 3) input.value = value;
+        else if (value.length <= 6) input.value = `${value.slice(0, 3)}.${value.slice(3)}`;
+        else if (value.length <= 9) input.value = `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6)}`;
+        else input.value = `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6, 9)}-${value.slice(9, 11)}`;
+      } else {
+        // Máscara de CNPJ: 00.000.000/0000-00
+        if (value.length <= 2) input.value = value;
+        else if (value.length <= 5) input.value = `${value.slice(0, 2)}.${value.slice(2)}`;
+        else if (value.length <= 8) input.value = `${value.slice(0, 2)}.${value.slice(2, 5)}.${value.slice(5)}`;
+        else if (value.length <= 12) input.value = `${value.slice(0, 2)}.${value.slice(2, 5)}.${value.slice(5, 8)}/${value.slice(8)}`;
+        else input.value = `${value.slice(0, 2)}.${value.slice(2, 5)}.${value.slice(5, 8)}/${value.slice(8, 12)}-${value.slice(12, 14)}`;
+      }
+    }
+
+    function setupDocumentMaskListeners() {
+      const creditDocField = document.getElementById("form-checkout__identificationNumber");
+      const debitDocField = document.getElementById("debit-form-checkout__identificationNumber");
+
+      if (creditDocField) {
+        creditDocField.addEventListener("input", () => applyDocumentMask(creditDocField));
+      }
+      if (debitDocField) {
+        debitDocField.addEventListener("input", () => applyDocumentMask(debitDocField));
+      }
+    }
+
+
+    // FUNÇÕES DE SELECT (UTILITÁRIAS)
+    function clearHTMLSelectChildrenFrom(element) {
+      if (!element) return;
+      const currOptions = [...element.children];
+      currOptions.forEach((child) => child.remove());
+    }
+
+    function createSelectElementPlaceholder(element, placeholder) {
+      if (!element) return;
+      const optionElement = document.createElement("option");
+      optionElement.textContent = placeholder;
+      optionElement.setAttribute("selected", "");
+      optionElement.setAttribute("disabled", "");
+      element.appendChild(optionElement);
+    }
+
+    function clearSelectAndSetPlaceholder(element, placeholder) {
+      if (!element) return;
+      element.innerHTML = "";
+      const option = document.createElement("option");
+      option.value = "";
+      option.disabled = true;
+      option.selected = true;
+      option.textContent = placeholder;
+      element.appendChild(option);
+    }
+
+    function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
+      if (!elem) return;
+      const { label, value } = labelsAndKeys;
+      const currentValue = elem.value;
+
+      const hasPlaceholder = elem.options.length === 1 && elem.options[0]?.disabled;
+
+      if (hasPlaceholder) {
+        elem.innerHTML = "";
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        placeholder.textContent = elem.options[0]?.textContent || "Selecione uma opção";
+        elem.appendChild(placeholder);
+      } else {
+        const placeholder = elem.querySelector("option[disabled][selected]");
+        elem.innerHTML = "";
+        if (placeholder) elem.appendChild(placeholder.cloneNode(true));
+      }
+
+      options.forEach((option) => {
+        const optValue = option[value];
+        const optLabel = option[label];
+        const opt = document.createElement("option");
+        opt.value = optValue;
+        opt.textContent = optLabel;
+        if (currentValue && optValue == currentValue) opt.selected = true;
+        elem.appendChild(opt);
+      });
+    }
+
+
+    // API CALLS PARA MERCADO PAGO
+    async function initMercadoPago() {
+      if (mp) return mp;
+      if (typeof MercadoPago !== "undefined") {
+        mp = new MercadoPago("APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123");
+        return mp;
+      }
+      return new Promise((resolve) => {
+        const check = setInterval(() => {
+          if (typeof MercadoPago !== "undefined") {
+            clearInterval(check);
+            mp = new MercadoPago("APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123");
+            resolve(mp);
+          }
+        }, 100);
+      });
+    }
+
+    async function getIdentificationTypes() {
+      try {
+        await initMercadoPago();
+        const identificationTypesList = await mp.getIdentificationTypes();
+        identificationTypes = identificationTypesList;
+
+        const creditSelect = document.getElementById("form-checkout__identificationType");
+        const debitSelect = document.getElementById("debit-form-checkout__identificationType");
+
+        if (creditSelect) createSelectOptions(creditSelect, identificationTypesList);
+        if (debitSelect) createSelectOptions(debitSelect, identificationTypesList);
+
+        return identificationTypesList;
+      } catch (e) {
+        console.error("Error getting identificationTypes: ", e);
+        return [];
+      }
+    }
+
+    async function getIssuers(paymentMethodId, bin) {
+      try {
+
+        // Valida os parâmetros
+        if (!paymentMethodId || !bin) {
+          console.error("Parâmetros inválidos:", { paymentMethodId, bin });
+          return [];
+        }
+
+        // Usa o SDK do Mercado Pago diretamente (sem chamar o backend)
+        const issuers = await mp.getIssuers({
+          paymentMethodId: paymentMethodId,
+          bin: bin
+        });
+
+        // Verifica se retornou dados válidos
+        if (issuers && Array.isArray(issuers) && issuers.length > 0) {
+          // Mapeia para o formato esperado pelo createSelectOptions
+          return issuers.map(issuer => ({
+            id: issuer.id,
+            name: issuer.name
+          }));
+        }
+
+        return [];
+      } catch (e) {
+        console.error("Erro ao buscar issuers com SDK:", e);
+        return [];
+      }
+    }
+
+    async function getInstallments(amount, bin, paymentMethodId) {
+      try {
+        // Valida se amount é válido (pode ser string ou número)
+        if (!amount || amount === '') {
+          console.error("Amount não fornecido");
+          return [];
+        }
+
+        // Converte para string e limpa a formatação
+        let amountStr = String(amount).trim();
+        // Remove "R$" e espaços, troca vírgula por ponto
+        amountStr = amountStr.replace(/[R$\s]/g, '').replace(',', '.');
+
+        // Valida se é um número válido
+        const amountNumber = parseFloat(amountStr);
+        if (isNaN(amountNumber) || amountNumber <= 0) {
+          console.error("Amount inválido após conversão:", amount);
+          return [];
+        }
+
+        const response = await mp.getInstallments({
+          amount: amountStr,
+          bin: bin,
+          paymentTypeId: 'credit_card'
+        });
+
+        // Extrai as opções de parcelamento
+        if (response && response.length > 0) {
+          // Filtra pelo payment_method_id se necessário
+          let installmentsInfo = response[0];
+          if (paymentMethodId) {
+            const found = response.find(item => item.payment_method_id === paymentMethodId);
+            if (found) installmentsInfo = found;
+          }
+
+          if (installmentsInfo && installmentsInfo.payer_costs && installmentsInfo.payer_costs.length > 0) {
+            return installmentsInfo.payer_costs;
+          } else {
+
+          }
+        } else {
+
+        }
+
+        return [];
+      } catch (e) {
+        console.error("Erro ao buscar parcelas com SDK:", e);
+        return [];
+      }
+    }
+
+    let debounceTimeout = null;
+
+    async function setupCardBinListener(cardNumberElement, type = "credit") {
+      if (!cardNumberElement) return;
+
+      const issuerElementId = type === "credit" ? "form-checkout__issuer" : "debit-form-checkout__issuer";
+      const installmentsElementId = type === "credit" ? "form-checkout__installments" : "debit-form-checkout__installments";
+      const paymentMethodIdInputId = type === "credit" ? "paymentMethodId" : "debit-paymentMethodId";
+
+      const issuerElement = document.getElementById(issuerElementId);
+      const installmentsElement = document.getElementById(installmentsElementId);
+      const paymentMethodIdInput = document.getElementById(paymentMethodIdInputId);
+
+      cardNumberElement.on("binChange", async (data) => {
+        const { bin } = data;
+
+        // Debounce para evitar múltiplas chamadas
+        if (debounceTimeout) clearTimeout(debounceTimeout);
+
+        debounceTimeout = setTimeout(async () => {
+          try {
+
+            if (!bin || bin.length < 6) {
+              if (issuerElement) clearSelectAndSetPlaceholder(issuerElement, "Selecione o banco");
+              if (installmentsElement) clearSelectAndSetPlaceholder(installmentsElement, "Selecione as parcelas");
+              if (paymentMethodIdInput) paymentMethodIdInput.value = "";
+              currentBin = null;
+              return;
+            }
+
+            if (bin !== currentBin) {
+              // Busca informações do método de pagamento baseado no bin
+              const { results } = await mp.getPaymentMethods({ bin });
+              const paymentMethod = results[0];
+
+              if (paymentMethod) {
+                // Atualiza o input hidden com o ID do método de pagamento
+                if (paymentMethodIdInput) {
+                  paymentMethodIdInput.value = paymentMethod.id;
+                }
+
+                // Atualiza as configurações dos campos (validações)
+                updatePCIFieldsSettings(paymentMethod, cardNumberElement,
+                  type === "credit" ? creditCardFields?.securityCode : debitCardFields?.securityCode);
+
+                // Para cartão de CRÉDITO apenas
+                if (type === "credit") {
+                  const issuers = await getIssuers(paymentMethod.id, bin);
+
+                  if (issuerElement) {
+                    if (issuers.length > 0) {
+                      createSelectOptions(issuerElement, issuers, { label: "name", value: "id" });
+                    } else {
+                      clearSelectAndSetPlaceholder(issuerElement, "Banco emissor (não disponível)");
+                    }
+                  }
+
+                  // 2. Buscar parcelas
+                  const amount = currentPresente?.preco || 100;
+
+                  // Limpa o amount: remove "R$", espaços, e converte vírgula para ponto
+                  let cleanAmount = amount;
+                  if (typeof cleanAmount === 'string') {
+                    cleanAmount = cleanAmount.replace(/[R$\s]/g, '').replace(',', '.');
+                  }
+                  cleanAmount = parseFloat(cleanAmount);
+
+                  // Chama getInstallments com o parâmetro correto (amount como string)
+                  const installmentOptions = await getInstallments(String(cleanAmount), bin, paymentMethod.id);
+
+                  if (installmentsElement) {
+                    if (installmentOptions.length > 0) {
+                      createSelectOptions(installmentsElement, installmentOptions, {
+                        label: "recommended_message",
+                        value: "installments"
+                      });
+                    } else {
+                      clearSelectAndSetPlaceholder(installmentsElement, "Selecione as parcelas");
+
+                      // Fallback: Adiciona opção de parcela única se não houver parcelas
+                      const amountNumber = cleanAmount;
+                      if (!isNaN(amountNumber) && amountNumber > 0) {
+                        const fallbackOption = [{
+                          installments: 1,
+                          recommended_message: `1x de R$ ${amountNumber.toFixed(2)} sem juros`,
+                          total_amount: amountNumber
+                        }];
+                        createSelectOptions(installmentsElement, fallbackOption, {
+                          label: "recommended_message",
+                          value: "installments"
+                        });
+                      }
+                    }
+                  }
+                }
+              }
+
+              currentBin = bin;
+            }
+          } catch (e) {
+            console.error("error in binChange: ", e);
+          }
+        }, 500); // Aguarda 500ms após o último dígito
+      });
+    }
+
+    function updatePCIFieldsSettings(paymentMethod, cardNumberElement, securityCodeElement) {
+      if (!paymentMethod?.settings?.[0]) return;
+      const { settings } = paymentMethod;
+      const cardNumberSettings = settings[0]?.card_number;
+      const securityCodeSettings = settings[0]?.security_code;
+      if (cardNumberSettings && cardNumberElement) cardNumberElement.update({ settings: cardNumberSettings });
+      if (securityCodeSettings && securityCodeElement) securityCodeElement.update({ settings: securityCodeSettings });
+    }
+
+    // INICIALIZAÇÃO DOS CAMPOS DE CARTÃO
+    async function initCreditCardFields() {
+      await initMercadoPago();
+      await getIdentificationTypes();
+
+      if (creditCardFields) {
+        try {
+          creditCardFields.cardNumber?.unmount();
+          creditCardFields.expirationDate?.unmount();
+          creditCardFields.securityCode?.unmount();
+        } catch (e) { }
+        creditCardFields = null;
+      }
+
+      const cardNumber = mp.fields.create("cardNumber", { placeholder: "Número do cartão" }).mount("form-checkout__cardNumber");
+      const expirationDate = mp.fields.create("expirationDate", { placeholder: "MM/YY" }).mount("form-checkout__expirationDate");
+      const securityCode = mp.fields.create("securityCode", { placeholder: "Código de segurança" }).mount("form-checkout__securityCode");
+
+      creditCardFields = { cardNumber, expirationDate, securityCode };
+      await setupCardBinListener(cardNumber, "credit");
+    }
+
+    async function initDebitCardFields() {
+      await initMercadoPago();
+      await getIdentificationTypes();
+
+      if (debitCardFields) {
+        try {
+          debitCardFields.cardNumber?.unmount();
+          debitCardFields.expirationDate?.unmount();
+          debitCardFields.securityCode?.unmount();
+        } catch (e) { }
+        debitCardFields = null;
+      }
+
+      const cardNumber = mp.fields.create("cardNumber", { placeholder: "Número do cartão" }).mount("debit-form-checkout__cardNumber");
+      const expirationDate = mp.fields.create("expirationDate", { placeholder: "MM/YY" }).mount("debit-form-checkout__expirationDate");
+      const securityCode = mp.fields.create("securityCode", { placeholder: "Código de segurança" }).mount("debit-form-checkout__securityCode");
+
+      debitCardFields = { cardNumber, expirationDate, securityCode };
+      await setupCardBinListener(cardNumber, "debit");
+    }
+
+    function unmountCardFields() {
+      if (creditCardFields) {
+        try {
+          creditCardFields.cardNumber?.unmount();
+          creditCardFields.expirationDate?.unmount();
+          creditCardFields.securityCode?.unmount();
+        } catch (e) { }
+        creditCardFields = null;
+      }
+      if (debitCardFields) {
+        try {
+          debitCardFields.cardNumber?.unmount();
+          debitCardFields.expirationDate?.unmount();
+          debitCardFields.securityCode?.unmount();
+        } catch (e) { }
+        debitCardFields = null;
+      }
+    }
+
+
+    // PROCESSAMENTO DE PAGAMENTOS
+    async function processCreditPayment() {
+      const cardholderName = document.getElementById("form-checkout__cardholderName").value;
+      const identificationType = document.getElementById("form-checkout__identificationType").value;
+      const identificationNumberRaw = document.getElementById("form-checkout__identificationNumber").value;
+      const identificationNumber = identificationNumberRaw.replace(/\D/g, "");
+      const email = document.getElementById("form-checkout__email").value;
+      const issuerId = document.getElementById("form-checkout__issuer")?.value;
+      const installments = parseInt(document.getElementById("form-checkout__installments")?.value || "1");
+
+      if (!cardholderName) { showToast("Preencha o nome do titular do cartão", "error"); return; }
+      if (!identificationType || identificationType === "") { showToast("Selecione o tipo de documento", "error"); return; }
+      if (!identificationNumber || identificationNumber.length < 11) { showToast("Número de documento inválido", "error"); return; }
+      if (!email || !email.includes("@")) { showToast("Preencha um e-mail válido", "error"); return; }
+      if (installments > 1 && !issuerId) { showToast("Selecione o banco emissor para parcelamento", "error"); return; }
+      if (!creditCardFields) { showToast("Sistema de pagamento não inicializado. Tente novamente.", "error"); return; }
+
+      showToast("Processando pagamento...", "info");
+
+      try {
+        const cardToken = await mp.fields.createCardToken({
+          cardholderName: cardholderName,
+          identificationType: identificationType,
+          identificationNumber: identificationNumber,
+        });
+
+        let cardBrand = "visa";
+        try {
+          const cardInfo = await mp.fields.getCardInfo();
+          cardBrand = cardInfo.cardNumber?.paymentMethod?.id || "visa";
+        } catch (e) { }
+
+        const paymentMethodId = cardBrand === "visa" ? "visa" : cardBrand === "master" ? "master" : cardBrand === "amex" ? "amex" : "visa";
+
+        const response = await fetch(`${API_BASE}/create-card-payment`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: currentPresente.preco,
+            description: currentPresente.nome,
+            token: cardToken.id,
+            paymentMethodId: paymentMethodId,
+            installments: installments,
+            issuerId: issuerId || undefined,
+            identificationType: identificationType,
+            identificationNumber: identificationNumber,
+            payerEmail: email,
+            cardBrand: cardBrand,
+            paymentType: "credit",
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.status === "approved") {
+          showToast("Pagamento aprovado! Obrigado por presentear!", "success");
+          setTimeout(() => { closeModal(); window.location.reload(); }, 2000);
+        } else if (data.status === "in_process") {
+          showToast("Pagamento em processamento. Aguarde...", "info");
+          startPaymentPolling(data.paymentId);
+        } else {
+          throw new Error(data.statusDetail || data.error || "Pagamento não aprovado");
+        }
+      } catch (error) {
+        console.error("Erro detalhado:", error);
+        showToast(`${error.message}`, "error");
+      }
+    }
+
+    async function processDebitPayment() {
+      const cardholderName = document.getElementById("debit-form-checkout__cardholderName").value;
+      const identificationType = document.getElementById("debit-form-checkout__identificationType").value;
+      const identificationNumberRaw = document.getElementById("debit-form-checkout__identificationNumber").value;
+      const identificationNumber = identificationNumberRaw.replace(/\D/g, "");
+      const email = document.getElementById("debit-form-checkout__email").value;
+
+      if (!cardholderName) { showToast("Preencha o nome do titular do cartão", "error"); return; }
+      if (!identificationType || identificationType === "") { showToast("Selecione o tipo de documento", "error"); return; }
+      if (!identificationNumber || identificationNumber.length < 11) { showToast("Número de documento inválido", "error"); return; }
+      if (!email || !email.includes("@")) { showToast("Preencha um e-mail válido", "error"); return; }
+      if (!debitCardFields) { showToast("Sistema de pagamento não inicializado. Tente novamente.", "error"); return; }
+
+      showToast("Processando pagamento...", "info");
+
+      try {
+        const cardToken = await mp.fields.createCardToken({
+          cardholderName: cardholderName,
+          identificationType: identificationType,
+          identificationNumber: identificationNumber,
+        });
+
+        let cardBrand = "visa";
+        try {
+          const cardInfo = await mp.fields.getCardInfo();
+          cardBrand = cardInfo.cardNumber?.paymentMethod?.id || "visa";
+        } catch (e) { }
+
+        const paymentMethodId = cardBrand === "visa" ? "visa_debit" : cardBrand === "master" ? "master_debit" : "visa_debit";
+
+        const response = await fetch(`${API_BASE}/create-card-payment`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: currentPresente.preco,
+            description: currentPresente.nome,
+            token: cardToken.id,
+            paymentMethodId: paymentMethodId,
+            installments: 1,
+            identificationType: identificationType,
+            identificationNumber: identificationNumber,
+            payerEmail: email,
+            cardBrand: cardBrand,
+            paymentType: "debit",
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.status === "approved") {
+          showToast("Pagamento aprovado! Obrigado por presentear!", "success");
+          setTimeout(() => { closeModal(); window.location.reload(); }, 2000);
+        } else {
+          throw new Error(data.statusDetail || data.error || "Pagamento não aprovado");
+        }
+      } catch (error) {
+        console.error("Erro no pagamento débito:", error);
+        showToast(`Erro: ${error.message}`, "error");
+      }
+    }
+
+    // PIX E POLLING
+    async function generatePixQRCode() {
+      // Valida o email antes de prosseguir
+      const pixEmailInput = document.getElementById("pixEmail");
+      const pixEmail = pixEmailInput ? pixEmailInput.value.trim() : "";
+
+      // Validação do email
+      if (!pixEmail) {
+        showToast("Por favor, informe seu e-mail para gerar o PIX", "error");
+        pixEmailInput?.focus();
+        return;
+      }
+
+      if (!isValidEmail(pixEmail)) {
+        showToast("Por favor, informe um e-mail válido", "error");
+        pixEmailInput?.focus();
+        return;
+      }
+
+      const pixPlaceholder = document.getElementById("pixPlaceholder");
+      const pixGeneratedContent = document.getElementById("pixGeneratedContent");
+      const qrContainer = document.getElementById("qrCodeContainer");
+      const pixCodeElement = document.getElementById("pixCode");
+
+      if (pixPlaceholder) pixPlaceholder.style.display = "none";
+      if (pixGeneratedContent) pixGeneratedContent.style.display = "block";
+      qrContainer.innerHTML = "<p>Gerando QR Code PIX...</p>";
+      pixCodeElement.innerHTML = "";
+
+      try {
+        const response = await fetch(`${API_BASE}/create-payment`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: currentPresente.preco,
+            description: currentPresente.nome,
+            payerEmail: pixEmail,
+            payerName: "Convidado",
+            presenteId: currentPresente.id,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          if (data.qrCodeBase64) {
+            qrContainer.innerHTML = `<img src="data:image/jpeg;base64,${data.qrCodeBase64}" alt="QR Code PIX" style="width: 200px; height: 200px; margin: 0 auto;"><p style="margin-top: 1rem; font-size: 0.85rem;">Escaneie o QR Code com seu banco</p>`;
+          } else if (data.qrCode) {
+            qrContainer.innerHTML = `<div style="background: #000; padding: 1rem; border-radius: 12px;"><img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(data.qrCode)}" alt="QR Code PIX" style="width: 200px; height: 200px;"></div><p style="margin-top: 1rem; font-size: 0.85rem;">Escaneie o QR Code com seu banco</p>`;
+          }
+          pixCodeElement.textContent = data.pixCode || data.qrCode;
+          startPaymentPolling(data.paymentId);
+          showToast("PIX gerado! Escaneie o QR Code para pagar", "success");
+        } else {
+          throw new Error(data.error || "Erro ao gerar PIX");
+        }
+      } catch (error) {
+        console.error("Erro ao gerar PIX:", error);
+        qrContainer.innerHTML = `<p style="color: red;">Erro ao gerar PIX</p><p style="font-size: 0.85rem;">${error.message}</p><button onclick="generatePixQRCode()" style="margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer; background: var(--rosa-protagonista); color: white; border: none; border-radius: 8px;">Tentar novamente</button>`;
+        showToast("Erro ao gerar pagamento PIX. Tente novamente.", "error");
+
+        // Se houve erro, mostra o placeholder novamente
+        if (pixPlaceholder) pixPlaceholder.style.display = "block";
+        if (pixGeneratedContent) pixGeneratedContent.style.display = "none";
+      }
+    }
+
+    // Função auxiliar para validar email
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function startPaymentPolling(paymentId) {
+      if (pollingInterval) clearInterval(pollingInterval);
+      let attempts = 0;
+      const maxAttempts = 60;
+
+      pollingInterval = setInterval(async () => {
+        attempts++;
+        try {
+          const response = await fetch(`${API_BASE}/check-payment?id=${paymentId}`);
+          const data = await response.json();
+
+          if (data.success) {
+            if (data.status === "approved") {
+              clearInterval(pollingInterval);
+              pollingInterval = null;
+              showToast("Pagamento confirmado! Obrigado por presentear!", "success");
+              closeModal();
+              setTimeout(() => window.location.reload(), 2000);
+            } else if (data.status === "rejected") {
+              clearInterval(pollingInterval);
+              pollingInterval = null;
+              showToast("Pagamento recusado. Tente novamente.", "error");
+            }
+          }
+          if (attempts >= maxAttempts) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+          }
+        } catch (error) {
+          console.error("Erro ao verificar status:", error);
+        }
+      }, 5000);
+    }
+
+    function copyPixCode() {
+      const pixCode = document.getElementById("pixCode").textContent;
+      if (pixCode) {
+        navigator.clipboard.writeText(pixCode);
+        showToast("Código PIX copiado!", "success");
+      } else {
+        showToast("Nenhum código PIX disponível", "error");
+      }
+    }
+
+    function openModal() {
+      const modal = document.getElementById("paymentModal");
+      modal.classList.add("active");
+
+      const pixPlaceholder = document.getElementById("pixPlaceholder");
+      const pixGeneratedContent = document.getElementById("pixGeneratedContent");
+      if (pixPlaceholder && pixGeneratedContent) {
+        pixPlaceholder.style.display = "block";
+        pixGeneratedContent.style.display = "none";
+      }
+
+      const activeMethod = document.querySelector(".payment-btn.active")?.dataset.method || "pix";
+
+      if (activeMethod === "credit") {
+        setTimeout(() => initCreditCardFields(), 100);
+      } else if (activeMethod === "debit") {
+        setTimeout(() => initDebitCardFields(), 100);
+      }
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("paymentModal");
+      modal.classList.remove("active");
+
+      setTimeout(() => {
+        unmountCardFields();
+      }, 300);
+
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+        pollingInterval = null;
+      }
+    }
+
+    function setupPaymentMethodSwitch() {
+      document.querySelectorAll(".payment-btn").forEach((btn) => {
+        btn.removeEventListener("click", btn._handler);
+
+        const handler = async () => {
+          const method = btn.dataset.method;
+
+          document.querySelectorAll(".payment-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          document.querySelectorAll(".payment-content").forEach((c) => c.classList.remove("active"));
+          document.getElementById(`${method}Content`).classList.add("active");
+
+          // Limpa campos existentes
+          unmountCardFields();
+
+          // Inicializa novos campos
+          if (method === "credit") {
+            await initCreditCardFields();
+            setupDocumentMaskListeners();
+          } else if (method === "debit") {
+            await initDebitCardFields();
+            setupDocumentMaskListeners();
+          } else if (method === "pix") {
+            const pixPlaceholder = document.getElementById("pixPlaceholder");
+            const pixGeneratedContent = document.getElementById("pixGeneratedContent");
+            if (pixPlaceholder && pixGeneratedContent) {
+              pixPlaceholder.style.display = "block";
+              pixGeneratedContent.style.display = "none";
+            }
+          }
+        };
+
+        btn._handler = handler;
+        btn.addEventListener("click", handler);
+      });
+    }
+
+    // RENDERIZAÇÃO DO DETALHE DO PRESENTE
+    async function carregarDetalhePresente() {
+      const id = getIdFromURL();
+      if (!id) {
+        mostrarErro("ID do presente não informado.");
+        return;
+      }
+      try {
+        const response = await fetch("/data/presentes.json");
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const data = await response.json();
+        const presente = data.presentes.find((p) => p.id === parseInt(id));
+        if (!presente) {
+          mostrarErro("Presente não encontrado.");
+          return;
+        }
+        currentPresente = presente;
+        renderizarDetalhe(presente);
+      } catch (error) {
+        console.error("Erro:", error);
+        mostrarErro(`Erro ao carregar detalhes do presente. Detalhe: ${error.message}`);
+      }
+    }
+
+    function renderizarDetalhe(presente) {
+      const container = document.getElementById("detalheContent");
+      const statusInfo = {
+        priority: { class: "ribbon--priority", text: "Prioritário" },
+        available: { class: "ribbon--available", text: "Disponível" },
+        gifted: { class: "ribbon--gifted", text: "Presenteado ♡" },
+      }[presente.status] || { class: "ribbon--available", text: "Disponível" };
+
+      const precoFormatado = presente.preco.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const hasExternalLink = presente.linkExterno && presente.linkExterno.trim() !== "";
+
+      // Função para lidar com o clique no botão "Ver na loja"
+      const handleVerNaLoja = () => {
+        if (presente.linkExterno) {
+          abrirWhatsapp(presente.linkExterno, presente.nome);
+        }
+      };
+
+      const html = `
+          <article class="detalhe-card">
+            <div class="detalhe-imagem">
+              ${presente.imagem ? `<img src="${escapeHTML(presente.imagem)}" alt="${escapeHTML(presente.nome)}">` : `<div class="detalhe-placeholder" aria-hidden="true">${presente.icone || "🎁"}</div>`}
+            </div>
             <div class="detalhe-info">
               <span class="detalhe-categoria">${capitalizar(presente.categoria)}</span>
               <h1>${escapeHTML(presente.nome)}</h1>
               <span class="detalhe-ribbon ${statusInfo.class}">${statusInfo.text}</span>
-              
               <p class="detalhe-descricao">${escapeHTML(presente.descricao)}</p>
-              
-              <div class="detalhe-preco">
-                <strong>Valor:</strong> 
-                <span>R$ ${precoFormatado}</span>
-              </div>
-              
-              ${
-                presente.detalhes && presente.detalhes.length > 0
-                  ? `
+              <div class="detalhe-preco"><strong>Valor:</strong> <span>R$ ${precoFormatado}</span></div>
+              ${presente.detalhes && presente.detalhes.length > 0 ? `
                 <div class="detalhe-especificacoes">
                   <h3>Detalhes do produto</h3>
-                  <ul>
-                    ${presente.detalhes.map((d) => `<li>${escapeHTML(d)}</li>`).join("")}
-                  </ul>
+                  <ul>${presente.detalhes.map((d) => `<li>${escapeHTML(d)}</li>`).join("")}</ul>
                 </div>
-              `
-                  : ""
-              }
-              
-              <!-- Endereço de entrega -->
+              ` : ""}
               <div class="detalhe-endereco">
                 <div class="endereco-header">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1496,1075 +2206,39 @@
                   </button>
                 </div>
               </div>
-              
               <div class="detalhe-acoes">
                 <div class="btn-group">
-                  ${
-                    hasExternalLink
-                      ? `<a href="${escapeHTML(presente.linkExterno)}" target="_blank" rel="noopener noreferrer" class="btn-externo">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                            <polyline points="15 3 21 3 21 9"/>
-                            <line x1="10" y1="14" x2="21" y2="3"/>
-                          </svg>
-                          Ver na loja
-                        </a>`
-                      : ""
-                  }
-                  ${
-                    presente.status !== "gifted"
-                      ? `<button class="btn-presentear" data-id="${presente.id}" onclick="openModal()">
-                          Presentear com o valor
-                        </button>`
-                      : `<p class="mensagem-gifted">Este presente já foi adquirido por um convidado especial!</p>`
-                  }
+                  ${hasExternalLink ? `<a href="#" onclick="abrirWhatsapp('${escapeHTML(presente.linkExterno)}', '${escapeHTML(presente.nome)}'); return false;" class="btn-externo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Ver na loja</a>` : ""}
+                  ${presente.status !== "gifted" ? `<button class="btn-presentear" data-id="${presente.id}" onclick="openModal()">Presentear com o valor</button>` : `<p class="mensagem-gifted">Este presente já foi adquirido por um convidado especial!</p>`}
                 </div>
               </div>
             </div>
           </article>
         `;
+      container.innerHTML = html;
+      
+      // Registra a função globalmente para ser chamada pelo onclick
+      window.abrirWhatsapp = abrirWhatsapp;
+    }
+
+    // INICIALIZAÇÃO
+    document.addEventListener("DOMContentLoaded", async () => {
+      setupPaymentMethodSwitch();
+      carregarDetalhePresente();
+      setupDocumentMaskListeners();
+
+      const creditButton = document.getElementById("creditPaymentButton");
+      const debitButton = document.getElementById("debitPaymentButton");
+
+      if (creditButton) creditButton.addEventListener("click", processCreditPayment);
+      if (debitButton) debitButton.addEventListener("click", processDebitPayment);
+    });
+
+    window.onclick = function (event) {
+      const modal = document.getElementById("paymentModal");
+      if (event.target === modal) closeModal();
+    };
+  </script>
+</body>
 
-        container.innerHTML = html;
-      }
-
-      function openModal() {
-        const modal = document.getElementById("paymentModal");
-        modal.classList.add("active");
-
-        const pixPlaceholder = document.getElementById("pixPlaceholder");
-        const pixGeneratedContent = document.getElementById(
-          "pixGeneratedContent",
-        );
-
-        if (pixPlaceholder && pixGeneratedContent) {
-          pixPlaceholder.style.display = "block";
-          pixGeneratedContent.style.display = "none";
-        }
-      }
-
-      function closeModal() {
-        const modal = document.getElementById("paymentModal");
-        modal.classList.remove("active");
-        unmountCardFields();
-
-        if (pollingInterval) {
-          clearInterval(pollingInterval);
-          pollingInterval = null;
-        }
-      }
-
-      document.querySelectorAll(".payment-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const method = btn.dataset.method;
-
-          document
-            .querySelectorAll(".payment-btn")
-            .forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-
-          document
-            .querySelectorAll(".payment-content")
-            .forEach((content) => content.classList.remove("active"));
-          document.getElementById(`${method}Content`).classList.add("active");
-
-          if (method === "pix") {
-            const pixPlaceholder = document.getElementById("pixPlaceholder");
-            const pixGeneratedContent = document.getElementById(
-              "pixGeneratedContent",
-            );
-            if (pixPlaceholder && pixGeneratedContent) {
-              pixPlaceholder.style.display = "block";
-              pixGeneratedContent.style.display = "none";
-            }
-          }
-        });
-      });
-
-      async function generatePixQRCode() {
-        const pixPlaceholder = document.getElementById("pixPlaceholder");
-        const pixGeneratedContent = document.getElementById(
-          "pixGeneratedContent",
-        );
-        const qrContainer = document.getElementById("qrCodeContainer");
-        const pixCodeElement = document.getElementById("pixCode");
-
-        if (pixPlaceholder) pixPlaceholder.style.display = "none";
-        if (pixGeneratedContent) pixGeneratedContent.style.display = "block";
-
-        qrContainer.innerHTML = "<p>Gerando QR Code PIX...</p>";
-        pixCodeElement.innerHTML = "";
-
-        try {
-          const response = await fetch(`${API_BASE}/create-payment`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              amount: currentPresente.preco,
-              description: currentPresente.nome,
-              payerEmail: "zanirattoduarteerick@gmail.com",
-              payerName: "Convidado",
-              presenteId: currentPresente.id,
-            }),
-          });
-
-          const data = await response.json();
-
-          if (data.success) {
-            if (data.qrCodeBase64) {
-              qrContainer.innerHTML = `
-              <img src="data:image/jpeg;base64,${data.qrCodeBase64}" 
-                  alt="QR Code PIX" 
-                  style="width: 200px; height: 200px; margin: 0 auto;">
-              <p style="margin-top: 1rem; font-size: 0.85rem;">Escaneie o QR Code com seu banco</p>
-            `;
-            } else if (data.qrCode) {
-              qrContainer.innerHTML = `
-              <div style="background: #000; padding: 1rem; border-radius: 12px;">
-                <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(data.qrCode)}" 
-                    alt="QR Code PIX" 
-                    style="width: 200px; height: 200px;">
-              </div>
-              <p style="margin-top: 1rem; font-size: 0.85rem;">Escaneie o QR Code com seu banco</p>
-            `;
-            }
-
-            pixCodeElement.textContent = data.pixCode || data.qrCode;
-            startPaymentPolling(data.paymentId);
-            showToast("PIX gerado! Escaneie o QR Code para pagar", "success");
-          } else {
-            throw new Error(data.error || "Erro ao gerar PIX");
-          }
-        } catch (error) {
-          console.error("Erro ao gerar PIX:", error);
-          qrContainer.innerHTML = `
-          <p style="color: red;">Erro ao gerar PIX</p>
-          <p style="font-size: 0.85rem;">${error.message}</p>
-          <button onclick="generatePixQRCode()" style="margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer; background: var(--rosa-protagonista); color: white; border: none; border-radius: 8px;">
-            Tentar novamente
-          </button>
-        `;
-          showToast("Erro ao gerar pagamento PIX. Tente novamente.", "error");
-        }
-      }
-
-      function startPaymentPolling(paymentId) {
-        if (pollingInterval) clearInterval(pollingInterval);
-
-        let attempts = 0;
-        const maxAttempts = 60;
-
-        pollingInterval = setInterval(async () => {
-          attempts++;
-
-          try {
-            const response = await fetch(
-              `${API_BASE}/check-payment?id=${paymentId}`,
-            );
-            const data = await response.json();
-
-            if (data.success) {
-              if (data.status === "approved") {
-                clearInterval(pollingInterval);
-                pollingInterval = null;
-                showToast(
-                  "Pagamento confirmado! Obrigado por presentear!",
-                  "success",
-                );
-                closeModal();
-                setTimeout(() => window.location.reload(), 2000);
-              } else if (data.status === "rejected") {
-                clearInterval(pollingInterval);
-                pollingInterval = null;
-                showToast("Pagamento recusado. Tente novamente.", "error");
-              }
-            }
-
-            if (attempts >= maxAttempts) {
-              clearInterval(pollingInterval);
-              pollingInterval = null;
-            }
-          } catch (error) {
-            console.error("Erro ao verificar status:", error);
-          }
-        }, 5000);
-      }
-
-      function copyPixCode() {
-        const pixCode = document.getElementById("pixCode").textContent;
-        if (pixCode) {
-          navigator.clipboard.writeText(pixCode);
-          showToast("Código PIX copiado!", "success");
-        } else {
-          showToast("Nenhum código PIX disponível", "error");
-        }
-      }
-
-      let mp = null;
-      let creditCardFields = null;
-      let debitCardFields = null;
-
-      async function initMercadoPago() {
-        if (typeof MercadoPago !== "undefined") {
-          mp = new MercadoPago("APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123");
-          return mp;
-        }
-        return new Promise((resolve) => {
-          const check = setInterval(() => {
-            if (typeof MercadoPago !== "undefined") {
-              clearInterval(check);
-              mp = new MercadoPago(
-                "APP_USR-d5bd182c-263e-4093-852f-cc78b81a6123",
-              );
-              resolve(mp);
-            }
-          }, 100);
-        });
-      }
-
-      // Variáveis globais adicionais
-      let identificationTypes = [];
-
-      // Função para buscar os tipos de documento disponíveis
-      async function getIdentificationTypes() {
-        try {
-          await initMercadoPago();
-          const identificationTypesList = await mp.getIdentificationTypes();
-          identificationTypes = identificationTypesList;
-
-          // Preenche os selects de tipo de documento (crédito e débito)
-          const creditSelect = document.getElementById(
-            "form-checkout__identificationType",
-          );
-          const debitSelect = document.getElementById(
-            "debit-form-checkout__identificationType",
-          );
-
-          if (creditSelect)
-            createSelectOptions(creditSelect, identificationTypesList);
-          if (debitSelect)
-            createSelectOptions(debitSelect, identificationTypesList);
-
-          return identificationTypesList;
-        } catch (e) {
-          console.error("Error getting identificationTypes: ", e);
-          return [];
-        }
-      }
-
-      // Função auxiliar para preencher selects
-      function createSelectOptions(
-        elem,
-        options,
-        labelsAndKeys = { label: "name", value: "id" },
-      ) {
-        if (!elem) return;
-
-        const { label, value } = labelsAndKeys;
-        const currentValue = elem.value;
-
-        // Preserva o placeholder se existir
-        const hasPlaceholder =
-          elem.options.length === 1 && elem.options[0].disabled;
-
-        if (hasPlaceholder) {
-          elem.innerHTML = "";
-          const placeholder = document.createElement("option");
-          placeholder.value = "";
-          placeholder.disabled = true;
-          placeholder.selected = true;
-          placeholder.textContent =
-            elem.options[0]?.textContent || "Selecione uma opção";
-          elem.appendChild(placeholder);
-        } else {
-          // Limpa opções existentes mantendo placeholder se houver
-          const placeholder = elem.querySelector("option[disabled][selected]");
-          elem.innerHTML = "";
-          if (placeholder) elem.appendChild(placeholder.cloneNode(true));
-        }
-
-        // Adiciona novas opções
-        options.forEach((option) => {
-          const optValue = option[value];
-          const optLabel = option[label];
-
-          const opt = document.createElement("option");
-          opt.value = optValue;
-          opt.textContent = optLabel;
-
-          // Restaura valor selecionado anteriormente se possível
-          if (currentValue && optValue == currentValue) {
-            opt.selected = true;
-          }
-
-          elem.appendChild(opt);
-        });
-      }
-
-      // Função para obter métodos de pagamento e configurar bandeira/parcelas
-      let currentBin = null;
-      let creditIssuerElement = null;
-      let creditInstallmentsElement = null;
-      let debitIssuerElement = null;
-      let debitInstallmentsElement = null;
-
-      async function setupCardBinListener(
-        cardNumberElement,
-        paymentMethodElementId,
-        issuerElementId,
-        installmentsElementId,
-      ) {
-        if (!cardNumberElement) return;
-
-        cardNumberElement.on("binChange", async (data) => {
-          const { bin } = data;
-          const paymentMethodElement = document.getElementById(
-            paymentMethodElementId,
-          );
-          const issuerElement = document.getElementById(issuerElementId);
-          const installmentsElement = document.getElementById(
-            installmentsElementId,
-          );
-
-          try {
-            if (!bin && paymentMethodElement) {
-              clearSelectsAndSetPlaceholders(
-                issuerElement,
-                installmentsElement,
-              );
-              paymentMethodElement.value = "";
-            }
-
-            if (bin && bin !== currentBin) {
-              const { results } = await mp.getPaymentMethods({ bin });
-              const paymentMethod = results[0];
-
-              if (paymentMethod && paymentMethodElement) {
-                paymentMethodElement.value = paymentMethod.id;
-                updatePCIFieldsSettings(
-                  paymentMethod,
-                  cardNumberElement,
-                  securityCodeElement,
-                );
-
-                // Atualiza opções de emissor e parcelas
-                if (issuerElement)
-                  await updateIssuer(paymentMethod, bin, issuerElement);
-                if (installmentsElement)
-                  await updateInstallments(
-                    paymentMethod,
-                    bin,
-                    installmentsElement,
-                  );
-              }
-            }
-
-            currentBin = bin;
-          } catch (e) {
-            console.error("error getting payment methods: ", e);
-          }
-        });
-      }
-
-      function clearSelectsAndSetPlaceholders(
-        issuerElement,
-        installmentsElement,
-      ) {
-        if (issuerElement) {
-          clearHTMLSelectChildrenFrom(issuerElement);
-          createSelectElementPlaceholder(issuerElement, "Banco emissor");
-        }
-
-        if (installmentsElement) {
-          clearHTMLSelectChildrenFrom(installmentsElement);
-          createSelectElementPlaceholder(installmentsElement, "Parcelas");
-        }
-      }
-
-      function clearHTMLSelectChildrenFrom(element) {
-        if (!element) return;
-        const currOptions = [...element.children];
-        currOptions.forEach((child) => child.remove());
-      }
-
-      function createSelectElementPlaceholder(element, placeholder) {
-        if (!element) return;
-        const optionElement = document.createElement("option");
-        optionElement.textContent = placeholder;
-        optionElement.setAttribute("selected", "");
-        optionElement.setAttribute("disabled", "");
-        element.appendChild(optionElement);
-      }
-
-      function updatePCIFieldsSettings(
-        paymentMethod,
-        cardNumberElement,
-        securityCodeElement,
-      ) {
-        if (
-          !paymentMethod ||
-          !paymentMethod.settings ||
-          !paymentMethod.settings[0]
-        )
-          return;
-
-        const { settings } = paymentMethod;
-        const cardNumberSettings = settings[0]?.card_number;
-        const securityCodeSettings = settings[0]?.security_code;
-
-        if (cardNumberSettings && cardNumberElement) {
-          cardNumberElement.update({ settings: cardNumberSettings });
-        }
-
-        if (securityCodeSettings && securityCodeElement) {
-          securityCodeElement.update({ settings: securityCodeSettings });
-        }
-      }
-
-      async function updateIssuer(paymentMethod, bin, issuerElement) {
-        const { additional_info_needed, issuer } = paymentMethod;
-        let issuerOptions = [issuer];
-
-        if (
-          additional_info_needed &&
-          additional_info_needed.includes("issuer_id")
-        ) {
-          issuerOptions = await getIssuers(paymentMethod, bin);
-        }
-
-        if (issuerElement) {
-          createSelectOptions(issuerElement, issuerOptions);
-        }
-      }
-
-      async function getIssuers(paymentMethodId, bin) {
-        try {
-          const response = await fetch(`${API_BASE}/get-issuers`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paymentMethodId, bin }),
-          });
-          const data = await response.json();
-          return data.issuers || [];
-        } catch (e) {
-          console.error("error getting issuers: ", e);
-          return [];
-        }
-      }
-
-      async function getInstallments(amount, bin, paymentMethodId) {
-        try {
-          const response = await fetch(`${API_BASE}/get-installments`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount, bin, paymentMethodId }),
-          });
-          const data = await response.json();
-          return data.installments || [];
-        } catch (e) {
-          console.error("error getting installments: ", e);
-          return [];
-        }
-      }
-
-      // Configurar listener para detectar bandeira do cartão e atualizar issuer/parcelas
-      async function setupCardBinListener(cardNumberElement, type = "credit") {
-        if (!cardNumberElement) return;
-
-        const issuerElementId =
-          type === "credit"
-            ? "form-checkout__issuer"
-            : "debit-form-checkout__issuer";
-        const installmentsElementId =
-          type === "credit"
-            ? "form-checkout__installments"
-            : "debit-form-checkout__installments";
-        const paymentMethodIdInputId =
-          type === "credit" ? "paymentMethodId" : "debit-paymentMethodId";
-
-        const issuerElement = document.getElementById(issuerElementId);
-        const installmentsElement = document.getElementById(
-          installmentsElementId,
-        );
-        const paymentMethodIdInput = document.getElementById(
-          paymentMethodIdInputId,
-        );
-
-        cardNumberElement.on("binChange", async (data) => {
-          const { bin } = data;
-
-          try {
-            if (!bin) {
-              // Limpar selects quando não há bin
-              if (issuerElement)
-                clearSelectAndSetPlaceholder(
-                  issuerElement,
-                  "Selecione o banco",
-                );
-              if (installmentsElement)
-                clearSelectAndSetPlaceholder(
-                  installmentsElement,
-                  "Selecione as parcelas",
-                );
-              if (paymentMethodIdInput) paymentMethodIdInput.value = "";
-              return;
-            }
-
-            if (bin !== currentBin) {
-              // Buscar métodos de pagamento baseado no bin
-              const { results } = await mp.getPaymentMethods({ bin });
-              const paymentMethod = results[0];
-
-              if (paymentMethod) {
-                // Atualizar payment_method_id
-                if (paymentMethodIdInput)
-                  paymentMethodIdInput.value = paymentMethod.id;
-
-                // Atualizar settings dos campos (validações)
-                updatePCIFieldsSettings(
-                  paymentMethod,
-                  cardNumberElement,
-                  type === "credit"
-                    ? creditCardFields?.securityCode
-                    : debitCardFields?.securityCode,
-                );
-
-                // Buscar e preencher bancos emissores (apenas para crédito)
-                if (
-                  type === "credit" &&
-                  paymentMethod.additional_info_needed?.includes("issuer_id")
-                ) {
-                  const issuers = await getIssuers(paymentMethod.id, bin);
-                  if (issuerElement && issuers.length > 0) {
-                    createSelectOptions(issuerElement, issuers, {
-                      label: "name",
-                      value: "id",
-                    });
-                  }
-                }
-
-                // Buscar e preencher parcelas (apenas para crédito)
-                if (type === "credit") {
-                  const amount = currentPresente?.preco || 100;
-                  const installmentsData = await getInstallments(
-                    amount,
-                    bin,
-                    paymentMethod.id,
-                  );
-                  if (installmentsElement && installmentsData.length > 0) {
-                    const installmentOptions =
-                      installmentsData[0]?.payer_costs || [];
-                    createSelectOptions(
-                      installmentsElement,
-                      installmentOptions,
-                      { label: "recommended_message", value: "installments" },
-                    );
-                  }
-                }
-              }
-
-              currentBin = bin;
-            }
-          } catch (e) {
-            console.error("error in binChange: ", e);
-          }
-        });
-      }
-
-      // Função auxiliar para limpar select e adicionar placeholder
-      function clearSelectAndSetPlaceholder(element, placeholder) {
-        if (!element) return;
-        element.innerHTML = "";
-        const option = document.createElement("option");
-        option.value = "";
-        option.disabled = true;
-        option.selected = true;
-        option.textContent = placeholder;
-        element.appendChild(option);
-      }
-
-      async function updateInstallments(
-        paymentMethod,
-        bin,
-        installmentsElement,
-      ) {
-        try {
-          const amount = currentPresente ? currentPresente.preco : 100;
-          const installments = await mp.getInstallments({
-            amount: amount,
-            bin: bin,
-            paymentTypeId: "credit_card",
-          });
-
-          if (installments && installments[0] && installments[0].payer_costs) {
-            const installmentOptions = installments[0].payer_costs;
-            const installmentOptionsKeys = {
-              label: "recommended_message",
-              value: "installments",
-            };
-            createSelectOptions(
-              installmentsElement,
-              installmentOptions,
-              installmentOptionsKeys,
-            );
-          }
-        } catch (error) {
-          console.error("error getting installments: ", error);
-        }
-      }
-
-      async function initCreditCardFields() {
-        await initMercadoPago();
-        await getIdentificationTypes();
-
-        if (creditCardFields) {
-          try {
-            creditCardFields.cardNumber?.unmount();
-            creditCardFields.expirationDate?.unmount();
-            creditCardFields.securityCode?.unmount();
-          } catch (e) {}
-          creditCardFields = null;
-        }
-
-        // Criar os campos
-        const cardNumber = mp.fields
-          .create("cardNumber", {
-            placeholder: "Número do cartão",
-          })
-          .mount("form-checkout__cardNumber");
-
-        const expirationDate = mp.fields
-          .create("expirationDate", {
-            placeholder: "MM/YY",
-          })
-          .mount("form-checkout__expirationDate");
-
-        const securityCode = mp.fields
-          .create("securityCode", {
-            placeholder: "Código de segurança",
-          })
-          .mount("form-checkout__securityCode");
-
-        creditCardFields = { cardNumber, expirationDate, securityCode };
-
-        // Configurar listener para detectar bandeira do cartão e atualizar parcelas
-        await setupCardBinListener(cardNumber, "credit");
-      }
-
-      async function initDebitCardFields() {
-        await initMercadoPago();
-        await getIdentificationTypes(); // Busca tipos de documento ao inicializar
-
-        if (debitCardFields) {
-          try {
-            debitCardFields.cardNumber?.unmount();
-            debitCardFields.expirationDate?.unmount();
-            debitCardFields.securityCode?.unmount();
-          } catch (e) {}
-          debitCardFields = null;
-        }
-
-        // Criar os campos
-        const cardNumber = mp.fields
-          .create("cardNumber", {
-            placeholder: "Número do cartão",
-          })
-          .mount("debit-form-checkout__cardNumber");
-
-        const expirationDate = mp.fields
-          .create("expirationDate", {
-            placeholder: "MM/YY",
-          })
-          .mount("debit-form-checkout__expirationDate");
-
-        const securityCode = mp.fields
-          .create("securityCode", {
-            placeholder: "Código de segurança",
-          })
-          .mount("debit-form-checkout__securityCode");
-
-        debitCardFields = { cardNumber, expirationDate, securityCode };
-      }
-
-      async function initDebitCardFields() {
-        await initMercadoPago();
-        await getIdentificationTypes(); // Busca tipos de documento ao inicializar
-
-        if (debitCardFields) {
-          try {
-            debitCardFields.cardNumber?.unmount();
-            debitCardFields.expirationDate?.unmount();
-            debitCardFields.securityCode?.unmount();
-          } catch (e) {}
-          debitCardFields = null;
-        }
-
-        // Criar os campos
-        const cardNumber = mp.fields
-          .create("cardNumber", {
-            placeholder: "Número do cartão",
-          })
-          .mount("debit-form-checkout__cardNumber");
-
-        const expirationDate = mp.fields
-          .create("expirationDate", {
-            placeholder: "MM/YY",
-          })
-          .mount("debit-form-checkout__expirationDate");
-
-        const securityCode = mp.fields
-          .create("securityCode", {
-            placeholder: "Código de segurança",
-          })
-          .mount("debit-form-checkout__securityCode");
-
-        debitCardFields = { cardNumber, expirationDate, securityCode };
-      }
-
-      function unmountCardFields() {
-        if (creditCardFields) {
-          try {
-            if (creditCardFields.cardNumber)
-              creditCardFields.cardNumber.unmount();
-            if (creditCardFields.expirationDate)
-              creditCardFields.expirationDate.unmount();
-            if (creditCardFields.securityCode)
-              creditCardFields.securityCode.unmount();
-          } catch (e) {}
-          creditCardFields = null;
-        }
-        if (debitCardFields) {
-          try {
-            if (debitCardFields.cardNumber)
-              debitCardFields.cardNumber.unmount();
-            if (debitCardFields.expirationDate)
-              debitCardFields.expirationDate.unmount();
-            if (debitCardFields.securityCode)
-              debitCardFields.securityCode.unmount();
-          } catch (e) {}
-          debitCardFields = null;
-        }
-      }
-
-      async function processCreditPayment() {
-        const cardholderName = document.getElementById(
-          "form-checkout__cardholderName",
-        ).value;
-        const identificationType = document.getElementById(
-          "form-checkout__identificationType",
-        ).value;
-        const identificationNumber = document
-          .getElementById("form-checkout__identificationNumber")
-          .value.replace(/\D/g, "");
-        const email = document.getElementById("form-checkout__email").value;
-        const issuerId = document.getElementById(
-          "form-checkout__issuer",
-        )?.value;
-        const installments = parseInt(
-          document.getElementById("form-checkout__installments")?.value || "1",
-        );
-
-        // Validações
-        if (!cardholderName) {
-          showToast("Preencha o nome do titular do cartão", "error");
-          return;
-        }
-
-        if (!identificationType || identificationType === "") {
-          showToast("Selecione o tipo de documento", "error");
-          return;
-        }
-
-        if (!identificationNumber || identificationNumber.length < 11) {
-          showToast("Número de documento inválido", "error");
-          return;
-        }
-
-        if (!email || !email.includes("@")) {
-          showToast("Preencha um e-mail válido", "error");
-          return;
-        }
-
-        if (installments > 1 && !issuerId) {
-          showToast("Selecione o banco emissor para parcelamento", "error");
-          return;
-        }
-
-        if (!creditCardFields) {
-          showToast(
-            "Sistema de pagamento não inicializado. Tente novamente.",
-            "error",
-          );
-          return;
-        }
-
-        showToast("Processando pagamento...", "info");
-
-        try {
-          // Cria o token do cartão
-          const cardToken = await mp.fields.createCardToken({
-            cardholderName: cardholderName,
-            identificationType: identificationType,
-            identificationNumber: identificationNumber,
-          });
-
-          // Obtém a bandeira do cartão
-          let cardBrand = "visa";
-          try {
-            const cardInfo = await mp.fields.getCardInfo();
-            cardBrand = cardInfo.cardNumber?.paymentMethod?.id || "visa";
-          } catch (e) {}
-
-          const paymentMethodId =
-            cardBrand === "visa"
-              ? "visa"
-              : cardBrand === "master"
-                ? "master"
-                : cardBrand === "amex"
-                  ? "amex"
-                  : "visa";
-
-          const response = await fetch(`${API_BASE}/create-card-payment`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              amount: currentPresente.preco,
-              description: currentPresente.nome,
-              token: cardToken.id,
-              paymentMethodId: paymentMethodId,
-              installments: installments,
-              issuerId: issuerId || undefined,
-              identificationType: identificationType,
-              identificationNumber: identificationNumber,
-              payerEmail: email,
-              cardBrand: cardBrand,
-              paymentType: "credit",
-            }),
-          });
-
-          const data = await response.json();
-
-          if (data.success && data.status === "approved") {
-            showToast(
-              "Pagamento aprovado! Obrigado por presentear!",
-              "success",
-            );
-            setTimeout(() => {
-              closeModal();
-              window.location.reload();
-            }, 2000);
-          } else if (data.status === "in_process") {
-            showToast("Pagamento em processamento. Aguarde...", "info");
-            startPaymentPolling(data.paymentId);
-          } else {
-            throw new Error(
-              data.statusDetail || data.error || "Pagamento não aprovado",
-            );
-          }
-        } catch (error) {
-          console.error("Erro detalhado:", error);
-          showToast(`${error.message}`, "error");
-        }
-      }
-
-      // Função similar para débito
-      async function processDebitPayment() {
-        const cardholderName = document.getElementById(
-          "debit-form-checkout__cardholderName",
-        ).value;
-        const identificationType = document.getElementById(
-          "debit-form-checkout__identificationType",
-        ).value;
-        const identificationNumber = document
-          .getElementById("debit-form-checkout__identificationNumber")
-          .value.replace(/\D/g, "");
-        const email = document.getElementById(
-          "debit-form-checkout__email",
-        ).value;
-
-        // Validações
-        if (!cardholderName) {
-          showToast("Preencha o nome do titular do cartão", "error");
-          return;
-        }
-
-        if (!identificationType || identificationType === "") {
-          showToast("Selecione o tipo de documento", "error");
-          return;
-        }
-
-        if (!identificationNumber || identificationNumber.length < 11) {
-          showToast("Número de documento inválido", "error");
-          return;
-        }
-
-        if (!email || !email.includes("@")) {
-          showToast("Preencha um e-mail válido", "error");
-          return;
-        }
-
-        if (!debitCardFields) {
-          showToast(
-            "Sistema de pagamento não inicializado. Tente novamente.",
-            "error",
-          );
-          return;
-        }
-
-        showToast("Processando pagamento...", "info");
-
-        try {
-          const cardToken = await mp.fields.createCardToken({
-            cardholderName: cardholderName,
-            identificationType: identificationType,
-            identificationNumber: identificationNumber,
-          });
-
-          let cardBrand = "visa";
-          try {
-            const cardInfo = await mp.fields.getCardInfo();
-            cardBrand = cardInfo.cardNumber?.paymentMethod?.id || "visa";
-          } catch (e) {}
-
-          const paymentMethodId =
-            cardBrand === "visa"
-              ? "visa_debit"
-              : cardBrand === "master"
-                ? "master_debit"
-                : "visa_debit";
-
-          const response = await fetch(`${API_BASE}/create-card-payment`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              amount: currentPresente.preco,
-              description: currentPresente.nome,
-              token: cardToken.id,
-              paymentMethodId: paymentMethodId,
-              installments: 1,
-              identificationType: identificationType,
-              identificationNumber: identificationNumber,
-              payerEmail: email,
-              cardBrand: cardBrand,
-              paymentType: "debit",
-            }),
-          });
-
-          const data = await response.json();
-
-          if (data.success && data.status === "approved") {
-            showToast(
-              "Pagamento aprovado! Obrigado por presentear!",
-              "success",
-            );
-            setTimeout(() => {
-              closeModal();
-              window.location.reload();
-            }, 2000);
-          } else {
-            throw new Error(
-              data.statusDetail || data.error || "Pagamento não aprovado",
-            );
-          }
-        } catch (error) {
-          console.error("Erro no pagamento débito:", error);
-          showToast(`Erro: ${error.message}`, "error");
-        }
-      }
-
-      function setupPaymentMethodSwitch() {
-        document.querySelectorAll(".payment-btn").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const method = btn.dataset.method;
-            document
-              .querySelectorAll(".payment-btn")
-              .forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            document
-              .querySelectorAll(".payment-content")
-              .forEach((c) => c.classList.remove("active"));
-            document.getElementById(`${method}Content`).classList.add("active");
-            unmountCardFields();
-            if (method === "credit") {
-              await initCreditCardFields();
-            } else if (method === "debit") {
-              await initDebitCardFields();
-            }
-          });
-        });
-      }
-
-      function showToast(message, type = "success") {
-        const toast = document.createElement("div");
-        toast.className = `toast ${type}`;
-        toast.textContent = message;
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-          toast.remove();
-        }, 4000);
-      }
-
-      function mostrarErro(mensagem) {
-        document.getElementById("detalheContent").innerHTML = `
-        <div class="erro-detalhe" style="text-align: center; padding: 4rem; background: #fff; border-radius: 24px;">
-          <p>${mensagem}</p>
-          <a href="../" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--rosa-protagonista); color: #fff; border-radius: 99px;">← Voltar para lista de presentes</a>
-        </div>
-      `;
-      }
-
-      function capitalizar(str) {
-        if (!str) return "";
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      }
-
-      function escapeHTML(str) {
-        if (!str) return "";
-        const div = document.createElement("div");
-        div.textContent = str;
-        return div.innerHTML;
-      }
-
-      function copiarEndereco() {
-        const enderecoCompleto = `Rua Duque de Caxias, 815\nOlímpia - SP\nCEP: 15402-072`;
-
-        navigator.clipboard
-          .writeText(enderecoCompleto)
-          .then(() => {
-            showToast("Endereço copiado com sucesso!", "success");
-          })
-          .catch(() => {
-            const textarea = document.createElement("textarea");
-            textarea.value = enderecoCompleto;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textarea);
-            showToast("Endereço copiado com sucesso!", "success");
-          });
-      }
-
-      document.addEventListener("DOMContentLoaded", async () => {
-        setupPaymentMethodSwitch();
-        carregarDetalhePresente();
-
-        const creditButton = document.getElementById("creditPaymentButton");
-        const debitButton = document.getElementById("debitPaymentButton");
-
-        if (creditButton) {
-          creditButton.addEventListener("click", processCreditPayment);
-        }
-        if (debitButton) {
-          debitButton.addEventListener("click", processDebitPayment);
-        }
-      });
-
-      window.onclick = function (event) {
-        const modal = document.getElementById("paymentModal");
-        if (event.target === modal) {
-          closeModal();
-        }
-      };
-    </script>
-  </body>
 </html>
