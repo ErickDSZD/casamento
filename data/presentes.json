@@ -18,23 +18,6 @@
       ]
     },
     {
-      "id": 2,
-      "nome": "Liquidificador Philco PLQ2100PI (3L, 1200W, Prateado)",
-      "categoria": "cozinha",
-      "preco": 250,
-      "descricao": "Liquidificador Turbo com 3L de capacidade e 1200W de potência, cor prateada.",
-      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_780377-MLA100010604301_122025-F.webp",
-      "status": "available",
-      "linkExterno": "https://www.mercadolivre.com.br/liquidificador-philco-plq2100pi-12-turbo-3l-1200w-cor-prateado/p/MLB27411494",
-      "detalhes": [
-        "Marca: Philco",
-        "Modelo: PLQ2100PI",
-        "Capacidade: 3L",
-        "Potência: 1200W",
-        "Cor: Prateado"
-      ]
-    },
-    {
       "id": 3,
       "nome": "Sanduicheira Grill Press Britânia BGR27I",
       "categoria": "cozinha",
@@ -52,29 +35,29 @@
     },
     {
       "id": 4,
-      "nome": "Espremedor Premium Mondial (127V, Preto)",
+      "nome": "Lavadora de Roupas",
       "categoria": "cozinha",
-      "preco": 100,
-      "descricao": "Espremedor de frutas elétrico Mondial, 127V, cor preta.",
-      "imagem": "https://m.media-amazon.com/images/I/61xeEzn1yYL._AC_SX679_.jpg",
+      "preco": 120,
+      "descricao": "Lavadora de Roupas Midea 12kg 10 Programas de Lavagem Branco Wave Impeller MAV04W120/WKBR04",
+      "imagem": "https://a-static.mlcdn.com.br/800x560/lavadora-de-roupas-midea-12kg-10-programas-de-lavagem-branco-wave-impeller-mav04w120-wkbr04/magazineluiza/240708900/f92717fd6a0765f938e830cac32ec98b.jpg",
       "status": "available",
-      "linkExterno": "https://www.amazon.com.br/Espremedor-Premium-127V-Mondial-Preto/dp/B076FFGXKK",
+      "linkExterno": "https://www.magazinevoce.com.br/dopechinchou/lavadora-de-roupas-midea-12kg-10-programas-de-lavagem-branco-wave-impeller-mav04w120-wkbr04/p/240708900/ed/lava/",
       "detalhes": [
-        "Marca: Mondial",
-        "Voltagem: 127V",
-        "Cor: Preto",
-        "Tipo: Premium"
+        "Marca: Midea",
+        "Peso: 12kg",
+        "Cor: Branco",
+        "Voltagem: 110V"
       ]
     },
     {
       "id": 5,
-      "nome": "Panela de Pressão Vancouver Tramontina (Alumínio Antiaderente)",
+      "nome": "Panela de Pressão Brinox 4,2L Bege Vanilla",
       "categoria": "cozinha",
-      "preco": 220,
-      "descricao": "Panela de pressão em alumínio com revestimento antiaderente interno e externo, cor grafite.",
+      "preco": 179.91,
+      "descricao": "Panela de Pressão Brinox 4,2L Bege Vanilla.",
       "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_821832-MLA99571452148_122025-F.webp",
       "status": "available",
-      "linkExterno": "https://www.mercadolivre.com.br/panela-de-presso-vancouver-20582620-em-aluminio-com-revestimento-interno-e-externo-antiaderente-grafite-tramontina/p/MLB10892513",
+      "linkExterno": "https://www.magazineluiza.com.br/panela-de-pressao-brinox-42l-bege-vanilla/p/237084500/ud/udpp/?&seller_id=magazineluiza&utm_source=google&utm_medium=cpc&utm_term=84377&utm_campaign=google_eco_per_ven_pla_lev_sor_1p_ud-0326&utm_content=&partner_id=84377&gclsrc=aw.ds&gad_source=1&gad_campaignid=23600284271&gbraid=0AAAAAD4zZmTFsB_4mRQYFoAJefOQlF8tp&gclid=CjwKCAjwuuPRBhAnEiwA2Ji8enZeawNiRZQRsj_Iltwwo_99Uv2fLZEKvSnoNww8Xryq-ehNXNHBqRoCYlgQAvD_BwE",
       "detalhes": [
         "Marca: Tramontina",
         "Linha: Vancouver",
@@ -210,23 +193,6 @@
       ]
     },
     {
-      "id": 14,
-      "nome": "Mesa Articulada Dobrável (6 lugares, Preta, MDP)",
-      "categoria": "móvel",
-      "preco": 300,
-      "descricao": "Mesa de jantar dobrável articulada para 6 lugares, em MDP, cor preta. 27% de desconto.",
-      "imagem": "https://down-br.img.susercontent.com/file/br-11134207-81z1k-midds2716pkx3b@resize_w450_nl.webp",
-      "status": "available",
-      "linkExterno": "https://br.shp.ee/3bWN57Qn",
-      "detalhes": [
-        "Material: MDP",
-        "Capacidade: 6 lugares",
-        "Tipo: Articulada/Dobrável",
-        "Cor: Preta",
-        "Desconto: 27%"
-      ]
-    },
-    {
       "id": 15,
       "nome": "Aspirador de Pó (Modelo B0DBJ6SCSB)",
       "categoria": "casa",
@@ -275,16 +241,16 @@
     },
     {
       "id": 19,
-      "nome": "Panela Anti Aderente",
+      "nome": "Panelas Brinox",
       "categoria": "cozinha",
       "preco": 610,
-      "descricao": "Jogo De Panelas Antiaderente 4,5mm 6 Peças Elara Soft Ceram",
-      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_787013-MLB107467133579_022026-F.webp",
+      "descricao": "Jogo de Panelas Brinox Revestimento Cerâmico Preto 5 Peças Carbon Ceramic Life",
+      "imagem": "https://m.magazineluiza.com.br/a-static/420x420/jogo-de-panelas-brinox-revestimento-ceramico-preto-5-pecas-carbon-ceramic-life/magazineluiza/237663000/cd83bd35bf4c3a4ec879dea0d22b49a7.jpg",
       "status": "available",
-      "linkExterno": "https://www.mercadolivre.com.br/jogo-de-panelas-antiaderente-45mm-6-pecas-elara-soft-ceram/up/MLBU3809423158",
+      "linkExterno": "https://www.magazineluiza.com.br/jogo-de-panelas-brinox-revestimento-ceramico-preto-5-pecas-carbon-ceramic-life/p/237663000/ud/cjpn/?seller_id=magazineluiza&ads=patrocinado",
       "detalhes": [
-        "Fonte: Mercado Livre",
-        "Tipo: Panela Anti Aderente"
+        "Fonte: Magalu",
+        "Tipo: Panelas Brinox"
       ]
     },
     {
@@ -331,14 +297,171 @@
     },
     {
       "id": 23,
-      "nome": "Teste",
-      "categoria": "quarto",
-      "preco": 1,
-      "descricao": "Teste",
-      "imagem": "/img/erick_gi.jpg",
+      "nome": "Pipoqueira Tramontina Loreto 3,5L",
+      "categoria": "cozinha",
+      "preco": 115.67,
+      "descricao": "Pipoqueira Tramontina Loreto 3,5L, Vermelho, Alumínio | 20CM, COM REVESTIMENTO ANTIADERENTE",
+      "imagem": "https://m.media-amazon.com/images/I/610N5Yz3vUL._AC_SX679_.jpg",
       "status": "available",
-      "linkExterno": "",
-      "detalhes": ["Teste"]
+      "linkExterno": "https://www.amazon.com.br/Tramontina-PIPOQUEIRA-20CM-LORETO-VERMELHO/dp/B09W4CSX53/ref=pd_rhf_dp_s_pd_crcbs_d_sccl_1_6/142-5159677-9391257?pd_rd_w=MpCCj&content-id=amzn1.sym.aef4fdbb-350a-48f6-a7d5-3c838de81164&pf_rd_p=aef4fdbb-350a-48f6-a7d5-3c838de81164&pf_rd_r=CAEA07AWXF8P98ZPQRHX&pd_rd_wg=tz8lm&pd_rd_r=d56707ea-7d13-4870-8992-92fe89c90d83&pd_rd_i=B09W4CSX53&th=1",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Pipoqueira"
+      ]
+    },
+    {
+      "id": 24,
+      "nome": "Jogo de Assadeiras de Alumínio Tramontina",
+      "categoria": "cozinha",
+      "preco": 126.60,
+      "descricao": "Jogo de Assadeiras de Alumínio Tramontina | com Revestimento Interno Antiaderente, com 3 Peças, Grafite",
+      "imagem": "https://m.media-amazon.com/images/I/51RKjJvDP8L._AC_SX679_.jpg",
+      "status": "available",
+      "linkExterno": "https://www.amazon.com.br/Assadeiras-Alum%C3%ADnio-Revestimento-Antiaderente-Tramontina/dp/B008R7SQ40/ref=sr_1_4?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=4G4BZUQWDK9F&dib=eyJ2IjoiMSJ9.Mf9_cTgVaS2E1W8GhVWCKbavGZ1d0UjtkrndhJV3M6stT7ig_TgzoJ16rSp66bUjiZDRS_YoST4pSpIJIAsBaKHKsd4bwNGWhPHCVLQw9vNcsL0Ol7pJ16J6iwb1VkU0NAIRAqjh8VxvfHUo3DmVuh-X2ivcJmoQ3UvyiecL-nGo0ZJhJFIIW6xDzeFdjBtuDBGglZBuqDMqyawLKG5Fbou3W5T62DEEJC4wkj-cBv4.tYtPNUa7XG15J5Jg23O_ZTTRgNvC_RvMcJ9EFpfBGx4&dib_tag=se&keywords=jogo+de+forma&qid=1782167265&s=kitchen&sprefix=jogo+de+formas%2Ckitchen%2C214&sr=1-4&ufe=app_do%3Aamzn1.fos.6a09f7ec-d911-4889-ad70-de8dd83c8a74",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Assadeiras"
+      ]
+    },
+    {
+      "id": 25,
+      "nome": "Frigideira Tramontina",
+      "categoria": "cozinha",
+      "preco": 97.75,
+      "descricao": "Frigideira Tramontina Sicília em Alumínio em Starflon Excellent | com Revestimento Interno e Externo, Avelã, 20 cm, 0,95 L",
+      "imagem": "https://m.media-amazon.com/images/I/71qKPtcJnGL._AC_SX679_.jpg",
+      "status": "available",
+      "linkExterno": "https://www.amazon.com.br/dp/B09B1CPGBC/ref=sspa_dk_detail_6?psc=1&pd_rd_i=B09B1CPGBC&pd_rd_w=0zRDY&content-id=amzn1.sym.01db1132-7a41-4b6b-bb8e-16b3635a59d0&pf_rd_p=01db1132-7a41-4b6b-bb8e-16b3635a59d0&pf_rd_r=3P08DD30WRBRY8FBPS5Y&pd_rd_wg=p3paq&pd_rd_r=7890a11f-a8cf-4ce5-aec7-10b85f6682eb&s=kitchen&sp_csd=d2lkZ2V0TmFtZT1zcF9kZXRhaWw",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Frigideira"
+      ]
+    },
+    {
+      "id": 26,
+      "nome": "Assadeiras Marinex",
+      "categoria": "cozinha",
+      "preco": 62.89,
+      "descricao": "Assadeiras Marinex Nadir Opaline | Jogo De Assadeiras, Kit 3 Unidades",
+      "imagem": "https://m.media-amazon.com/images/I/611DHhOHFkL._AC_SX679_.jpg",
+      "status": "available",
+      "linkExterno": "https://www.amazon.com.br/dp/B08G8WD9MF/ref=sspa_dk_detail_6?psc=1&pf_rd_p=01db1132-7a41-4b6b-bb8e-16b3635a59d0&pf_rd_r=3P08DD30WRBRY8FBPS5Y&pd_rd_wg=p3paq&pd_rd_w=0zRDY&content-id=amzn1.sym.01db1132-7a41-4b6b-bb8e-16b3635a59d0&pd_rd_r=7890a11f-a8cf-4ce5-aec7-10b85f6682eb&s=kitchen&sp_csd=d2lkZ2V0TmFtZT1zcF9kZXRhaWw",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Assadeira"
+      ]
+    },
+    {
+      "id": 27,
+      "nome": "Jogo de Facas Tramontina",
+      "categoria": "cozinha",
+      "preco": 62.89,
+      "descricao": "Jogo de Facas Tramontina Plenus | 9 Peças, Lâminas em Aço Inox, Cabos de Polipropileno Preto",
+      "imagem": "https://m.media-amazon.com/images/I/51oCxGHT-aL._AC_SX679_.jpg",
+      "status": "available",
+      "linkExterno": "https://www.amazon.com.br/Facas-Tramontina-Plenus-L%C3%A2minas-Polipropileno/dp/B07WR4TP9W/ref=mp_s_a_1_3?crid=IUN28YBKCM5E&dib=eyJ2IjoiMSJ9.yC9Uki80xDkcVbwGxtCv376KdJ9vXP8MxSVFd65opy5L13j3KfuJaB9XgyOd6wyvQF98kxeqzmD23KSqilvws7keIGvOV_2Q3_ZKeMtxbEm4LEL-2FMxXNx4Km7k7aHyHaJgyz96sJV9inXI-BZK6LAAf0p2rfAa924FKXk2R3gGgHuyqgnuqa_ADyvf6tLBlCqUUMl0MJPFt7Aamai2mQ.uMACmsvqL5isIWBDUi5MefMkqLZaEeVXa9ZzeQ_Q_AI&dib_tag=se&keywords=conjunto+de+facas&qid=1782169079&s=kitchen&sprefix=conjunyo+%2Ckitchen%2C269&sr=1-3&ufe=app_do%3Aamzn1.fos.6d798eae-cadf-45de-946a-f477d47705b9",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Jogo de Facas Tramontina"
+      ]
+    },
+    {
+      "id": 28,
+      "nome": "Aparelho de Jantar Chá e Café",
+      "categoria": "cozinha",
+      "preco": 173.36,
+      "descricao": "Aparelho de Jantar Chá e Café 12 Peças Alleanza Cerâmica Branco e Verde Redondo Harmony",
+      "imagem": "https://a-static.mlcdn.com.br/420x420/aparelho-de-jantar-cha-e-cafe-12-pecas-alleanza-ceramica-branco-e-verde-redondo-harmony/magazineluiza/237743100/493349c65555cc15631b4e0fe18db8ac.jpg",
+      "status": "available",
+      "linkExterno": "https://m.magazineluiza.com.br/aparelho-de-jantar-cha-e-cafe-12-pecas-alleanza-ceramica-branco-e-verde-redondo-harmony/p/237743100/ud/apja/?&seller_id=magazineluiza&utm_source=google&utm_medium=cpc&utm_term=84377&utm_campaign=google_eco_per_ven_pla_lev_sor_1p_ud-0326&utm_content=&partner_id=84377&gclsrc=aw.ds&gad_source=1&gad_campaignid=23600284271&gbraid=0AAAAAD4zZmS8ea6hJNA1Io6IwP27q_m-a&gclid=CjwKCAjwuuPRBhAnEiwA2Ji8epQ9BynrUxaWtFsxj01OrAglEbiXIsMg-yw7ugKkW9WTd4f-RPsHBRoCRyoQAvD_BwE",
+      "detalhes": [
+        "Fonte: Magalu",
+        "Tipo: Aparelho de Jantar Chá e Café"
+      ]
+    },
+    {
+      "id": 29,
+      "nome": "Conjunto de 3 Travessas",
+      "categoria": "cozinha",
+      "preco": 60.99,
+      "descricao": "Conjunto de 3 Travessas Ovais em Porcelana 1040ml, Branca Design Moderno vai forno frezzer saladeira",
+      "imagem": "https://m.media-amazon.com/images/I/41+j9Yd7iGL._AC_SX679_.jpg",
+      "status": "available",
+      "linkExterno": "https://www.amazon.com.br/Conjunto-Travessas-Porcelana-Moderno-saladeira/dp/B0F2CNYJ3L/ref=pd_aw_subss_hxwPER_sspa_mw_detail_m_sccl_2_7/139-3613972-0126637?pd_rd_r=2083c928-a933-4036-a304-eb1cdd164731&pd_rd_wg=WIte2&pd_rd_w=NOjqz&pd_rd_i=B0F2CNYJ3L&psc=1&sp_csd=d2lkZ2V0TmFtZT1zcF9waG9uZV9kZXRhaWxfdGhlbWF0aWM=",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Travessas Ovais em Porcelana 1040ml"
+      ]
+    },
+    {
+      "id": 30,
+      "nome": "Pratos de Sobremesa",
+      "categoria": "cozinha",
+      "preco": 99,
+      "descricao": "Pratos de Sobremesa Oxford Ryo Maresia | Conjunto com 6 Pratos de Sobremesa, 21,5cm",
+      "imagem": "https://m.media-amazon.com/images/I/51JgGsB14nS._AC_SX679_.jpg",
+      "status": "available",
+      "linkExterno": "https://www.amazon.com.br/Conjunto-com-Pratos-Sobremesa-Maresia/dp/B0941VNWN2?source=ps-sl-shoppingads-lpcontext&ref_=fplfs&psc=1&smid=A1ZZFT5FULY4LN",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Pratos de Sobremesa Oxford Ryo Maresia"
+      ]
+    },
+    {
+      "id": 31,
+      "nome": "Jogo de Lençol",
+      "categoria": "quarto",
+      "preco": 199.99,
+      "descricao": "Jogo de Lençol Home Style Amalfi",
+      "imagem": "https://img.camicado.com.br/item/100798881/zoom/1.jpg",
+      "status": "available",
+      "linkExterno": "https://www.camicado.com.br/p/jogo-de-lencol-home-style-amalfi/-/A-100798890-br.lc?sku=100798881",
+      "detalhes": [
+        "Fonte: Camicado",
+        "Tipo: Pratos de Sobremesa Oxford Ryo Maresia"
+      ]
+    },
+    {
+      "id": 31,
+      "nome": "Jogo de cama",
+      "categoria": "quarto",
+      "preco": 119.99,
+      "descricao": "Jogo de cama queen 4 peças soft touch Nadia - multicor | Casa Riachuelo",
+      "imagem": "https://static.riachuelo.com.br/RCHLO/16283783001/portrait/63d98d0625bfa4819435c91fd52daa1311d459f0.jpg?imwidth=200",
+      "status": "available",
+      "linkExterno": "https://www.riachuelo.com.br/jogo-de-cama-queen-4-pecas-soft-touch-nadia-multicor-casa-riachuelo-16283783001_sku_sku?sku=16283783001&gad_source=1&gad_campaignid=22975098893&gbraid=0AAAAADr2JaxmA_1FF-r-cMrzgmARs9SJ2&gclid=CjwKCAjwuuPRBhAnEiwA2Ji8emCgZDyWX7dN3vynxGt2WEBhOhLLsC7QftoO9xbw3o4LlsMMQu8pphoC7HwQAvD_BwE",
+      "detalhes": [
+        "Fonte: Riachuelo",
+        "Tipo: Jogo de cama"
+      ]
+    },
+    {
+      "id": 32,
+      "nome": "Manta casal",
+      "categoria": "quarto",
+      "preco": 149.99,
+      "descricao": "Manta casal em flannel canelada Aspen - bege | Casa Riachuelo",
+      "imagem": "https://static.riachuelo.com.br/RCHLO/16326601001/portrait/47aa414e41e30accb11eac9cb4e832ede2d3b843.jpg?imwidth=200",
+      "status": "available",
+      "linkExterno": "https://www.riachuelo.com.br/jogo-de-cama-queen-4-pecas-soft-touch-nadia-multicor-casa-riachuelo-16283783001_sku_sku?sku=16283783001&gad_source=1&gad_campaignid=22975098893&gbraid=0AAAAADr2JaxmA_1FF-r-cMrzgmARs9SJ2&gclid=CjwKCAjwuuPRBhAnEiwA2Ji8emCgZDyWX7dN3vynxGt2WEBhOhLLsC7QftoO9xbw3o4LlsMMQu8pphoC7HwQAvD_BwE",
+      "detalhes": [
+        "Fonte: Riachuelo",
+        "Tipo: Manta casal"
+      ]
+    },
+    {
+      "id": 33,
+      "nome": "Conjunto Sala de Jantar",
+      "categoria": "cozinha",
+      "preco": 893.60,
+      "descricao": "Conjunto Sala de Jantar Tampo de Vidro 4 Cadeiras Capri Madesa",
+      "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-825b9-meu3a8vf2ebo69.webp",
+      "status": "available",
+      "linkExterno": "https://shopee.com.br/product/872473112/22394429410?d_id=18cac&uls_trackid=55v98t6p01la&utm_content=LS5MxgvbVdnhT7PeRzJqorN43X5",
+      "detalhes": [
+        "Fonte: Shopee",
+        "Tipo: Conjunto Sala de Jantar"
+      ]
     }
   ]
 }

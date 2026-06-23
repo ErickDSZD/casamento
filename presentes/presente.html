@@ -1809,7 +1809,7 @@
 
     // PROCESSAMENTO DE PAGAMENTOS
     async function processCreditPayment() {
-      const cardholderName = document.getElementById("form-checkout__cardholderName").value;
+      const cardholderName = document.getElementById("form-checkout__cardholderName").value.toUpperCase();
       const identificationType = document.getElementById("form-checkout__identificationType").value;
       const identificationNumberRaw = document.getElementById("form-checkout__identificationNumber").value;
       const identificationNumber = identificationNumberRaw.replace(/\D/g, "");
@@ -1877,7 +1877,7 @@
     }
 
     async function processDebitPayment() {
-      const cardholderName = document.getElementById("debit-form-checkout__cardholderName").value;
+      const cardholderName = document.getElementById("debit-form-checkout__cardholderName").value.toUpperCase();
       const identificationType = document.getElementById("debit-form-checkout__identificationType").value;
       const identificationNumberRaw = document.getElementById("debit-form-checkout__identificationNumber").value;
       const identificationNumber = identificationNumberRaw.replace(/\D/g, "");
