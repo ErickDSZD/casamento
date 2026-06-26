@@ -1,23 +1,6 @@
 {
   "presentes": [
     {
-      "id": 1,
-      "nome": "Mixer 3 em 1 Electrolux TruFlow EIB10 (400W, Preto)",
-      "categoria": "cozinha",
-      "preco": 250,
-      "descricao": "Mixer 3 em 1 com tecnologia TruFlow, 400W, cor preta.",
-      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_774750-MLA99975679579_112025-F.webp",
-      "status": "available",
-      "linkExterno": "https://www.mercadolivre.com.br/mixer-3-em-1-electrolux-com-tecnologia-truflow-eib10-400w-cor-preto/p/MLB18425326",
-      "detalhes": [
-        "Marca: Electrolux",
-        "Modelo: EIB10",
-        "Potência: 400W",
-        "Funções: 3 em 1",
-        "Cor: Preto"
-      ]
-    },
-    {
       "id": 3,
       "nome": "Sanduicheira Grill Press Britânia BGR27I",
       "categoria": "cozinha",
@@ -37,7 +20,7 @@
       "id": 4,
       "nome": "Lavadora de Roupas",
       "categoria": "cozinha",
-      "preco": 120,
+      "preco": 1699,
       "descricao": "Lavadora de Roupas Midea 12kg 10 Programas de Lavagem Branco Wave Impeller MAV04W120/WKBR04",
       "imagem": "https://a-static.mlcdn.com.br/800x560/lavadora-de-roupas-midea-12kg-10-programas-de-lavagem-branco-wave-impeller-mav04w120-wkbr04/magazineluiza/240708900/f92717fd6a0765f938e830cac32ec98b.jpg",
       "status": "available",
@@ -99,16 +82,16 @@
     },
     {
       "id": 8,
-      "nome": "Kit de Potes de Vidro com Tampa (Hermético)",
+      "nome": "Kit 6 Potes de Vidro (Hermético)",
       "categoria": "cozinha",
-      "preco": 150,
-      "descricao": "Kit com potes de vidro redondo de 250ml com tampa.",
+      "preco": 49.99,
+      "descricao": "Kit 6 Potes de Vidro Oikos Redondos, 200ml | Herméticos, com Tampa de Bambu",
       "imagem": "https://m.media-amazon.com/images/I/616-Dra0CyL._AC_SX679_.jpg",
       "status": "available",
-      "linkExterno": "https://www.amazon.com.br/Potes-Vidro-Redondo-250ML-Tampa/dp/B09JCQLC7D",
+      "linkExterno": "https://www.amazon.com.br/Potes-Vidro-Redondo-250ML-Tampa/dp/B0BFC5HJY8?th=1&psc=1",
       "detalhes": [
         "Material: Vidro",
-        "Capacidade: 250ml cada",
+        "Capacidade: 200ml cada",
         "Formato: Redondo",
         "Com tampa"
       ]
@@ -208,22 +191,6 @@
       ]
     },
     {
-      "id": 16,
-      "nome": "Panela Elétrica de Arroz",
-      "categoria": "cozinha",
-      "preco": 200,
-      "descricao": "Panela Elétrica de Arroz Mondial PE-43 6 Xícaras - Preta/Inox - 110V",
-      "imagem": "https://imgs.casasbahia.com.br/55011884/1g.jpg?imwidth=500",
-      "status": "available",
-      "linkExterno": "https://www.casasbahia.com.br/panela-eletrica-de-arroz-mondial-pe-43-6-xicaras-preta-inox/p/55011884?utm_medium=Cpc&utm_source=GP_PLA&IdSku=55011884&idLojista=10037&tipoLojista=1P&gclsrc=aw.ds&&utm_campaign=cb_b2c_gg_shopping_core_elpo_medium&gad_source=1&gad_campaignid=23898474716&gbraid=0AAAAADtAamhthlCuIKhaFvQlRtYM4TkoL&gclid=CjwKCAjwxITRBhBYEiwA6mZm7TKWCwElp2PC-mVAxjLrqkX1lRr8VYy3Vm94wvznscImNWV6bpVUoRoCon0QAvD_BwE",
-      "detalhes": [
-        "Fonte: Casas Bahia",
-        "Código: 55011884",
-        "Voltagem: 110V",
-        "Tipo: Panela"
-      ]
-    },
-    {
       "id": 18,
       "nome": "Panela de Pressão Elétrica",
       "categoria": "cozinha",
@@ -243,7 +210,7 @@
       "id": 19,
       "nome": "Panelas Brinox",
       "categoria": "cozinha",
-      "preco": 610,
+      "preco": 489.99,
       "descricao": "Jogo de Panelas Brinox Revestimento Cerâmico Preto 5 Peças Carbon Ceramic Life",
       "imagem": "https://m.magazineluiza.com.br/a-static/420x420/jogo-de-panelas-brinox-revestimento-ceramico-preto-5-pecas-carbon-ceramic-life/magazineluiza/237663000/cd83bd35bf4c3a4ec879dea0d22b49a7.jpg",
       "status": "available",
@@ -279,20 +246,6 @@
       "detalhes": [
         "Fonte: Mercado Livre",
         "Tipo: Blender Power"
-      ]
-    },
-    {
-      "id": 22,
-      "nome": "Batedeira Planetária",
-      "categoria": "cozinha",
-      "preco": 384,
-      "descricao": "Batedeira Planetária Britânia Bbpe01 12 Velocidades 4l 500w Cor Preto",
-      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_809500-MLA99934080747_112025-F.webp",
-      "status": "available",
-      "linkExterno": "https://www.mercadolivre.com.br/batedeira-planetaria-britnia-bbpe01-12-velocidades-4l-500w-cor-preto/p/MLB28681453",
-      "detalhes": [
-        "Fonte: Mercado Livre",
-        "Tipo: Batedeira Planetária"
       ]
     },
     {
@@ -451,6 +404,76 @@
     },
     {
       "id": 33,
+      "nome": "Guarda Roupa Casal",
+      "categoria": "quarto",
+      "preco": 978.98,
+      "descricao": "Guarda Roupa Casal 8 Portas 4 Gavetas Paris Espresso Móveis - Cinza",
+      "imagem": "https://imgs.casasbahia.com.br/1555638869/2xg.jpg?imwidth=200",
+      "status": "available",
+      "linkExterno": "https://www.casasbahia.com.br/guarda-roupa-casal-8-portas-4-gavetas-paris-espresso-moveis/p/1555638869?vtr_id=similares_ao_que_voce_esta_vendo&vtr_name=similares+ao+que+voce+esta+vendo",
+      "detalhes": [
+        "Fonte: Casas bahia",
+        "Tipo: Guarda roupa"
+      ]
+    },
+    {
+      "id": 34,
+      "nome": "Espelho",
+      "categoria": "quarto",
+      "preco": 269.99,
+      "descricao": "Espelho 170x70 Decorativo Grande Corpo Inteiro Com Moldura Caramelo",
+      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_870940-MLA96870147800_112025-F.webp",
+      "status": "available",
+      "linkExterno": "https://www.mercadolivre.com.br/espelho-170x70-decorativo-grande-corpo-inteiro-com-moldura-caramelo/p/MLB61701482",
+      "detalhes": [
+        "Fonte: Mercado Livre",
+        "Tipo: Espelho"
+      ]
+    },
+    {
+      "id": 35,
+      "nome": "Cabeceira",
+      "categoria": "quarto",
+      "preco": 345.50,
+      "descricao": "Cabeceira Queen Ripada de Madeira para Quarto de Casal",
+      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_884817-MLA89982806640_082025-F.webp",
+      "status": "available",
+      "linkExterno": "https://www.mercadolivre.com.br/cabeceira-queen-ripada-de-madeira-para-quarto-de-casal/p/MLB53994559?product_trigger_id=MLB54444326&pdp_filters=item_id%3AMLB4277739083&applied_product_filters=MLB54444326&picker=true&quantity=1",
+      "detalhes": [
+        "Fonte: Mercado Livre",
+        "Tipo: Cabeceira da cama"
+      ]
+    },
+    {
+      "id": 36,
+      "nome": "Sofá 3 Lugares",
+      "categoria": "quarto",
+      "preco": 1199.00,
+      "descricao": "Sofá 3 Lugares Retrátil e Reclinável Cama inBox Compact 1,80m Velusoft Cinza",
+      "imagem": "https://imgs.casasbahia.com.br/1511981089/1xg.jpg?imwidth=500",
+      "status": "available",
+      "linkExterno": "https://www.casasbahia.com.br/sofa-3-lugares-retratil-e-reclinavel-cama-inbox-compact-180m-velusoft-cinza/p/1511981089?IdLojista=31937&vtr_id=similares_ao_que_voce_esta_vendo&vtr_name=similares+ao+que+voce+esta+vendo",
+      "detalhes": [
+        "Fonte: Casas bahia",
+        "Tipo: Sofá"
+      ]
+    },
+    {
+      "id": 37,
+      "nome": "Tapete Sala",
+      "categoria": "sala",
+      "preco": 333.61,
+      "descricao": "Tapete Sala Boho Rústico 2,00x2,00. Grosso, Pesado E Macio!",
+      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_615316-MLB83070030982_032025-F.webp",
+      "status": "available",
+      "linkExterno": "https://www.mercadolivre.com.br/tapete-sala-boho-rustico-200x200-grosso-pesado-e-macio/up/MLBU3167837474?pdp_filters=item_id%3AMLB5379484960",
+      "detalhes": [
+        "Fonte: Mercado Livre",
+        "Tipo: Tapete da sala"
+      ]
+    },
+    {
+      "id": 38,
       "nome": "Conjunto Sala de Jantar",
       "categoria": "cozinha",
       "preco": 893.60,

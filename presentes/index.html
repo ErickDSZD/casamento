@@ -577,6 +577,21 @@
       font-weight: 400;
     }
 
+    .btn-lua-de-mel-inline {
+      display: inline-block;
+      color: var(--rosa-protagonista);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-lua-de-mel-inline:hover {
+      color: var(--laranja-energia);
+      text-decoration-color: var(--laranja-energia);
+      transform: translateX(3px);
+    }
+
     .btn-copiar-endereco {
       display: inline-flex;
       align-items: center;
@@ -915,7 +930,6 @@
       .info-item__title {
         font-size: 0.7rem;
         margin-top: 0.25rem;
-        line-height: 2;
       }
 
       .info-item__text {
@@ -1046,6 +1060,11 @@
               endereço como local de entrega.</p>
             <p><strong>Opção 2 - Dar o valor:</strong> Clique em "Presentear este item", faça o pagamento via PIX ou
               cartão e nós mesmos adquirimos o presente.</p>
+            <p><strong>Opção 3 - Lua de Mel:</strong> 
+              <a href="../luademel/" class="btn-lua-de-mel-inline">
+                Contribua para nossa viagem dos sonhos →
+              </a>
+            </p>
           </div>
         </div>
         <div class="info-item">

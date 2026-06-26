@@ -523,6 +523,61 @@
       transform: translateX(4px);
     }
 
+    .btn-presentear--primary {
+      background: linear-gradient(135deg, var(--rosa-protagonista) 0%, var(--laranja-energia) 100%);
+      color: var(--branco);
+      font-size: 1.1rem;
+      padding: 1.2rem 3.5rem;
+      box-shadow: 0 8px 30px rgba(237, 75, 20, 0.35);
+    }
+
+    .btn-presentear--primary:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(237, 75, 20, 0.45);
+    }
+
+    .btn-presentear--secondary {
+      background: transparent;
+      color: var(--marrom-base);
+      border: 2px solid var(--rosa-protagonista);
+      padding: 1rem 2.5rem;
+      box-shadow: none;
+    }
+
+    .btn-presentear--secondary:hover {
+      background: var(--rosa-protagonista);
+      color: var(--branco);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(232, 58, 109, 0.3);
+    }
+
+    .welcome__actions {
+      margin-top: 3rem;
+    }
+
+    .welcome__actions-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    @media (min-width: 768px) {
+      .welcome__actions-group {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+      
+      .btn-presentear--primary {
+        padding: 1.2rem 4rem;
+      }
+      
+      .btn-presentear--secondary {
+        padding: 1.2rem 2.5rem;
+      }
+    }
+
     /* Responsivo para o botão */
     @media (max-width: 600px) {
       .btn-presentear {
@@ -798,12 +853,17 @@
         </div>
       </div>
 
-      <!-- Botão Presentear -->
-      <div class="welcome__present-btn reveal reveal-delay-3">
-        <a href="./presentes/" class="btn-presentear">
-          Presentear
-          <span class="btn-presentear__arrow">→</span>
-        </a>
+      <div class="welcome__actions reveal reveal-delay-3">
+        <div class="welcome__actions-group">
+          <a href="./presentes/" class="btn-presentear btn-presentear--primary">
+            Presentear
+            <span class="btn-presentear__arrow">→</span>
+          </a>
+          <a href="./luademel/" class="btn-presentear btn-presentear--secondary">
+            Operação lua de mel
+            <span class="btn-presentear__arrow">→</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
