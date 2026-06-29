@@ -36,7 +36,6 @@
     }
 
     :root {
-      /* CORES PADRÃO DO SITE */
       --rosa-protagonista: #e83a6d;
       --laranja-energia: #ed4b14;
       --amarelo-alegria: #feb423;
@@ -45,6 +44,7 @@
       --marrom-claro: #5e4130;
       --terracota: #d96c2b;
       --branco: #ffffff;
+      --verde-destaque: #22c55e;
 
       --font-titulos:
         "Oleragie", "Playfair Display", Georgia, "Times New Roman", serif;
@@ -73,7 +73,7 @@
       margin-inline: auto;
     }
 
-    /* Navbar - com fundo transparente para logo branco */
+    /* Navbar */
     .nav {
       position: fixed;
       top: 0;
@@ -165,6 +165,35 @@
       transition:
         transform 0.3s,
         opacity 0.3s;
+    }
+
+    /* Botão Voltar */
+    .btn-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: none;
+      color: var(--marrom-claro);
+      font-family: var(--font-paragrafos);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      transition: color 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-voltar:hover {
+      color: var(--laranja-energia);
+    }
+
+    .btn-voltar svg {
+      transition: transform 0.3s ease;
+    }
+
+    .btn-voltar:hover svg {
+      transform: translateX(-4px);
     }
 
     .presente-detalhe {
@@ -426,6 +455,36 @@
       transform: translateY(0);
     }
 
+    .btn-comprar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: var(--laranja-energia);
+      color: var(--branco);
+      border: 2px solid var(--laranja-energia);
+      padding: 1rem 2rem;
+      font-family: var(--font-paragrafos);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-comprar:hover {
+      background: var(--terracota);
+      border-color: var(--terracota);
+      transform: translateY(-2px);
+    }
+
+    .btn-comprar:active {
+      transform: translateY(0);
+    }
+
     .btn-presentear {
       display: inline-flex;
       align-items: center;
@@ -455,8 +514,40 @@
       transform: translateY(0);
     }
 
+    .btn-avisar-noivos {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: var(--verde-destaque);
+      color: var(--branco);
+      border: 2px solid var(--verde-destaque);
+      padding: 1rem 2rem;
+      font-family: var(--font-paragrafos);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-avisar-noivos:hover {
+      background: #16a34a;
+      border-color: #16a34a;
+      transform: translateY(-2px);
+    }
+
+    .btn-avisar-noivos:active {
+      transform: translateY(0);
+    }
+
     .btn-externo svg,
-    .btn-presentear svg {
+    .btn-comprar svg,
+    .btn-presentear svg,
+    .btn-avisar-noivos svg {
       flex-shrink: 0;
     }
 
@@ -472,13 +563,17 @@
       }
 
       .btn-externo,
-      .btn-presentear {
+      .btn-comprar,
+      .btn-presentear,
+      .btn-avisar-noivos {
         padding: 0.875rem 1.5rem;
         font-size: 0.8rem;
       }
 
       .btn-externo svg,
-      .btn-presentear svg {
+      .btn-comprar svg,
+      .btn-presentear svg,
+      .btn-avisar-noivos svg {
         width: 18px;
         height: 18px;
       }
@@ -487,13 +582,17 @@
     @media (max-width: 380px) {
 
       .btn-externo,
-      .btn-presentear {
+      .btn-comprar,
+      .btn-presentear,
+      .btn-avisar-noivos {
         padding: 0.75rem 1.25rem;
         font-size: 0.75rem;
       }
 
       .btn-externo svg,
-      .btn-presentear svg {
+      .btn-comprar svg,
+      .btn-presentear svg,
+      .btn-avisar-noivos svg {
         width: 16px;
         height: 16px;
       }
@@ -520,7 +619,7 @@
       font-size: 1.1rem;
     }
 
-    /* Modal */
+    /* Modal de Pagamento */
     .modal {
       display: none;
       position: fixed;
@@ -887,7 +986,6 @@
         height: 38px;
       }
 
-      /* Detalhe Card Responsivo */
       .detalhe-card {
         grid-template-columns: 1fr;
         border-radius: 20px;
@@ -1033,7 +1131,6 @@
         padding: 0.875rem;
       }
 
-      /* Modal mobile */
       .modal-content {
         width: 95%;
         border-radius: 20px;
@@ -1075,7 +1172,6 @@
       }
     }
 
-    /* Ajuste para telas muito pequenas */
     @media (max-width: 380px) {
       .detalhe-info {
         padding: 1rem;
@@ -1121,6 +1217,14 @@
 
   <main class="presente-detalhe">
     <div class="container">
+      <!-- Botão Voltar -->
+      <button class="btn-voltar" onclick="history.back()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Voltar
+      </button>
+
       <div id="detalheContent">
         <div class="loading" style="text-align: center; padding: 4rem">
           <p>Carregando detalhes do presente...</p>
@@ -1227,7 +1331,6 @@
             <input type="email" id="form-checkout__email" class="email-input" placeholder="seu@email.com" />
           </div>
 
-          <!-- Campos ocultos necessários -->
           <input id="token" name="token" type="hidden" />
           <input id="paymentMethodId" name="paymentMethodId" type="hidden" />
           <input id="transactionAmount" name="transactionAmount" type="hidden" value="" />
@@ -1278,7 +1381,6 @@
             <input type="email" id="debit-form-checkout__email" class="email-input" placeholder="seu@email.com" />
           </div>
 
-          <!-- Campos ocultos necessários -->
           <input id="debit-token" name="debit-token" type="hidden" />
           <input id="debit-paymentMethodId" name="debit-paymentMethodId" type="hidden" />
 
@@ -1347,20 +1449,17 @@
     const WHATSAPP_NUMBER = "5517996181324";
 
     // FUNÇÃO PARA ABRIR WHATSAPP COM MENSAGEM DO PRESENTE
-    function abrirWhatsapp(linkExterno, nomePresente) {
-      // Obtém a URL completa da página atual
-      const urlAtual = window.location.href;
+    function abrirWhatsapp(linkExterno, nomePresente, tipo) {
+      let mensagem = '';
       
-      // Cria a mensagem personalizada
-      const mensagem = `Olá! Gostaria de comprar o presente *${nomePresente}* e gostaria de removê-lo da lista de presentes. Segue o link do presente: ${linkExterno}`;
+      if (tipo === 'comprar') {
+        mensagem = `Olá! Gostaria de comprar o presente *${nomePresente}* e gostaria de removê-lo da lista de presentes. Segue o link do presente: ${linkExterno}`;
+      } else if (tipo === 'avisar') {
+        mensagem = `Olá! Gostaria de avisar que escolhi o presente *${nomePresente}* para comprar. Segue o link do presente: ${linkExterno}`;
+      }
       
-      // Codifica a mensagem para URL
       const mensagemCodificada = encodeURIComponent(mensagem);
-      
-      // Cria o link do WhatsApp
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensagemCodificada}`;
-      
-      // Abre o WhatsApp em uma nova aba
       window.open(whatsappUrl, '_blank');
     }
 
@@ -1417,18 +1516,14 @@
     // MÁSCARA DE CPF/CNPJ
     function applyDocumentMask(input) {
       let value = input.value.replace(/\D/g, '');
-
-      // Verifica se é CNPJ (14 dígitos) ou CPF (11 dígitos)
       if (value.length > 14) value = value.slice(0, 14);
 
       if (value.length <= 11) {
-        // Máscara de CPF: 000.000.000-00
         if (value.length <= 3) input.value = value;
         else if (value.length <= 6) input.value = `${value.slice(0, 3)}.${value.slice(3)}`;
         else if (value.length <= 9) input.value = `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6)}`;
         else input.value = `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6, 9)}-${value.slice(9, 11)}`;
       } else {
-        // Máscara de CNPJ: 00.000.000/0000-00
         if (value.length <= 2) input.value = value;
         else if (value.length <= 5) input.value = `${value.slice(0, 2)}.${value.slice(2)}`;
         else if (value.length <= 8) input.value = `${value.slice(0, 2)}.${value.slice(2, 5)}.${value.slice(5)}`;
@@ -1449,23 +1544,7 @@
       }
     }
 
-
-    // FUNÇÕES DE SELECT (UTILITÁRIAS)
-    function clearHTMLSelectChildrenFrom(element) {
-      if (!element) return;
-      const currOptions = [...element.children];
-      currOptions.forEach((child) => child.remove());
-    }
-
-    function createSelectElementPlaceholder(element, placeholder) {
-      if (!element) return;
-      const optionElement = document.createElement("option");
-      optionElement.textContent = placeholder;
-      optionElement.setAttribute("selected", "");
-      optionElement.setAttribute("disabled", "");
-      element.appendChild(optionElement);
-    }
-
+    // FUNÇÕES DE SELECT
     function clearSelectAndSetPlaceholder(element, placeholder) {
       if (!element) return;
       element.innerHTML = "";
@@ -1509,8 +1588,7 @@
       });
     }
 
-
-    // API CALLS PARA MERCADO PAGO
+    // API CALLS MERCADO PAGO
     async function initMercadoPago() {
       if (mp) return mp;
       if (typeof MercadoPago !== "undefined") {
@@ -1549,28 +1627,22 @@
 
     async function getIssuers(paymentMethodId, bin) {
       try {
-
-        // Valida os parâmetros
         if (!paymentMethodId || !bin) {
           console.error("Parâmetros inválidos:", { paymentMethodId, bin });
           return [];
         }
 
-        // Usa o SDK do Mercado Pago diretamente (sem chamar o backend)
         const issuers = await mp.getIssuers({
           paymentMethodId: paymentMethodId,
           bin: bin
         });
 
-        // Verifica se retornou dados válidos
         if (issuers && Array.isArray(issuers) && issuers.length > 0) {
-          // Mapeia para o formato esperado pelo createSelectOptions
           return issuers.map(issuer => ({
             id: issuer.id,
             name: issuer.name
           }));
         }
-
         return [];
       } catch (e) {
         console.error("Erro ao buscar issuers com SDK:", e);
@@ -1580,18 +1652,14 @@
 
     async function getInstallments(amount, bin, paymentMethodId) {
       try {
-        // Valida se amount é válido (pode ser string ou número)
         if (!amount || amount === '') {
           console.error("Amount não fornecido");
           return [];
         }
 
-        // Converte para string e limpa a formatação
         let amountStr = String(amount).trim();
-        // Remove "R$" e espaços, troca vírgula por ponto
         amountStr = amountStr.replace(/[R$\s]/g, '').replace(',', '.');
 
-        // Valida se é um número válido
         const amountNumber = parseFloat(amountStr);
         if (isNaN(amountNumber) || amountNumber <= 0) {
           console.error("Amount inválido após conversão:", amount);
@@ -1604,9 +1672,7 @@
           paymentTypeId: 'credit_card'
         });
 
-        // Extrai as opções de parcelamento
         if (response && response.length > 0) {
-          // Filtra pelo payment_method_id se necessário
           let installmentsInfo = response[0];
           if (paymentMethodId) {
             const found = response.find(item => item.payment_method_id === paymentMethodId);
@@ -1615,13 +1681,8 @@
 
           if (installmentsInfo && installmentsInfo.payer_costs && installmentsInfo.payer_costs.length > 0) {
             return installmentsInfo.payer_costs;
-          } else {
-
           }
-        } else {
-
         }
-
         return [];
       } catch (e) {
         console.error("Erro ao buscar parcelas com SDK:", e);
@@ -1645,12 +1706,10 @@
       cardNumberElement.on("binChange", async (data) => {
         const { bin } = data;
 
-        // Debounce para evitar múltiplas chamadas
         if (debounceTimeout) clearTimeout(debounceTimeout);
 
         debounceTimeout = setTimeout(async () => {
           try {
-
             if (!bin || bin.length < 6) {
               if (issuerElement) clearSelectAndSetPlaceholder(issuerElement, "Selecione o banco");
               if (installmentsElement) clearSelectAndSetPlaceholder(installmentsElement, "Selecione as parcelas");
@@ -1660,21 +1719,17 @@
             }
 
             if (bin !== currentBin) {
-              // Busca informações do método de pagamento baseado no bin
               const { results } = await mp.getPaymentMethods({ bin });
               const paymentMethod = results[0];
 
               if (paymentMethod) {
-                // Atualiza o input hidden com o ID do método de pagamento
                 if (paymentMethodIdInput) {
                   paymentMethodIdInput.value = paymentMethod.id;
                 }
 
-                // Atualiza as configurações dos campos (validações)
                 updatePCIFieldsSettings(paymentMethod, cardNumberElement,
                   type === "credit" ? creditCardFields?.securityCode : debitCardFields?.securityCode);
 
-                // Para cartão de CRÉDITO apenas
                 if (type === "credit") {
                   const issuers = await getIssuers(paymentMethod.id, bin);
 
@@ -1686,17 +1741,13 @@
                     }
                   }
 
-                  // 2. Buscar parcelas
                   const amount = currentPresente?.preco || 100;
-
-                  // Limpa o amount: remove "R$", espaços, e converte vírgula para ponto
                   let cleanAmount = amount;
                   if (typeof cleanAmount === 'string') {
                     cleanAmount = cleanAmount.replace(/[R$\s]/g, '').replace(',', '.');
                   }
                   cleanAmount = parseFloat(cleanAmount);
 
-                  // Chama getInstallments com o parâmetro correto (amount como string)
                   const installmentOptions = await getInstallments(String(cleanAmount), bin, paymentMethod.id);
 
                   if (installmentsElement) {
@@ -1707,8 +1758,6 @@
                       });
                     } else {
                       clearSelectAndSetPlaceholder(installmentsElement, "Selecione as parcelas");
-
-                      // Fallback: Adiciona opção de parcela única se não houver parcelas
                       const amountNumber = cleanAmount;
                       if (!isNaN(amountNumber) && amountNumber > 0) {
                         const fallbackOption = [{
@@ -1725,13 +1774,12 @@
                   }
                 }
               }
-
               currentBin = bin;
             }
           } catch (e) {
             console.error("error in binChange: ", e);
           }
-        }, 500); // Aguarda 500ms após o último dígito
+        }, 500);
       });
     }
 
@@ -1744,7 +1792,6 @@
       if (securityCodeSettings && securityCodeElement) securityCodeElement.update({ settings: securityCodeSettings });
     }
 
-    // INICIALIZAÇÃO DOS CAMPOS DE CARTÃO
     async function initCreditCardFields() {
       await initMercadoPago();
       await getIdentificationTypes();
@@ -1805,7 +1852,6 @@
         debitCardFields = null;
       }
     }
-
 
     // PROCESSAMENTO DE PAGAMENTOS
     async function processCreditPayment() {
@@ -1939,11 +1985,9 @@
 
     // PIX E POLLING
     async function generatePixQRCode() {
-      // Valida o email antes de prosseguir
       const pixEmailInput = document.getElementById("pixEmail");
       const pixEmail = pixEmailInput ? pixEmailInput.value.trim() : "";
 
-      // Validação do email
       if (!pixEmail) {
         showToast("Por favor, informe seu e-mail para gerar o PIX", "error");
         pixEmailInput?.focus();
@@ -1998,13 +2042,11 @@
         qrContainer.innerHTML = `<p style="color: red;">Erro ao gerar PIX</p><p style="font-size: 0.85rem;">${error.message}</p><button onclick="generatePixQRCode()" style="margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer; background: var(--rosa-protagonista); color: white; border: none; border-radius: 8px;">Tentar novamente</button>`;
         showToast("Erro ao gerar pagamento PIX. Tente novamente.", "error");
 
-        // Se houve erro, mostra o placeholder novamente
         if (pixPlaceholder) pixPlaceholder.style.display = "block";
         if (pixGeneratedContent) pixGeneratedContent.style.display = "none";
       }
     }
 
-    // Função auxiliar para validar email
     function isValidEmail(email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
@@ -2101,10 +2143,8 @@
           document.querySelectorAll(".payment-content").forEach((c) => c.classList.remove("active"));
           document.getElementById(`${method}Content`).classList.add("active");
 
-          // Limpa campos existentes
           unmountCardFields();
 
-          // Inicializa novos campos
           if (method === "credit") {
             await initCreditCardFields();
             setupDocumentMaskListeners();
@@ -2161,13 +2201,6 @@
       const precoFormatado = presente.preco.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const hasExternalLink = presente.linkExterno && presente.linkExterno.trim() !== "";
 
-      // Função para lidar com o clique no botão "Ver na loja"
-      const handleVerNaLoja = () => {
-        if (presente.linkExterno) {
-          abrirWhatsapp(presente.linkExterno, presente.nome);
-        }
-      };
-
       const html = `
           <article class="detalhe-card">
             <div class="detalhe-imagem">
@@ -2208,7 +2241,22 @@
               </div>
               <div class="detalhe-acoes">
                 <div class="btn-group">
-                  ${hasExternalLink ? `<a href="#" onclick="abrirWhatsapp('${escapeHTML(presente.linkExterno)}', '${escapeHTML(presente.nome)}'); return false;" class="btn-externo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Ver na loja</a>` : ""}
+                  ${hasExternalLink ? `
+                    <a href="${escapeHTML(presente.linkExterno)}" target="_blank" class="btn-externo">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                      </svg>
+                      Ver na loja
+                    </a>
+                    <button class="btn-avisar-noivos" onclick="abrirWhatsapp('${escapeHTML(presente.linkExterno)}', '${escapeHTML(presente.nome)}', 'avisar')">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                      </svg>
+                      Avisar os Noivos
+                    </button>
+                  ` : ""}
                   ${presente.status !== "gifted" ? `<button class="btn-presentear" data-id="${presente.id}" onclick="openModal()">Presentear com o valor</button>` : `<p class="mensagem-gifted">Este presente já foi adquirido por um convidado especial!</p>`}
                 </div>
               </div>
@@ -2216,9 +2264,6 @@
           </article>
         `;
       container.innerHTML = html;
-      
-      // Registra a função globalmente para ser chamada pelo onclick
-      window.abrirWhatsapp = abrirWhatsapp;
     }
 
     // INICIALIZAÇÃO

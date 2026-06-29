@@ -51,7 +51,7 @@
     {
       "id": 6,
       "nome": "Faqueiro Inox Búzios Tramontina (23799)",
-      "categoria": "casa",
+      "categoria": "cozinha",
       "preco": 90,
       "descricao": "Faqueiro em inox da linha Búzios, Tramontina.",
       "imagem": "https://m.media-amazon.com/images/I/61x2HGF7CfL._AC_SX679_.jpg",
@@ -67,7 +67,7 @@
     {
       "id": 7,
       "nome": "Jogo de Jantar e Chá Unni Brisa Oxford (20 Peças)",
-      "categoria": "casa",
+      "categoria": "cozinha",
       "preco": 280,
       "descricao": "Jogo de jantar e chá com 20 peças, linha Brisa Oxford.",
       "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_771183-MLA95712551934_102025-F.webp",
@@ -115,7 +115,7 @@
     {
       "id": 10,
       "nome": "Aparelho de Jantar Biona Donna Colb",
-      "categoria": "casa",
+      "categoria": "cozinha",
       "preco": 230,
       "descricao": "Aparelho de jantar da linha Biona Donna Colb.",
       "imagem": "https://m.media-amazon.com/images/I/61oh7BFSgiL._AC_SX679_.jpg",
@@ -130,10 +130,10 @@
     {
       "id": 11,
       "nome": "Conjunto de Xícaras (150ml, Borossilicato)",
-      "categoria": "casa",
+      "categoria": "cozinha",
       "preco": 60,
       "descricao": "Conjunto de xícaras de 150ml em vidro borossilicato.",
-      "imagem": "https://m.media-amazon.com/images/I/61XSp7iIJqL._AC_SX679_.jpg",
+      "imagem": "https://m.media-amazon.com/images/I/51JFiv9ezEL._AC_SX679_.jpg",
       "status": "available",
       "linkExterno": "https://www.amazon.com.br/Conjunto-X%C3%ADcaras-150ml-Parede-Borossilicato/dp/B0GSMVSG42",
       "detalhes": [
@@ -147,15 +147,14 @@
       "nome": "Armário de Cozinha Compacta Nice Madesa (120cm, Cinza)",
       "categoria": "móvel",
       "preco": 840,
-      "descricao": "Armário de cozinha compacto com 120cm, cor cinza. 7% de desconto.",
+      "descricao": "Armário de cozinha compacto com 120cm, cor cinza.",
       "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-22110-syzetsd7xljvc1@resize_w450_nl.webp",
       "status": "available",
       "linkExterno": "https://br.shp.ee/CragNgBN",
       "detalhes": [
         "Marca: Nice Madesa",
         "Largura: 120cm",
-        "Cor: Cinza",
-        "Desconto: 7%"
+        "Cor: Cinza"
       ]
     },
     {
@@ -163,7 +162,7 @@
       "nome": "Torre Quente Nice Madesa (60cm, 2 Portas, 2 Nichos, Cinza)",
       "categoria": "móvel",
       "preco": 470,
-      "descricao": "Torre quente suspensa com 60cm, 2 portas e 2 nichos, cor cinza. 31% de desconto.",
+      "descricao": "Torre quente suspensa com 60cm, 2 portas e 2 nichos, cor cinza.",
       "imagem": "https://down-br.img.susercontent.com/file/sg-11134201-22110-yo24s8wq2bkv23.webp",
       "status": "available",
       "linkExterno": "https://br.shp.ee/DfRh4Ucm",
@@ -216,7 +215,7 @@
       "status": "available",
       "linkExterno": "https://www.magazineluiza.com.br/jogo-de-panelas-brinox-revestimento-ceramico-preto-5-pecas-carbon-ceramic-life/p/237663000/ud/cjpn/?seller_id=magazineluiza&ads=patrocinado",
       "detalhes": [
-        "Fonte: Magalu",
+        "Fonte: Magazine Luiza",
         "Tipo: Panelas Brinox"
       ]
     },
@@ -328,7 +327,7 @@
       "status": "available",
       "linkExterno": "https://m.magazineluiza.com.br/aparelho-de-jantar-cha-e-cafe-12-pecas-alleanza-ceramica-branco-e-verde-redondo-harmony/p/237743100/ud/apja/?&seller_id=magazineluiza&utm_source=google&utm_medium=cpc&utm_term=84377&utm_campaign=google_eco_per_ven_pla_lev_sor_1p_ud-0326&utm_content=&partner_id=84377&gclsrc=aw.ds&gad_source=1&gad_campaignid=23600284271&gbraid=0AAAAAD4zZmS8ea6hJNA1Io6IwP27q_m-a&gclid=CjwKCAjwuuPRBhAnEiwA2Ji8epQ9BynrUxaWtFsxj01OrAglEbiXIsMg-yw7ugKkW9WTd4f-RPsHBRoCRyoQAvD_BwE",
       "detalhes": [
-        "Fonte: Magalu",
+        "Fonte: Magazine Luiza",
         "Tipo: Aparelho de Jantar Chá e Café"
       ]
     },
@@ -412,7 +411,7 @@
       "status": "available",
       "linkExterno": "https://www.casasbahia.com.br/guarda-roupa-casal-8-portas-4-gavetas-paris-espresso-moveis/p/1555638869?vtr_id=similares_ao_que_voce_esta_vendo&vtr_name=similares+ao+que+voce+esta+vendo",
       "detalhes": [
-        "Fonte: Casas bahia",
+        "Fonte: Casas Bahia",
         "Tipo: Guarda roupa"
       ]
     },
@@ -447,14 +446,14 @@
     {
       "id": 36,
       "nome": "Sofá 3 Lugares",
-      "categoria": "quarto",
+      "categoria": "sala",
       "preco": 1199.00,
       "descricao": "Sofá 3 Lugares Retrátil e Reclinável Cama inBox Compact 1,80m Velusoft Cinza",
       "imagem": "https://imgs.casasbahia.com.br/1511981089/1xg.jpg?imwidth=500",
       "status": "available",
       "linkExterno": "https://www.casasbahia.com.br/sofa-3-lugares-retratil-e-reclinavel-cama-inbox-compact-180m-velusoft-cinza/p/1511981089?IdLojista=31937&vtr_id=similares_ao_que_voce_esta_vendo&vtr_name=similares+ao+que+voce+esta+vendo",
       "detalhes": [
-        "Fonte: Casas bahia",
+        "Fonte: Casas Bahia",
         "Tipo: Sofá"
       ]
     },
@@ -474,6 +473,79 @@
     },
     {
       "id": 38,
+      "nome": "Micro-ondas Electrolux",
+      "categoria": "cozinha",
+      "preco": 589,
+      "descricao": "Micro-ondas Electrolux Efficient 23L ME23S",
+      "imagem": "https://imgs.casasbahia.com.br/55054770/1g.jpg?imwidth=500",
+      "status": "available",
+      "linkExterno": "https://www.casasbahia.com.br/micro-ondas-electrolux-efficient-23l-me23s-funcao-manter-aquecido-prata-110v/p/55054770",
+      "detalhes": [
+        "Fonte: Casas Bahia",
+        "Tipo: Micro-ondas Electrolux Efficient 23L ME23S",
+        "Voltagem: 110V"
+      ]
+    },
+    {
+      "id": 39,
+      "nome": "Smart Tv LG 43",
+      "categoria": "sala",
+      "preco": 1789.20,
+      "descricao": "Smart Tv LG 43 4K Ultra HD WebOS 25 AI Smart Magic Alexa 43AU801",
+      "imagem": "https://m.magazineluiza.com.br/a-static/420x420/smart-tv-lg-43-4k-ultra-hd-webos-25-ai-smart-magic-alexa-43au801/esh0p/2032/e1fce0bbfec61bfd48e81cdbc9c98883.jpeg",
+      "status": "available",
+      "linkExterno": "https://www.magazineluiza.com.br/smart-tv-lg-43-4k-ultra-hd-webos-25-ai-smart-magic-alexa-43au801/p/dech269c69/et/elit/?seller_id=esh0p",
+      "detalhes": [
+        "Fonte: Magazine Luiza",
+        "Tipo: Smart Tv LG 43"
+      ]
+    },
+    {
+      "id": 40,
+      "nome": "Ventilador de Teto",
+      "categoria": "quarto",
+      "preco": 350.55,
+      "descricao": "Ventilador de Teto 106,7 cm, Preto | Bivolt 110-220V, Ventilador de Teto com Luz LED, Controle Remoto, Motor DC Reversível, 6 Velocidades",
+      "imagem": "https://m.media-amazon.com/images/I/61z7c5eTTwL._AC_SX679_.jpg",
+      "status": "available",
+      "linkExterno": "https://www.amazon.com.br/Ventilador-110-220V-Controle-Revers%C3%ADvel-Velocidades/dp/B0F9T2DD2P/ref=sr_1_2_sspa?adgrpid=128348618322&dib=eyJ2IjoiMSJ9.NwRO19GlmkOdc8_pdJoEvMs0O-Mcfv0yMShxGvApG-1kUB8AC5xv7yO7lIIP67UAiIDMjmZD-OGxRAiS86t-Sgyafrfl6c65mK7PuuqS-L-9x3xXD75XbVIFhWE5mjogYpGJEfMrs1R6vJcWTHmebzLsJJm0c549TPaIV4_b36snIxXee_3Z3-YK9CRRCaGZTHXg-vuj3p2lmJ6UyvpfpmH5ukl_YY41fjcfK2MuLH86Y0QGF25cpxO1vLSbKWKyGYlXzye6bbPQwCwB3qVfpwdk8s_3mBgZvVC2PD3YqaU.fR5dm1sfu-zWWijMdtNJIUNC-lqffn7GcgsXbFedy08&dib_tag=se&hvadid=595885257045&hvdev=c&hvexpln=0&hvlocphy=9100638&hvnetw=g&hvocijid=14977575438067328212--&hvqmt=e&hvrand=14977575438067328212&hvtargid=kwd-132866641&hydadcr=10666_13509977&keywords=ventilador%2Bde%2Bteto&mcid=803b95cbac843bc68076735c390af3e3&qid=1782764824&sr=8-2-spons&ufe=app_do%3Aamzn1.fos.4bb5663b-6f7d-4772-84fa-7c7f565ec65b&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Ventilador de Teto",
+        "Voltagem: 110V"
+      ]
+    },
+    {
+      "id": 41,
+      "nome": "Tábua de Passar Roupa",
+      "categoria": "casa",
+      "preco": 154.90,
+      "descricao": "Tábua de Passar Roupa Maxeb Extra Forte Dobrável – Estrutura em Aço Reforçado com Suporte para Ferro e Tecido Térmico – 4 Níveis de Altura",
+      "imagem": "https://m.media-amazon.com/images/I/61MRrNuCvkL._AC_SX679_.jpg",
+      "status": "available",
+      "linkExterno": "https://www.amazon.com.br/T%C3%A1bua-Passar-Roupa-Maxeb-Dobr%C3%A1vel/dp/B0GT23R811/ref=sr_1_2_sspa?crid=2YFAM34PGI3H6&dib=eyJ2IjoiMSJ9.6OyYUk2keO7qijAa1neXKam_lTIOSMKJJzLvA870CFQMt08x1gzfufAEAi7uotcWLaUK7LOuDcZ3pnoZs3d7RBPkuvTAL2XQ7Us7tH2kXVArFhwOAsSPmVrHzWEMU1DDVXDf-gHbacXJcxe8qi8yYltumcn6NP21bM3D4yfP_y4QTuXmAyG6WHU-sYpnzvDMVLHShNvkdWpJ_DafEORKDsT0ZXGrsN2ru1b5FW6qch7KcL_NEMKo3vEIUt_sIfGYVh-VDO1X8vR93ASNvTTvuqShOMTZ5h7LmxXgsX_n55M.oq4NKfgYquBTbC393JS1-CxD5xyp8L3TP2_CE5GD8YU&dib_tag=se&keywords=tabua%2Bde%2Bpassar%2Broupa&qid=1782764105&sprefix=tabua%2B%2Caps%2C350&sr=8-2-spons&ufe=app_do%3Aamzn1.fos.db68964d-7c0e-4bb2-a95c-e5cb9e32eb12&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1",
+      "detalhes": [
+        "Fonte: Amazon",
+        "Tipo: Tábua de Passar Roupa",
+        "Voltagem: 110V"
+      ]
+    },
+    {
+      "id": 42,
+      "nome": "Baú Recamier Queen",
+      "categoria": "casa",
+      "preco": 296.90,
+      "descricao": "Sapateira Organizador Bau Recamier 155cm Queen Veludo Pistao",
+      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_834549-MLB106747800694_022026-F.webp",
+      "status": "available",
+      "linkExterno": "https://www.mercadolivre.com.br/sapateira-organizador-bau-recamier-155cm-queen-veludo-pistao/up/MLBU3805075154?pdp_filters=item_id%3AMLB4479185575&applied_product_filters=MLBU3805075152&from=gshop&picker=true&matt_tool=30040270&matt_word=&matt_source=google&matt_campaign_id=23440873668&matt_ad_group_id=197094210611&matt_match_type=&matt_network=g&matt_device=c&matt_creative=792396423526&matt_keyword=&matt_ad_position=&matt_ad_type=pla_with_promotion&matt_merchant_id=5082131674&matt_product_id=MLBU3805075152&matt_product_partition_id=2390284843624&matt_target_id=pla-2390284843624&cq_src=google_ads&cq_cmp=23440873668&cq_net=g&cq_plt=gp&cq_med=pla_with_promotion&gad_source=1&gad_campaignid=23440873668&gbraid=0AAAAAD93qcAsdK6f622YeuHTPSpPPd00q&gclid=Cj0KCQjwr4jSBhCSARIsAOX1E-IjNQ2xV1X2B_uE-okU19L9fowj_dyikIcPWLguOVpUwsBDEJ2CuW0aAqitEALw_wcB&quantity=1",
+      "detalhes": [
+        "Fonte: Mercado Livre",
+        "Tipo: Baú Recamier 155cm Queen"
+      ]
+    },
+    {
+      "id": 43,
       "nome": "Conjunto Sala de Jantar",
       "categoria": "cozinha",
       "preco": 893.60,

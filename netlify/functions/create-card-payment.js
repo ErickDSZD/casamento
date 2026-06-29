@@ -45,15 +45,36 @@ exports.handler = async (event, context) => {
       throw new Error('Número do documento é obrigatório');
     }
 
-    // Limpa o número do documento
     const cleanDocNumber = identificationNumber.replace(/\D/g, '');
 
-    // Validação do CPF
     if (identificationType === 'CPF' && cleanDocNumber.length !== 11) {
       throw new Error('CPF deve conter 11 dígitos');
     }
 
-    // Estrutura base do paymentData conforme documentação
+    let tokenInfo = null;
+    try {
+      const tokenResponse = await fetch(`https://api.mercadopago.com/v1/card_tokens/${token}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      
+      if (tokenResponse.ok) {
+        tokenInfo = await tokenResponse.json();
+        console.log('Informações do token:', {
+          payment_method_id: tokenInfo.payment_method_id,
+          card_holder: tokenInfo.card_holder?.name,
+          first_six_digits: tokenInfo.first_six_digits,
+          last_four_digits: tokenInfo.last_four_digits
+        });
+      } else {
+        console.warn('Não foi possível obter informações do token:', tokenResponse.status);
+      }
+    } catch (tokenError) {
+      console.warn('Erro ao buscar token:', tokenError.message);
+    }
+
+    // Estrutura base do paymentData
     const paymentData = {
       transaction_amount: parseFloat(amount),
       description: description,
@@ -73,40 +94,64 @@ exports.handler = async (event, context) => {
       }
     };
 
-    // IMPORTANTE: Para débito, é OBRIGATÓRIO enviar o payment_method_id correto
+    let finalPaymentMethodId = null;
+    
+    if (tokenInfo && tokenInfo.payment_method_id) {
+      // Usa o payment_method_id do token
+      finalPaymentMethodId = tokenInfo.payment_method_id;
+      console.log('Usando payment_method_id do token:', finalPaymentMethodId);
+    } else if (paymentMethodId) {
+      // Fallback para o paymentMethodId enviado
+      finalPaymentMethodId = paymentMethodId;
+      console.log('Usando payment_method_id enviado:', finalPaymentMethodId);
+    }
+
+    // Para débito, precisa mapear para o ID correto
     if (paymentType === 'debit') {
-      // Mapeamento de bandeiras para débito
-      const debitMethodMap = {
-        'visa': 'visa_debit',
-        'master': 'master_debit',
-        'amex': 'amex_debit',
-        'elo': 'elo_debit',
-        'hipercard': 'hipercard_debit'
-      };
-      
-      const mappedMethodId = debitMethodMap[cardBrand?.toLowerCase()];
-      
-      if (mappedMethodId) {
-        paymentData.payment_method_id = mappedMethodId;
-      } else if (paymentMethodId) {
-        paymentData.payment_method_id = paymentMethodId;
-      } else {
-        throw new Error('Para pagamentos com débito, é necessário informar o payment_method_id');
-      }
-    } else {
-      // Para crédito, podemos enviar o payment_method_id ou deixar inferir
-      if (paymentMethodId) {
-        paymentData.payment_method_id = paymentMethodId;
-      } else {
-        // Para crédito, enviamos o payment_type_id para ajudar na inferência
-        paymentData.payment_type_id = 'credit_card';
+      if (tokenInfo && tokenInfo.payment_method_id) {
+        // Se temos o ID do token, converte para débito se necessário
+        const debitMethodMap = {
+          'visa': 'visa_debit',
+          'master': 'master_debit',
+          'amex': 'amex_debit',
+          'elo': 'elo_debit',
+          'hipercard': 'hipercard_debit'
+        };
+        
+        const mappedMethodId = debitMethodMap[tokenInfo.payment_method_id?.toLowerCase()];
+        if (mappedMethodId) {
+          finalPaymentMethodId = mappedMethodId;
+        }
+      } else if (cardBrand) {
+        // Fallback para cardBrand
+        const debitMethodMap = {
+          'visa': 'visa_debit',
+          'master': 'master_debit',
+          'amex': 'amex_debit',
+          'elo': 'elo_debit',
+          'hipercard': 'hipercard_debit'
+        };
+        finalPaymentMethodId = debitMethodMap[cardBrand.toLowerCase()] || paymentMethodId;
       }
     }
 
-    // Adicionar issuer_id se fornecido (útil para parcelamento)
+    // Define o payment_method_id no paymentData
+    if (finalPaymentMethodId) {
+      paymentData.payment_method_id = finalPaymentMethodId;
+    } else if (paymentType === 'credit') {
+      // Para crédito, podemos deixar o Mercado Pago inferir
+      paymentData.payment_type_id = 'credit_card';
+    } else {
+      throw new Error('Não foi possível determinar o método de pagamento');
+    }
+
+    // Adicionar issuer_id se fornecido
     if (issuerId) {
       paymentData.issuer_id = parseInt(issuerId);
     }
+
+    // Adicionar statement_descriptor para melhor identificação
+    paymentData.statement_descriptor = 'Lista de Presentes';
 
     const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}-${description.substring(0, 20)}`;
 
@@ -116,7 +161,11 @@ exports.handler = async (event, context) => {
       payment_type_id: paymentData.payment_type_id,
       paymentType,
       cardBrand,
-      installments
+      installments,
+      token_info: tokenInfo ? {
+        payment_method_id: tokenInfo.payment_method_id,
+        first_six: tokenInfo.first_six_digits
+      } : null
     });
 
     const response = await fetch('https://api.mercadopago.com/v1/payments', {
@@ -134,24 +183,46 @@ exports.handler = async (event, context) => {
     if (!response.ok) {
       console.error('Erro detalhado Mercado Pago:', JSON.stringify(data, null, 2));
 
-      // Tratamento específico para erro 2131
+      // Tratamento específico para erro de inferência
       if (data.status === 400 && data.cause) {
         const hasError2131 = data.cause.some(cause => cause.code === '2131');
         if (hasError2131) {
-          throw new Error('Erro ao identificar método de pagamento. Verifique se o payment_method_id está correto para débito ou se o token é válido.');
+          // Tenta novamente com payment_type_id apenas
+          console.log('Tentando novamente sem payment_method_id específico...');
+          delete paymentData.payment_method_id;
+          paymentData.payment_type_id = 'credit_card';
+          
+          const retryResponse = await fetch('https://api.mercadopago.com/v1/payments', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+              'X-Idempotency-Key': idempotencyKey + '-retry'
+            },
+            body: JSON.stringify(paymentData)
+          });
+          
+          const retryData = await retryResponse.json();
+          
+          if (retryResponse.ok) {
+            console.log('Pagamento aprovado na segunda tentativa:', retryData.id);
+            return {
+              statusCode: 200,
+              headers,
+              body: JSON.stringify({
+                success: true,
+                paymentId: retryData.id,
+                status: retryData.status,
+                statusDetail: retryData.status_detail,
+                paymentType: retryData.payment_type_id,
+                cardBrand: retryData.card?.payment_method?.id || cardBrand
+              })
+            };
+          }
         }
         
         const causes = data.cause.map(c => c.description).join(', ');
         throw new Error(`Erro no pagamento: ${causes}`);
-      }
-
-      if (data.status === 400) {
-        const errorMessage = data.cause?.[0]?.description || data.message;
-        throw new Error(`Dados inválidos: ${errorMessage}`);
-      }
-
-      if (data.status === 401) {
-        throw new Error('Erro de autenticação. Verifique as credenciais.');
       }
 
       throw new Error(data.message || 'Erro ao processar pagamento');
