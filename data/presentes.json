@@ -472,21 +472,6 @@
       ]
     },
     {
-      "id": 38,
-      "nome": "Micro-ondas Electrolux",
-      "categoria": "cozinha",
-      "preco": 589,
-      "descricao": "Micro-ondas Electrolux Efficient 23L ME23S",
-      "imagem": "https://imgs.casasbahia.com.br/55054770/1g.jpg?imwidth=500",
-      "status": "available",
-      "linkExterno": "https://www.casasbahia.com.br/micro-ondas-electrolux-efficient-23l-me23s-funcao-manter-aquecido-prata-110v/p/55054770",
-      "detalhes": [
-        "Fonte: Casas Bahia",
-        "Tipo: Micro-ondas Electrolux Efficient 23L ME23S",
-        "Voltagem: 110V"
-      ]
-    },
-    {
       "id": 39,
       "nome": "Smart Tv LG 43",
       "categoria": "sala",
