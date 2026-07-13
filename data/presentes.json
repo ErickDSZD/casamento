@@ -17,22 +17,6 @@
       ]
     },
     {
-      "id": 4,
-      "nome": "Lavadora de Roupas",
-      "categoria": "cozinha",
-      "preco": 1699,
-      "descricao": "Lavadora de Roupas Midea 12kg 10 Programas de Lavagem Branco Wave Impeller MAV04W120/WKBR04",
-      "imagem": "https://a-static.mlcdn.com.br/800x560/lavadora-de-roupas-midea-12kg-10-programas-de-lavagem-branco-wave-impeller-mav04w120-wkbr04/magazineluiza/240708900/f92717fd6a0765f938e830cac32ec98b.jpg",
-      "status": "available",
-      "linkExterno": "https://www.magazinevoce.com.br/dopechinchou/lavadora-de-roupas-midea-12kg-10-programas-de-lavagem-branco-wave-impeller-mav04w120-wkbr04/p/240708900/ed/lava/",
-      "detalhes": [
-        "Marca: Midea",
-        "Peso: 12kg",
-        "Cor: Branco",
-        "Voltagem: 110V"
-      ]
-    },
-    {
       "id": 5,
       "nome": "Panela de Pressão Brinox 4,2L Bege Vanilla",
       "categoria": "cozinha",
