@@ -174,22 +174,6 @@
       ]
     },
     {
-      "id": 18,
-      "nome": "Panela de Pressão Elétrica",
-      "categoria": "cozinha",
-      "preco": 400,
-      "descricao": "Panela de Pressão Elétrica Mondial 5L Digital Master Cooker PE-38 5L Preta - 110V",
-      "imagem": "https://imgs.casasbahia.com.br/15003627/1g.jpg?imwidth=500",
-      "status": "available",
-      "linkExterno": "https://www.casasbahia.com.br/panela-de-pressao-eletrica-mondial-5l-digital-master-cooker-pe-38-5l-preta-110v/p/15003627",
-      "detalhes": [
-        "Fonte: Casas Bahia",
-        "Código: 15003627",
-        "Voltagem: 110V",
-        "Tipo: Panela"
-      ]
-    },
-    {
       "id": 19,
       "nome": "Panelas Brinox",
       "categoria": "cozinha",
