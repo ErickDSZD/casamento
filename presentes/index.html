@@ -315,18 +315,27 @@
     }
 
     .ribbon--available {
-      background: rgba(254, 180, 35, 0.2);
-      color: #8a6800;
+      background: rgba(254, 180, 35);
+      color: var(--branco);
     }
 
     .ribbon--gifted {
-      background: rgba(232, 58, 109, 0.12);
-      color: var(--rosa-protagonista);
+      background: rgba(232, 58, 109);
+      color: var(--branco);
     }
 
     .ribbon--priority {
       background: var(--laranja-energia);
-      color: #fff;
+      color: var(--branco);
+    }
+
+    .gift-card--disabled {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .gift-card--disabled .gift-card__placeholder {
+      filter: grayscale(0.4);
     }
 
     /* image area */
@@ -1057,9 +1066,11 @@
           <h3 class="info-item__title">Como presentear</h3>
           <div class="info-item__text">
             <p><strong>Opção 1 - Comprar online:</strong> Clique em "Ver na loja", faça a compra e escolha nosso
-              endereço como local de entrega. Após realizar a compra, clique em "Avisar os Noivos" para que possamos retirar o presente do site.</p>
-            <p><strong>Opção 2 - Dar o valor:</strong> Clique em "Presentear este item", faça o pagamento via PIX ou e nós mesmos adquirimos o presente.</p>
-            <p><strong>Opção 3 - Lua de Mel:</strong> 
+              endereço como local de entrega. Após realizar a compra, clique em "Avisar os Noivos" para que possamos
+              retirar o presente do site.</p>
+            <p><strong>Opção 2 - Dar o valor:</strong> Clique em "Presentear este item", faça o pagamento via PIX ou e
+              nós mesmos adquirimos o presente.</p>
+            <p><strong>Opção 3 - Lua de Mel:</strong>
               <a href="../luademel/" class="btn-lua-de-mel-inline">
                 Contribua para nossa viagem dos sonhos →
               </a>
@@ -1162,9 +1173,10 @@
 
     // Mapeamento de status para classes e textos
     const statusConfig = {
-      priority: { class: "ribbon--priority", text: "Prioritário" },
-      available: { class: "ribbon--available", text: "Disponível" },
-      gifted: { class: "ribbon--gifted", text: "Presenteado" },
+      prioridade: { class: "ribbon--priority", text: "Prioritário" },
+      disponivel: { class: "ribbon--available", text: "Disponível" },
+      presenteado: { class: "ribbon--gifted", text: "Presenteado" },
+      indisponivel: { class: "ribbon--unavailable", text: "Indisponível" } // ADICIONADO
     };
 
     /* Funções principais */
@@ -1190,8 +1202,17 @@
 
         todosPresentes = data.presentes;
 
-        // ORDENAR DO MENOR PARA O MAIOR PREÇO
-        todosPresentes.sort((a, b) => a.preco - b.preco);
+        // ORDENAÇÃO: VALOR LIVRE (preco = 0) primeiro, depois do menor para o maior preço
+        todosPresentes.sort((a, b) => {
+          // Se ambos são 0, mantém a ordem
+          if (a.preco === 0 && b.preco === 0) return 0;
+          // Se A é 0 (valor livre), coloca antes
+          if (a.preco === 0) return -1;
+          // Se B é 0 (valor livre), coloca antes
+          if (b.preco === 0) return 1;
+          // Ordena por preço do menor para o maior
+          return a.preco - b.preco;
+        });
 
         // Esconde loading e renderiza
         loadingState.style.display = "none";
@@ -1235,54 +1256,65 @@
       const cardsHTML = presentes
         .map((presente) => {
           const statusInfo =
-            statusConfig[presente.status] || statusConfig.available;
-          const isGifted = presente.status === "gifted";
-          const giftedAttrs = isGifted
+            statusConfig[presente.status] || statusConfig.disponivel;
+          const isDisabled = presente.status === "presenteado" || presente.status === "indisponivel";
+          const disabledAttrs = isDisabled
             ? 'tabindex="-1" aria-disabled="true"'
             : "";
           const ctaText =
             presente.categoria === "viagem" ? "Contribuir" : "Ver presente";
 
-          // Formata o preço
-          const precoFormatado = presente.preco.toLocaleString("pt-BR", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          });
+          // FORMATAÇÃO DO PREÇO - VERIFICA SE É VALOR LIVRE
+          const preco = presente.preco;
+          let precoFormatado;
+          let precoClass = "";
+
+          if (preco === 0) {
+            precoFormatado = "VALOR LIVRE";
+            precoClass = "free";
+          } else {
+            precoFormatado = preco.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
 
           return `
-      <a class="gift-card ${isGifted ? "gift-card--gifted" : ""}" 
-        href="presente.html?id=${presente.id}" 
-        role="listitem" 
-        data-category="${presente.categoria}" 
-        data-price="${presente.preco}"
-        aria-label="${escapeHTML(presente.nome)} — R$ ${precoFormatado}"
-        ${giftedAttrs}>
-        
-        <span class="gift-card__ribbon ${statusInfo.class}">${statusInfo.text}</span>
-        
-        <div class="gift-card__img">
-          <div class="gift-card__placeholder" style="${presente.imagem ? `background-image: url('${presente.imagem}');` : ""}">
-            ${!presente.imagem ? `<span class="gift-card__icon" aria-hidden="true">${presente.icone || "🎁"}</span>` : ""}
-          </div>
-        </div>
-        
-        <div class="gift-card__body">
-          <span class="gift-card__category">${capitalizar(presente.categoria)}</span>
-          <h2 class="gift-card__name">${escapeHTML(presente.nome)}</h2>
-          <p class="gift-card__desc">${escapeHTML(presente.descricao)}</p>
-          <div class="gift-card__footer">
-            <span class="gift-card__price"><sup>R$</sup>${precoFormatado}</span>
-            <span class="gift-card__cta">${ctaText} <span class="gift-card__cta-arrow"></span></span>
-          </div>
-        </div>
-      </a>
-    `;
+            <a class="gift-card ${isDisabled ? "gift-card--disabled" : ""}" 
+              href="presente.html?id=${presente.id}" 
+              role="listitem" 
+              data-category="${presente.categoria}" 
+              data-price="${presente.preco}"
+              aria-label="${escapeHTML(presente.nome)} — ${preco === 0 ? 'Valor livre' : `R$ ${precoFormatado}`}"
+              ${disabledAttrs}>
+              
+              <span class="gift-card__ribbon ${statusInfo.class}">${statusInfo.text}</span>
+              
+              <div class="gift-card__img">
+                <div class="gift-card__placeholder" style="${presente.imagem ? `background-image: url('${presente.imagem}');` : ""}">
+                  ${!presente.imagem ? `<span class="gift-card__icon" aria-hidden="true">${presente.icone || "🎁"}</span>` : ""}
+                </div>
+              </div>
+              
+              <div class="gift-card__body">
+                <span class="gift-card__category">${capitalizar(presente.categoria)}</span>
+                <h2 class="gift-card__name">${escapeHTML(presente.nome)}</h2>
+                <p class="gift-card__desc">${escapeHTML(presente.descricao)}</p>
+                <div class="gift-card__footer">
+                  <span class="gift-card__price ${precoClass}">
+                    ${preco !== 0 ? '<sup>R$</sup>' : ''} ${precoFormatado}
+                  </span>
+                  <span class="gift-card__cta">${ctaText} <span class="gift-card__cta-arrow"></span></span>
+                </div>
+              </div>
+            </a>
+          `;
         })
         .join("");
 
       grid.innerHTML = cardsHTML;
     }
-    
+
     /* Scroll reveal */
     function initScrollReveal() {
       const revealEls = document.querySelectorAll(".reveal");
@@ -1333,7 +1365,7 @@
       <p>${mensagem}</p>
       <a href="../" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--rosa-protagonista); color: #fff; border-radius: 99px;">← Voltar para lista de presentes</a>
     </div>
-  `;
+    `;
     }
 
     function copiarEndereco() {
