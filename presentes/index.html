@@ -329,15 +329,6 @@
       color: var(--branco);
     }
 
-    .gift-card--disabled {
-      pointer-events: none;
-      opacity: 0.7;
-    }
-
-    .gift-card--disabled .gift-card__placeholder {
-      filter: grayscale(0.4);
-    }
-
     /* image area */
     .gift-card__img {
       height: 200px;
@@ -1257,10 +1248,6 @@
         .map((presente) => {
           const statusInfo =
             statusConfig[presente.status] || statusConfig.disponivel;
-          const isDisabled = presente.status === "presenteado" || presente.status === "indisponivel";
-          const disabledAttrs = isDisabled
-            ? 'tabindex="-1" aria-disabled="true"'
-            : "";
           const ctaText =
             presente.categoria === "viagem" ? "Contribuir" : "Ver presente";
 
@@ -1280,13 +1267,12 @@
           }
 
           return `
-            <a class="gift-card ${isDisabled ? "gift-card--disabled" : ""}" 
+            <a class="gift-card}" 
               href="presente.html?id=${presente.id}" 
               role="listitem" 
               data-category="${presente.categoria}" 
               data-price="${presente.preco}"
-              aria-label="${escapeHTML(presente.nome)} — ${preco === 0 ? 'Valor livre' : `R$ ${precoFormatado}`}"
-              ${disabledAttrs}>
+              aria-label="${escapeHTML(presente.nome)} — ${preco === 0 ? 'Valor livre' : `R$ ${precoFormatado}`}">
               
               <span class="gift-card__ribbon ${statusInfo.class}">${statusInfo.text}</span>
               
