@@ -1,11 +1,10 @@
 [build]
   publish = "."
   functions = "netlify/functions"
-  command = "npm install"
+  command = "npm run build:tailwind"
 
 [build.environment]
   NODE_VERSION = "18"
 
-# Plugin para instalar dependências das functions
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"

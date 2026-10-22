@@ -4,11 +4,22 @@
   "description": "Lista de presentes de casamento com Mercado Pago",
   "main": "index.html",
   "scripts": {
-    "build": "echo 'Build concluído'"
+    "build": "echo 'Build concluído'",
+    "dev:tailwind": "tailwindcss -i ./src/input.css -o ./dist/styles.css --watch",
+    "build:tailwind": "tailwindcss -i ./src/input.css -o ./dist/styles.css --minify"
   },
   "dependencies": {
     "node-fetch": "^2.7.0"
   },
-  "keywords": ["casamento", "presentes", "mercado-pago"],
-  "author": "Erick Zaniratto Duarte"
+  "keywords": [
+    "casamento",
+    "presentes",
+    "mercado-pago"
+  ],
+  "author": "Erick Zaniratto Duarte",
+  "devDependencies": {
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.31",
+    "tailwindcss": "^3.4.19"
+  }
 }
