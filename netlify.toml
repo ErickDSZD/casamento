@@ -1,7 +1,7 @@
 [build]
   publish = "."
   functions = "netlify/functions"
-  command = "npm run build:tailwind"
+  command = "rm -rf node_modules && npm install && npx tailwindcss -i ./src/input.css -o ./dist/styles.css --minify"
 
 [build.environment]
   NODE_VERSION = "18"
