@@ -131,8 +131,8 @@
     class="fixed top-0 inset-x-0 z-[100] py-5 transition-[background,padding,backdrop-filter] duration-400 bg-transparent">
     <div class="w-[min(1200px,92%)] mx-auto flex items-center justify-between">
       <a href="" class="block leading-none">
-        <img src="./img/logo_branco.png" alt="Giovanna & Erick"
-          class="h-[45px] w-auto block transition-transform duration-300 hover:scale-[1.02] max-[900px]:h-[38px] max-[600px]:h-[32px]" />
+        <img id="navLogo" src="./img/logo_branco.png" alt="Giovanna & Erick"
+          class="h-[45px] w-auto block transition-transform duration-300 hover:scale-[1.02] max-[900px]:h-[38px] max-[600px]:h-[45px]" />
       </a>
 
       <ul id="navLinks" role="list" class="hidden min-[900px]:flex gap-10 list-none">
@@ -148,7 +148,7 @@
       </ul>
 
       <button id="navToggle" aria-label="Abrir menu" aria-expanded="false"
-        class="min-[900px]:hidden flex flex-col gap-[5px] cursor-pointer bg-transparent border-none p-1 z-[101]">
+        class="min-[900px]:hidden flex flex-col gap-[5px] cursor-pointer border-none p-1 z-[101]">
         <span class="block w-6 h-[1.8px] bg-creme transition-transform duration-300"></span>
         <span class="block w-6 h-[1.8px] bg-creme transition-opacity duration-300"></span>
         <span class="block w-6 h-[1.8px] bg-creme transition-transform duration-300"></span>
@@ -276,7 +276,8 @@
                 </div>
                 <span class="block text-[0.7rem] tracking-[0.15em] uppercase text-marrom-claro font-medium">Local</span>
               </div>
-              <h3 class="font-titulos font-semibold text-lg sm:text-xl text-marrom leading-[2.8rem] tracking-[0.01em] mt-12">
+              <h3
+                class="font-titulos font-semibold text-lg sm:text-xl text-marrom leading-[2.8rem] tracking-[0.01em] mt-12">
                 Estância Sal da Terra
               </h3>
               <p class="text-marrom-claro text-sm sm:text-base leading-relaxed mt-4">
@@ -401,16 +402,27 @@
     /* Mobile menu toggle */
     const toggle = document.getElementById("navToggle");
     const mobileMenu = document.getElementById("mobileMenu");
+    const navLogo = document.getElementById("navLogo");
+
+    const LOGO_BRANCO = "./img/logo_branco.png";
+    const LOGO_LARANJA = "./img/logo_laranja.png";
 
     function closeMenu() {
       mobileMenu.classList.add("hidden");
       mobileMenu.classList.remove("flex");
       toggle.setAttribute("aria-expanded", "false");
       document.body.classList.remove("menu-open");
+
+      // Linhas voltam para creme
       toggle.querySelectorAll("span").forEach((s) => {
         s.style.transform = "";
         s.style.opacity = "";
+        s.classList.remove("bg-laranja");
+        s.classList.add("bg-creme");
       });
+
+      // Logo volta para branco
+      if (navLogo) navLogo.src = LOGO_BRANCO;
     }
 
     function openMenu() {
@@ -418,10 +430,20 @@
       mobileMenu.classList.add("flex");
       toggle.setAttribute("aria-expanded", "true");
       document.body.classList.add("menu-open");
+
       const spans = toggle.querySelectorAll("span");
       spans[0].style.transform = "translateY(7.8px) rotate(45deg)";
       spans[1].style.opacity = "0";
       spans[2].style.transform = "translateY(-6.5px) rotate(-45deg)";
+
+      // Linhas ficam laranja
+      spans.forEach((s) => {
+        s.classList.remove("bg-creme");
+        s.classList.add("bg-laranja");
+      });
+
+      // Logo troca para laranja
+      if (navLogo) navLogo.src = LOGO_LARANJA;
     }
 
     toggle.addEventListener("click", () => {

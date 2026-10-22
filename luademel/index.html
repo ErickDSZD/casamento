@@ -815,7 +815,7 @@
       </a>
       <ul class="nav__links" id="navLinks">
         <li><a href="../">Início</a></li>
-        <li><a href="../presentes">Presentes</a></li>
+        <li><a href="../presentes/">Presentes</a></li>
         <li><a href="" class="active">Lua de Mel</a></li>
       </ul>
       <button class="nav__toggle" id="navToggle" aria-label="Abrir menu">
@@ -1003,7 +1003,7 @@
                   : "🎁";
 
           return `
-          <a class="gift-card" href="./presente.html?id=${presente.id}" data-category="${presente.categoria}">
+          <a class="gift-card" href="./${presente.id}" data-category="${presente.categoria}">
             <span class="gift-card__ribbon">Disponível</span>
             <div class="gift-card__img">
               <div class="gift-card__placeholder" style="${presente.imagem ? `background-image: url('${presente.imagem}');` : ""}">

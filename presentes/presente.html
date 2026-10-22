@@ -80,7 +80,7 @@
           <li><a href="../"
               class="text-[0.72rem] tracking-[0.18em] uppercase font-medium text-white hover:text-amarelo transition-colors relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-amarelo after:transition-[width] after:duration-300 hover:after:w-full">Início</a>
           </li>
-          <li><a href="../presentes"
+          <li><a href="../presentes/"
               class="text-[0.72rem] tracking-[0.18em] uppercase font-medium text-white hover:text-amarelo transition-colors relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-amarelo after:transition-[width] after:duration-300 hover:after:w-full">Presentes</a>
           </li>
           <li><a href="../luademel/"
@@ -102,7 +102,7 @@
   <div id="mobileMenu"
     class="hidden fixed inset-0 z-[99] bg-creme flex-col items-center justify-center gap-8 md:!hidden">
     <a href="../" class="text-laranja text-lg font-medium">Início</a>
-    <a href="../presentes" class="text-laranja text-lg font-medium">Presentes</a>
+    <a href="../presentes/" class="text-laranja text-lg font-medium">Presentes</a>
     <a href="../luademel/" class="text-laranja text-lg font-medium">Lua de Mel</a>
   </div>
 
@@ -356,7 +356,9 @@
     }
 
     function getIdFromURL() {
-      return new URLSearchParams(window.location.search).get("id");
+      const path = window.location.pathname;
+      const parts = path.split('/').filter(Boolean);
+      return parts[parts.length - 1];
     }
 
     function capitalizar(str) {

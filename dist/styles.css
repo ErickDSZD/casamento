@@ -1300,6 +1300,10 @@ video {
   background-color: rgb(255 255 255 / 0.8);
 }
 
+.bg-\[url\(\'\/img\/background-floral\.png\'\)\] {
+  background-image: url('/img/background-floral.png');
+}
+
 .bg-gradient-to-br {
   background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
 }
@@ -1433,6 +1437,10 @@ video {
 
 .bg-contain {
   background-size: contain;
+}
+
+.bg-cover {
+  background-size: cover;
 }
 
 .bg-center {
@@ -2508,6 +2516,10 @@ video {
 
   .max-\[600px\]\:h-\[32px\] {
     height: 32px;
+  }
+
+  .max-\[600px\]\:h-\[45px\] {
+    height: 45px;
   }
 
   .max-\[600px\]\:w-\[50px\] {
