@@ -12,5 +12,11 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/luademel/:id"
+  to = "/luademel/presente.html"
+  status = 200
+  force = true
+
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
