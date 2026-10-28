@@ -7,16 +7,10 @@
   <link rel="shortcut icon" href="../img/logo_laranja.png" type="image/x-icon" />
   <title>Lua de Mel — Giovanna & Erick</title>
 
-  <style>
-    /* RESET & BASE */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  <!-- Tailwind (compilado) -->
+  <link href="/dist/styles.css" rel="stylesheet">
 
+  <style>
     @font-face {
       font-family: "Oleragie";
       src: url("../fonts/Oleragie.otf") format("opentype");
@@ -33,32 +27,10 @@
       font-display: swap;
     }
 
-    :root {
-      --rosa-protagonista: #e83a6d;
-      --laranja-energia: #ed4b14;
-      --amarelo-alegria: #feb423;
-      --creme-suavidade: #fee3b4;
-      --marrom-base: #3a2a1f;
-      --marrom-claro: #5e4130;
-      --terracota: #d96c2b;
-      --branco: #ffffff;
-
-      --font-titulos:
-        "Oleragie", "Playfair Display", Georgia, "Times New Roman", serif;
-      --font-paragrafos:
-        "Satoshi", "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      --section-pad: clamp(4rem, 8vw, 7rem);
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      background-color: var(--creme-suavidade);
-      color: var(--marrom-base);
-      font-family: var(--font-paragrafos);
+      font-family: "Satoshi", "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-weight: 300;
       font-size: 1rem;
       line-height: 1.75;
@@ -72,316 +44,21 @@
       height: 100%;
     }
 
-    img {
-      display: block;
-      max-width: 100%;
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
+    .toast-anim { animation: slideIn 0.3s ease; }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    .page-hero__title,
-    .info-item__title,
-    .footer__names {
-      font-family: var(--font-titulos);
-      font-weight: 600;
-    }
-
-    .section-label,
-    .gift-card__category,
-    .gift-card__cta,
-    .filter-btn,
-    .gift-card__name,
-    .info-item__text,
-    .footer__date,
-    .empty-state__text {
-      font-family: var(--font-paragrafos);
-      font-weight: 500;
-    }
-
-    .container {
-      width: min(1200px, 92%);
-      margin-inline: auto;
-    }
-
-    .divider {
-      width: 70px;
-      height: 2px;
-      background: linear-gradient(90deg,
-          var(--rosa-protagonista),
-          var(--amarelo-alegria));
-      border: none;
-      margin: 1.5rem auto;
-    }
-
-    /* NAV */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 1.25rem 0;
-      background: var(--laranja-energia);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 1px 0 rgba(58, 42, 31, 0.08);
-    }
-
-    .nav__inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav__logo-image {
-      height: 45px;
-      width: auto;
-      display: block;
-    }
-
-    .nav__links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-
-    .nav__links a {
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      font-weight: 500;
-      color: var(--branco);
-      transition: color 0.2s;
-      position: relative;
-      padding-bottom: 4px;
-    }
-
-    .nav__links a:hover,
-    .nav__links a.active {
-      color: var(--amarelo-alegria);
-    }
-
-    .nav__links a::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 1.5px;
-      background: var(--amarelo-alegria);
-      transition: width 0.3s ease;
-    }
-
-    .nav__links a:hover::after {
-      width: 100%;
-    }
-
-    .nav__toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-      z-index: 101;
-    }
-
-    .nav__toggle span {
-      display: block;
-      width: 24px;
-      height: 1.8px;
-      background: var(--branco);
-      transition:
-        transform 0.3s,
-        opacity 0.3s;
-    }
-
-    /* PAGE HERO */
-    .page-hero {
-      padding: 9rem 0 0;
-      text-align: center;
-      position: relative;
-    }
-
-    .page-hero__title {
-      font-size: clamp(1.55rem, 1.75vw, 2rem);
-      color: var(--laranja-energia);
-      font-weight: 600;
-      letter-spacing: 0.2em;
-    }
-
-    .page-hero__title em {
-      font-style: italic;
-      color: var(--rosa-protagonista);
-    }
-
-    .page-hero__sub {
-      max-width: 1650px;
-      margin-inline: auto;
-      color: var(--marrom-claro);
-    }
-
-    /* GIFT GRID */
-    .gifts {
-      padding: 3.5rem 0 var(--section-pad);
-    }
-
-    .gifts__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    /* GIFT CARD */
-    .gift-card {
-      display: flex;
-      flex-direction: column;
-      background: #fff;
-      border-radius: 28px;
-      overflow: hidden;
-      border: 1px solid rgba(58, 42, 31, 0.07);
-      box-shadow: 0 8px 24px rgba(58, 42, 31, 0.06);
-      transition:
-        transform 0.3s,
-        box-shadow 0.3s;
-      text-decoration: none;
-      color: inherit;
-      position: relative;
-    }
-
-    .gift-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(58, 42, 31, 0.14);
-    }
-
-    .gift-card__ribbon {
-      position: absolute;
-      top: 16px;
-      right: -1px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.35rem 0.9rem;
-      border-radius: 6px 0 0 6px;
-      z-index: 2;
-      background: rgba(254, 180, 35, 0.9);
-      color: #5a3e1a;
-    }
-
-    .gift-card__img {
-      height: 210px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .gift-card__placeholder {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      place-items: center;
-      transition: transform 0.6s ease;
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-color: var(--branco);
-    }
-
-    .gift-card:hover .gift-card__placeholder {
-      transform: scale(1.05);
-    }
-
-    .gift-card__icon {
-      font-size: 3rem;
-      opacity: 0.7;
-    }
-
-    .gift-card__body {
-      padding: 1.4rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .gift-card__category {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--rosa-protagonista);
-      font-weight: 600;
-    }
-
-    .gift-card__name {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--marrom-base);
-      line-height: 1.3;
-    }
-
-    .gift-card__desc {
-      font-size: 0.85rem;
-      color: var(--marrom-claro);
-      line-height: 1.5;
-    }
-
-    .gift-card__footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 0.75rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid rgba(58, 42, 31, 0.07);
-    }
-
-    .gift-card__price {
-      font-family: var(--font-paragrafos);
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--laranja-energia);
-    }
-
-    .gift-card__price sup {
-      font-size: 0.7rem;
-      font-weight: 500;
-      vertical-align: middle;
-    }
-
-    .gift-card__price.free {
-      font-size: 1rem;
-      color: var(--azul-aguamarine);
-    }
-
-    .gift-card__cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--rosa-protagonista);
-      transition: gap 0.2s;
-    }
-
-    .gift-card:hover .gift-card__cta {
-      gap: 0.65rem;
-    }
-
+    /* Arrow do CTA (linha + ponta) */
     .gift-card__cta-arrow {
       width: 18px;
       height: 1px;
-      background: var(--rosa-protagonista);
+      background: #e83a6d;
       position: relative;
+      transition: width 0.2s;
+      display: inline-block;
     }
-
     .gift-card__cta-arrow::after {
       content: "";
       position: absolute;
@@ -389,458 +66,102 @@
       top: -3px;
       width: 6px;
       height: 6px;
-      border-top: 1px solid var(--rosa-protagonista);
-      border-right: 1px solid var(--rosa-protagonista);
+      border-top: 1px solid #e83a6d;
+      border-right: 1px solid #e83a6d;
       transform: rotate(45deg);
     }
-
-    /* INFO STRIP */
-    .info-strip {
-      margin: 2rem 0;
+    .gift-card:hover .gift-card__cta-arrow { width: 26px; }
+    @media (max-width: 768px) {
+      .gift-card__cta-arrow { width: 14px; }
+      .gift-card__cta-arrow::after { width: 5px; height: 5px; top: -2.5px; }
+    }
+    @media (max-width: 500px) {
+      .gift-card__cta-arrow { width: 10px; }
+      .gift-card__cta-arrow::after { width: 4px; height: 4px; top: -2px; }
+      .gift-card:hover .gift-card__cta-arrow { width: 14px; }
     }
 
-    .info-strip__inner {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.75rem;
-    }
-
-    .info-item {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      border-radius: 32px;
-      padding: 1.8rem;
-      box-shadow: 0 12px 28px rgba(58, 42, 31, 0.06);
-    }
-
-    .info-item__title {
-      font-size: 0.85rem;
-      letter-spacing: 0.2em;
-      color: var(--laranja-energia);
-      text-transform: uppercase;
-      margin-top: 0.75rem;
-      line-height: 3;
-    }
-
-    .btn-copiar-endereco {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: transparent;
-      border: 1px solid var(--marrom-claro);
-      color: var(--marrom-claro);
-      padding: 0.5rem 1rem;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      margin-top: 0.75rem;
-    }
-
-    .footer {
-      padding: 3rem 0;
-      text-align: center;
-      border-top: 1px solid rgba(58, 42, 31, 0.07);
-    }
-
-    .footer__names img {
-      max-width: 240px;
-      display: inline-block;
-    }
-
-    .footer__date {
-      font-size: 0.85rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--laranja-energia);
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background: var(--marrom-base);
-      color: var(--branco);
-      padding: 1rem 1.5rem;
-      border-radius: 40px;
-      z-index: 1001;
-      animation: slideIn 0.3s ease;
-    }
-
-    .toast.success {
-      background: #10b981;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
+    /* Reveal on scroll */
     .reveal {
       opacity: 0;
       transform: translateY(28px);
-      transition:
-        opacity 0.65s ease,
-        transform 0.65s ease;
+      transition: opacity 0.65s ease, transform 0.65s ease;
     }
-
     .reveal.visible {
       opacity: 1;
       transform: none;
     }
-    
-    @media (max-width: 1024px) {
-      .gifts__grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .gifts__grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-
-      /* Ajustes de fontes para telas menores */
-      .gift-card__body {
-        padding: 1rem;
-        gap: 0.35rem;
-      }
-
-      .gift-card__category {
-        font-size: 0.55rem;
-        letter-spacing: 0.15em;
-      }
-
-      .gift-card__name {
-        font-size: 0.95rem;
-        line-height: 1.2;
-      }
-
-      .gift-card__desc {
-        font-size: 0.75rem;
-        line-height: 1.4;
-      }
-
-      .gift-card__price {
-        font-size: 1.1rem;
-      }
-
-      .gift-card__price sup {
-        font-size: 0.6rem;
-      }
-
-      .gift-card__price.free {
-        font-size: 0.85rem;
-      }
-
-      .gift-card__cta {
-        font-size: 0.6rem;
-        letter-spacing: 0.1em;
-      }
-
-      .gift-card__ribbon {
-        font-size: 0.55rem;
-        padding: 0.25rem 0.7rem;
-      }
-
-      .gift-card__img {
-        height: 160px;
-      }
-
-      .gift-card__icon {
-        font-size: 2.5rem;
-      }
-
-      .gift-card__footer {
-        margin-top: 0.5rem;
-        padding-top: 0.5rem;
-      }
-
-      .gift-card__cta-arrow {
-        width: 14px;
-      }
-
-      .page-hero__title {
-        font-size: 1.3rem;
-      }
-
-      .page-hero__sub {
-        font-size: 0.9rem;
-      }
-
-      .info-item__title {
-        font-size: 0.75rem;
-      }
-
-      .info-item__text {
-        font-size: 0.85rem;
-      }
-
-      .info-item {
-        padding: 1.2rem;
-        border-radius: 24px;
-      }
-
-      .info-strip__inner {
-        gap: 1rem;
-      }
-    }
-
-    @media (max-width: 500px) {
-      .gifts__grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-      }
-
-      .gift-card__body {
-        padding: 0.75rem;
-        gap: 0.25rem;
-      }
-
-      .gift-card__category {
-        font-size: 0.5rem;
-      }
-
-      .gift-card__name {
-        font-size: 0.8rem;
-      }
-
-      .gift-card__desc {
-        font-size: 0.65rem;
-        line-height: 1.3;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .gift-card__price {
-        font-size: 0.9rem;
-      }
-
-      .gift-card__price sup {
-        font-size: 0.5rem;
-      }
-
-      .gift-card__price.free {
-        font-size: 0.7rem;
-      }
-
-      .gift-card__cta {
-        font-size: 0.5rem;
-      }
-
-      .gift-card__ribbon {
-        font-size: 0.45rem;
-        padding: 0.2rem 0.5rem;
-        top: 10px;
-      }
-
-      .gift-card__img {
-        height: 120px;
-      }
-
-      .gift-card__icon {
-        font-size: 2rem;
-      }
-
-      .gift-card__footer {
-        margin-top: 0.3rem;
-        padding-top: 0.3rem;
-      }
-
-      .gift-card__cta-arrow {
-        width: 10px;
-      }
-
-      .gift-card__cta-arrow::after {
-        width: 4px;
-        height: 4px;
-        top: -2px;
-      }
-
-      .gift-card {
-        border-radius: 16px;
-      }
-
-      .gift-card:hover {
-        transform: translateY(-4px);
-      }
-
-      .page-hero {
-        padding: 7rem 0 0;
-      }
-
-      .page-hero__title {
-        font-size: 1.1rem;
-        line-height: 2.5;
-      }
-
-      .page-hero__sub {
-        font-size: 0.8rem;
-      }
-
-      .divider {
-        width: 50px;
-        margin: 1rem auto;
-      }
-
-      .info-strip__inner {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-      }
-
-      .info-item {
-        padding: 1rem;
-        border-radius: 20px;
-      }
-
-      .info-item__title {
-        font-size: 0.7rem;
-        margin-top: 0.5rem;
-      }
-
-      .info-item__text {
-        font-size: 0.8rem;
-      }
-
-      .btn-copiar-endereco {
-        font-size: 0.65rem;
-        padding: 0.4rem 0.8rem;
-      }
-
-      .footer__names img {
-        max-width: 180px;
-      }
-
-      .footer__date {
-        font-size: 0.7rem;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .gifts__grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-      }
-
-      .gift-card__body {
-        padding: 0.6rem;
-      }
-
-      .gift-card__name {
-        font-size: 0.7rem;
-      }
-
-      .gift-card__desc {
-        font-size: 0.6rem;
-        -webkit-line-clamp: 1;
-      }
-
-      .gift-card__price {
-        font-size: 0.8rem;
-      }
-
-      .gift-card__cta {
-        font-size: 0.45rem;
-      }
-
-      .gift-card__ribbon {
-        font-size: 0.4rem;
-        padding: 0.15rem 0.4rem;
-        top: 8px;
-      }
-
-      .gift-card__img {
-        height: 100px;
-      }
-
-      .gift-card__icon {
-        font-size: 1.6rem;
-      }
-
-      .gift-card {
-        border-radius: 14px;
-      }
-    }
-
-    /* Navegação responsiva */
-    @media (max-width: 900px) {
-      .nav__links {
-        display: none;
-      }
-
-      .nav__links.open {
-        display: flex;
-        flex-direction: column;
-        gap: 1.8rem;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: var(--creme-suavidade);
-        justify-content: center;
-        align-items: center;
-        z-index: 99;
-        width: 100vw;
-        height: 100vh;
-      }
-
-      .nav__links.open a {
-        color: var(--laranja-energia);
-        font-size: 1.1rem;
-      }
-
-      .nav__toggle {
-        display: flex;
-      }
-    }
   </style>
 </head>
 
-<body>
-  <nav class="nav">
-    <div class="container nav__inner">
-      <a href="../" class="nav__logo">
-        <img src="../img/logo_branco.png" alt="Giovanna & Erick" class="nav__logo-image" />
+<body class="bg-creme text-marrom font-paragrafos font-light text-base leading-relaxed">
+
+  <!-- NAV -->
+  <nav class="fixed top-0 inset-x-0 z-[100] py-5 bg-laranja backdrop-blur-md shadow-[0_1px_0_rgba(58,42,31,0.08)] transition-[padding] duration-300 max-[900px]:py-[0.85rem]">
+    <div class="w-[min(1200px,92%)] mx-auto flex items-center justify-between">
+      <a href="../" class="block leading-none">
+        <img src="../img/logo_branco.png" alt="Giovanna & Erick"
+          class="h-[45px] w-auto block max-[900px]:h-[45px] max-[600px]:h-[32px]" />
       </a>
-      <ul class="nav__links" id="navLinks">
-        <li><a href="../">Início</a></li>
-        <li><a href="../presentes/">Presentes</a></li>
-        <li><a href="" class="active">Lua de Mel</a></li>
+
+      <ul id="navLinks" class="hidden min-[900px]:flex gap-10 list-none">
+        <li><a href="../"
+            class="text-[0.72rem] tracking-[0.18em] uppercase font-medium text-white hover:text-amarelo transition-colors relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-amarelo after:transition-[width] after:duration-300 hover:after:w-full">Início</a>
+        </li>
+        <li><a href="../presentes/"
+            class="text-[0.72rem] tracking-[0.18em] uppercase font-medium text-white hover:text-amarelo transition-colors relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-amarelo after:transition-[width] after:duration-300 hover:after:w-full">Presentes</a>
+        </li>
+        <li><a href=""
+            class="text-[0.72rem] tracking-[0.18em] uppercase font-medium text-amarelo transition-colors relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-amarelo">Lua
+            de Mel</a></li>
       </ul>
-      <button class="nav__toggle" id="navToggle" aria-label="Abrir menu">
-        <span></span><span></span><span></span>
+
+      <button id="navToggle" aria-label="Abrir menu" aria-expanded="false"
+        class="min-[900px]:hidden flex flex-col gap-[5px] cursor-pointer bg-transparent border-none p-1 z-[101]">
+        <span class="block w-6 h-[1.8px] bg-white transition-transform duration-300"></span>
+        <span class="block w-6 h-[1.8px] bg-white transition-opacity duration-300"></span>
+        <span class="block w-6 h-[1.8px] bg-white transition-transform duration-300"></span>
       </button>
     </div>
   </nav>
 
-  <header class="page-hero">
-    <div class="container page-hero__content">
-      <h1 class="page-hero__title">Ajude nossa <em>Lua de Mel</em></h1>
-      <hr class="divider" />
-      <p class="page-hero__sub">
+  <!-- MENU MOBILE -->
+  <div id="mobileMenu"
+    class="hidden fixed inset-0 z-[99] bg-creme flex-col items-center justify-center gap-8 min-[900px]:!hidden">
+    <a href="../" class="text-laranja text-lg font-medium">Início</a>
+    <a href="../presentes/" class="text-laranja text-lg font-medium">Presentes</a>
+    <a href="" class="text-laranja text-lg font-medium">Lua de Mel</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <header class="pt-36 pb-0 text-center relative max-[500px]:pt-28">
+    <div class="w-[min(1200px,92%)] mx-auto relative z-10">
+      <h1
+        class="font-titulos font-semibold tracking-[0.2em] text-laranja text-[clamp(1.55rem,1.75vw,2rem)] max-[768px]:text-[1.3rem] max-[500px]:text-[1.1rem] max-[500px]:leading-[2.5]">
+        Ajude nossa <em class="italic text-rosa">Lua de Mel</em>
+      </h1>
+      <hr
+        class="w-[70px] h-[2px] bg-gradient-to-r from-rosa to-amarelo border-none my-6 mx-auto max-[500px]:w-[50px] max-[500px]:my-4" />
+      <p class="max-w-[1650px] mx-auto text-marrom-claro max-[768px]:text-[0.9rem] max-[500px]:text-[0.8rem]">
         Sua contribuição transforma nossos sonhos em realidade! Escolha uma
         experiência abaixo e nos ajude a criar memórias inesquecíveis.
       </p>
     </div>
   </header>
 
-  <section class="info-strip reveal">
-    <div class="container">
-      <div class="info-strip__inner">
-        <div class="info-item">
-          <h3 class="info-item__title">Como contribuir</h3>
-          <div class="info-item__text">
+  <!-- INFO STRIP -->
+  <section class="my-8 reveal">
+    <div class="w-[min(1200px,92%)] mx-auto">
+      <div class="grid grid-cols-1 min-[500px]:grid-cols-2 gap-7 max-[768px]:gap-4 max-[500px]:gap-3">
+
+        <!-- Como contribuir -->
+        <div
+          class="bg-white/85 backdrop-blur-md rounded-[32px] p-[1.8rem] shadow-[0_12px_28px_rgba(58,42,31,0.06)] max-[768px]:p-[1.2rem] max-[768px]:rounded-3xl max-[500px]:p-4 max-[500px]:rounded-[20px]">
+          <h3
+            class="font-titulos font-semibold text-[0.85rem] tracking-[0.2em] text-laranja uppercase mt-3 leading-[3] max-[768px]:text-[0.75rem] max-[500px]:text-[0.7rem] max-[500px]:mt-2">
+            Como contribuir
+          </h3>
+          <div class="text-[0.9rem] text-marrom font-medium max-[768px]:text-[0.85rem] max-[500px]:text-[0.8rem]">
             <p>
               <strong>PIX:</strong> Clique em "Contribuir", realize
               o pagamento e o valor será destinado diretamente à experiência
@@ -852,15 +173,23 @@
             </p>
           </div>
         </div>
-        <div class="info-item">
-          <h3 class="info-item__title">Destino: Campos do Jordão</h3>
-          <div class="info-item__text">
+
+        <!-- Destino -->
+        <div
+          class="bg-white/85 backdrop-blur-md rounded-[32px] p-[1.8rem] shadow-[0_12px_28px_rgba(58,42,31,0.06)] max-[768px]:p-[1.2rem] max-[768px]:rounded-3xl max-[500px]:p-4 max-[500px]:rounded-[20px]">
+          <h3
+            class="font-titulos font-semibold text-[0.85rem] tracking-[0.2em] text-laranja uppercase mt-3 leading-[3] max-[768px]:text-[0.75rem] max-[500px]:text-[0.7rem] max-[500px]:mt-2">
+            Destino: Campos do Jordão
+          </h3>
+          <div class="text-[0.9rem] text-marrom font-medium max-[768px]:text-[0.85rem] max-[500px]:text-[0.8rem]">
             <p>
               Cada contribuição será transformada em momentos especiais na
               serra: fondue, vinho, chocolate quente e muito amor!
             </p>
-            <button class="btn-copiar-endereco" onclick="copiarChavePix()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button onclick="copiarChavePix()"
+              class="inline-flex items-center gap-2 bg-transparent border border-marrom-claro text-marrom-claro px-4 py-2 rounded-full text-xs cursor-pointer mt-3 transition-all duration-300 hover:bg-marrom-claro hover:text-white hover:border-marrom-claro group max-[500px]:text-[0.65rem] max-[500px]:px-3 max-[500px]:py-1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="shrink-0 transition-all duration-300 group-hover:stroke-white">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
               </svg>
@@ -872,42 +201,48 @@
     </div>
   </section>
 
-  <main class="gifts">
-    <div class="container">
-      <div class="gifts__grid" id="giftsGrid">
-        <div style="grid-column: 1/-1; text-align: center; padding: 3rem">
+  <!-- GIFT GRID -->
+  <main class="pt-14 pb-[clamp(4rem,8vw,7rem)]">
+    <div class="w-[min(1200px,92%)] mx-auto">
+      <div id="giftsGrid"
+        class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8 max-[1024px]:grid-cols-2 max-[1024px]:gap-6 max-[768px]:gap-4 max-[500px]:gap-3 max-[380px]:gap-2">
+        <div class="col-span-full text-center py-12">
           Carregando presentes da lua de mel...
         </div>
       </div>
     </div>
   </main>
 
-  <footer class="footer">
-    <p class="footer__names">
-      <img src="../img/nome_laranja.png" alt="Giovanna & Erick" />
+  <!-- FOOTER -->
+  <footer class="py-12 text-center border-t border-marrom/[0.07] max-[500px]:py-8">
+    <p class="block w-full max-w-[1921px] mx-auto mb-1.5">
+      <img src="../img/nome_laranja.png" alt="Giovanna & Erick"
+        class="w-full h-auto max-w-[240px] inline-block max-[500px]:max-w-[180px]" />
     </p>
-    <p class="footer__date">21 · Novembro · 2026 · Lua de Mel</p>
+    <p class="text-[0.85rem] tracking-[0.2em] uppercase text-laranja max-[500px]:text-[0.7rem]">21 · Novembro · 2026 ·
+      Lua de Mel</p>
   </footer>
 
   <script>
     // Menu mobile
     const toggle = document.getElementById("navToggle");
-    const navLinks = document.getElementById("navLinks");
+    const mobileMenu = document.getElementById("mobileMenu");
 
-    if (toggle && navLinks) {
+    if (toggle && mobileMenu) {
       toggle.addEventListener("click", () => {
-        const isOpen = navLinks.classList.contains("open");
+        const isOpen = !mobileMenu.classList.contains("hidden");
         if (isOpen) {
-          navLinks.classList.remove("open");
+          mobileMenu.classList.add("hidden");
+          mobileMenu.classList.remove("flex");
           toggle.setAttribute("aria-expanded", "false");
           document.body.classList.remove("menu-open");
-          const spans = toggle.querySelectorAll("span");
-          spans.forEach((s) => {
+          toggle.querySelectorAll("span").forEach((s) => {
             s.style.transform = "";
             s.style.opacity = "";
           });
         } else {
-          navLinks.classList.add("open");
+          mobileMenu.classList.remove("hidden");
+          mobileMenu.classList.add("flex");
           toggle.setAttribute("aria-expanded", "true");
           document.body.classList.add("menu-open");
           const spans = toggle.querySelectorAll("span");
@@ -916,15 +251,20 @@
           spans[2].style.transform = "translateY(-6.5px) rotate(-45deg)";
         }
       });
-      navLinks.querySelectorAll("a").forEach((a) =>
+      mobileMenu.querySelectorAll("a").forEach((a) =>
         a.addEventListener("click", () => {
-          navLinks.classList.remove("open");
+          mobileMenu.classList.add("hidden");
+          mobileMenu.classList.remove("flex");
           document.body.classList.remove("menu-open");
+          toggle.querySelectorAll("span").forEach((s) => {
+            s.style.transform = "";
+            s.style.opacity = "";
+          });
         }),
       );
     }
 
-    // CONFIGURAÇÃO CORRIGIDA para o seu JSON
+    // Configuração
     const API_URL = "../data/lua_de_mel.json";
     let todosPresentes = [];
 
@@ -962,11 +302,11 @@
         const grid = document.getElementById("giftsGrid");
         if (grid) {
           grid.innerHTML = `
-        <div style="grid-column:1/-1; text-align:center; padding:3rem;">
+        <div class="col-span-full text-center py-12">
           <p>Erro ao carregar lista de presentes.</p>
           <p><small>${error.message}</small></p>
           <p><small>Caminho: ${API_URL}</small></p>
-          <button onclick="location.reload()" style="margin-top:1rem; padding:0.5rem 1rem; cursor:pointer;">Tentar novamente</button>
+          <button onclick="location.reload()" class="mt-4 px-4 py-2 cursor-pointer bg-rosa text-white rounded-full">Tentar novamente</button>
         </div>
       `;
         }
@@ -978,51 +318,61 @@
       if (!grid) return;
 
       if (!presentes || presentes.length === 0) {
-        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1; text-align:center; padding:3rem;">Nenhum presente encontrado.</div>`;
+        grid.innerHTML = `<div class="col-span-full text-center py-12">
+          <div class="text-5xl mb-4 opacity-40">🌴</div>
+          <p class="text-marrom-claro">Nenhum presente encontrado.</p>
+        </div>`;
         return;
       }
 
-      const cardsHTML = presentes
-        .map((presente, idx) => {
-          const preco = presente.preco;
-          const precoFormatado =
-            preco === 0
-              ? "VALOR LIVRE"
-              : `R$ ${preco.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-          const precoClass = preco === 0 ? "free" : "";
-          const categoriaExibida =
-            categoriasMap[presente.categoria] || presente.categoria;
-          const icone = presente.imagem
-            ? ""
-            : presente.categoria === "lua_de_mel"
-              ? "🍫"
-              : presente.categoria === "passeio"
-                ? "🚠"
-                : presente.categoria === "diversao"
-                  ? "😂"
-                  : "🎁";
+      const cardsHTML = presentes.map((presente) => {
+        const preco = presente.preco;
+        const precoFormatado = preco === 0
+          ? "VALOR LIVRE"
+          : `R$ ${preco.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const categoriaExibida = categoriasMap[presente.categoria] || presente.categoria;
+        const icone = presente.imagem
+          ? ""
+          : presente.categoria === "lua_de_mel"
+            ? "🍫"
+            : presente.categoria === "passeio"
+              ? "🚠"
+              : presente.categoria === "diversao"
+                ? "😂"
+                : "🎁";
 
-          return `
-          <a class="gift-card" href="./${presente.id}" data-category="${presente.categoria}">
-            <span class="gift-card__ribbon">Disponível</span>
-            <div class="gift-card__img">
-              <div class="gift-card__placeholder" style="${presente.imagem ? `background-image: url('${presente.imagem}');` : ""}">
-                ${!presente.imagem ? `<span class="gift-card__icon">${icone}</span>` : ""}
+        return `
+          <a class="gift-card group relative flex flex-col bg-white rounded-[28px] overflow-hidden border border-marrom/[0.07] shadow-[0_8px_24px_rgba(58,42,31,0.06)] no-underline text-inherit transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(58,42,31,0.14)] max-[500px]:rounded-2xl max-[500px]:hover:-translate-y-1 max-[380px]:rounded-[14px]"
+            href="./${presente.id}"
+            data-category="${presente.categoria}">
+
+            <span class="absolute top-4 -right-px text-[0.65rem] font-semibold tracking-[0.1em] uppercase py-[0.35rem] pr-[0.9rem] pl-[0.9rem] rounded-l-md z-[2] bg-amarelo/90 text-[#5a3e1a] max-[768px]:text-[0.55rem] max-[768px]:py-[0.25rem] max-[768px]:pr-[0.7rem] max-[768px]:pl-[0.7rem] max-[500px]:text-[0.45rem] max-[500px]:py-[0.2rem] max-[500px]:pr-[0.5rem] max-[500px]:pl-[0.5rem] max-[500px]:top-2.5 max-[380px]:text-[0.4rem] max-[380px]:py-[0.15rem] max-[380px]:pr-[0.4rem] max-[380px]:pl-[0.4rem] max-[380px]:top-2">
+              Disponível
+            </span>
+
+            <div class="h-[210px] relative overflow-hidden max-[768px]:h-[160px] max-[500px]:h-[120px] max-[380px]:h-[100px]">
+              <div class="w-full h-full grid place-items-center transition-transform duration-[0.6s] bg-contain bg-center bg-no-repeat bg-white group-hover:scale-105 ${!presente.imagem ? 'bg-gradient-to-br from-[#fef5d3] to-[#fde4a0]' : ''}"
+                style="${presente.imagem ? `background-image: url('${presente.imagem}');` : ''}">
+                ${!presente.imagem ? `<span class="text-5xl opacity-70 max-[768px]:text-[2.5rem] max-[500px]:text-[2rem] max-[380px]:text-[1.6rem]">${icone}</span>` : ""}
               </div>
             </div>
-            <div class="gift-card__body">
-              <span class="gift-card__category">${categoriaExibida}</span>
-              <h2 class="gift-card__name">${escapeHtml(presente.nome)}</h2>
-              <p class="gift-card__desc">${escapeHtml(presente.descricao)}</p>
-              <div class="gift-card__footer">
-                <span class="gift-card__price ${precoClass}"><sup>${preco !== 0 ? "R$" : ""}</sup> ${precoFormatado}</span>
-                <span class="gift-card__cta">Contribuir <span class="gift-card__cta-arrow"></span></span>
+
+            <div class="flex-1 flex flex-col gap-2 p-[1.4rem] max-[768px]:p-4 max-[768px]:gap-[0.35rem] max-[500px]:p-3 max-[500px]:gap-1 max-[380px]:p-[0.6rem]">
+              <span class="text-[0.65rem] tracking-[0.2em] uppercase text-rosa font-semibold max-[768px]:text-[0.55rem] max-[768px]:tracking-[0.15em] max-[500px]:text-[0.5rem]">${categoriaExibida}</span>
+              <h2 class="font-paragrafos text-[1.2rem] font-bold text-marrom leading-[1.3] max-[768px]:text-[0.95rem] max-[768px]:leading-[1.2] max-[500px]:text-[0.8rem] max-[380px]:text-[0.7rem]">${escapeHtml(presente.nome)}</h2>
+              <p class="text-[0.85rem] text-marrom-claro leading-[1.5] line-clamp-2 max-[768px]:text-[0.75rem] max-[768px]:leading-[1.4] max-[500px]:text-[0.65rem] max-[500px]:leading-[1.3] max-[380px]:text-[0.6rem] max-[380px]:line-clamp-1">${escapeHtml(presente.descricao)}</p>
+              <div class="flex items-center justify-between mt-3 pt-3 border-t border-marrom/[0.07] max-[768px]:mt-2 max-[768px]:pt-2 max-[500px]:mt-[0.3rem] max-[500px]:pt-[0.3rem]">
+                <span class="font-paragrafos ${preco === 0 ? 'text-base text-rosa' : 'text-[1.4rem] text-laranja'} font-bold max-[768px]:text-[1.1rem] max-[500px]:text-[0.9rem] max-[380px]:text-[0.8rem]">
+                  ${preco !== 0 ? '<sup class="text-[0.7rem] font-medium align-middle max-[768px]:text-[0.6rem] max-[500px]:text-[0.5rem]">R$</sup>' : ''} ${precoFormatado}
+                </span>
+                <span class="inline-flex items-center gap-[0.4rem] text-[0.7rem] font-semibold tracking-[0.12em] uppercase text-rosa transition-[gap] duration-200 group-hover:gap-[0.65rem] max-[768px]:text-[0.6rem] max-[768px]:tracking-[0.1em] max-[500px]:text-[0.5rem] max-[380px]:text-[0.45rem]">
+                  Contribuir <span class="gift-card__cta-arrow"></span>
+                </span>
               </div>
             </div>
           </a>
         `;
-        })
-        .join("");
+      }).join("");
 
       grid.innerHTML = cardsHTML;
     }
@@ -1036,7 +386,7 @@
 
     function showToast(message) {
       const toast = document.createElement("div");
-      toast.className = "toast success";
+      toast.className = "toast-anim fixed bottom-4 right-4 left-4 sm:left-auto bg-[#10b981] text-white px-4 py-3 sm:px-6 sm:py-4 rounded-[40px] z-[1001] text-sm sm:text-base text-center sm:text-left";
       toast.textContent = message;
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 3000);
@@ -1046,9 +396,7 @@
       navigator.clipboard
         .writeText("zanirattoduarteerick@gmail.com")
         .then(() =>
-          showToast(
-            "Chave PIX copiada! Obrigado por ajudar nossa lua de mel.",
-          ),
+          showToast("Chave PIX copiada! Obrigado por ajudar nossa lua de mel."),
         )
         .catch(() =>
           alert("Copie manualmente: zanirattoduarteerick@gmail.com"),
@@ -1067,9 +415,7 @@
         },
         { threshold: 0.1 },
       );
-      document
-        .querySelectorAll(".reveal")
-        .forEach((el) => observer.observe(el));
+      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
     }
 
     document.addEventListener("DOMContentLoaded", () => {
