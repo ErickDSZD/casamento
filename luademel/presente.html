@@ -30,7 +30,9 @@
       font-display: swap;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       font-family: "Satoshi", "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -45,10 +47,20 @@
     }
 
     @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
-    .toast-anim { animation: slideIn 0.3s ease; }
+
+    .toast-anim {
+      animation: slideIn 0.3s ease;
+    }
 
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button {
@@ -91,7 +103,8 @@
   </nav>
 
   <!-- MENU MOBILE -->
-  <div id="mobileMenu" class="hidden fixed inset-0 z-[99] bg-creme flex-col items-center justify-center gap-8 md:!hidden">
+  <div id="mobileMenu"
+    class="hidden fixed inset-0 z-[99] bg-creme flex-col items-center justify-center gap-8 md:!hidden">
     <a href="../" class="text-laranja text-lg font-medium">Início</a>
     <a href="../presentes/" class="text-laranja text-lg font-medium">Presentes</a>
     <a href="../luademel/" class="text-laranja text-lg font-medium">Lua de Mel</a>
@@ -100,16 +113,27 @@
   <!-- MAIN -->
   <main class="min-h-[80vh] pt-32 pb-12">
     <div class="w-[min(1200px,92%)] mx-auto">
+      <!-- Botão Voltar -->
+      <button onclick="history.back()"
+        class="inline-flex items-center gap-2 bg-transparent border-none text-marrom-claro text-sm font-medium cursor-pointer py-2 mb-6 transition-colors hover:text-laranja group">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          class="transition-transform duration-300 group-hover:-translate-x-1">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Voltar
+      </button>
+
       <div id="detalheContent">
         <div class="text-center py-16">
-          <p class="text-marrom-claro text-lg">Carregando detalhes da experiência...</p>
+          <p class="text-marrom-claro text-lg">Carregando detalhes do presente...</p>
         </div>
       </div>
     </div>
   </main>
 
   <!-- MODAL DE PAGAMENTO -->
-  <div id="paymentModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-[1000] justify-center items-center p-3">
+  <div id="paymentModal"
+    class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-[1000] justify-center items-center p-3">
     <div class="bg-creme rounded-3xl w-[95%] max-w-[500px] max-h-[90vh] overflow-y-auto">
       <div class="p-4 sm:p-6 border-b border-marrom/10 flex justify-between items-center">
         <h2 class="font-titulos text-base font-medium text-marrom mt-6">Contribuir com a experiência</h2>
@@ -305,9 +329,9 @@
   </script>
 
   <script>
-    // ==========================================================
+
     // LÓGICA DO APP (mantida integralmente)
-    // ==========================================================
+
     let currentPresente = null;
     let valorContribuicao = null;
     let pollingInterval = null;
@@ -857,26 +881,68 @@
       });
     }
 
+    function normalizarPresente(p) {
+      return {
+        id: Number(p.id),
+        nome: p.nome,
+        categoria: p.categoria,
+        preco: Number(p.preco) || 0,
+        descricao: p.descricao,
+        imagem: p.imagem,
+        status: p.status,
+        linkExterno: p.linkExterno ?? p.link_externo ?? null,
+        detalhes: Array.isArray(p.detalhes) ? p.detalhes : []
+      };
+    }
+
     async function carregarDetalhe() {
       const id = getIdFromURL();
       if (!id) { mostrarErro("ID não informado"); return; }
+      const idNum = parseInt(id, 10);
+      if (isNaN(idNum)) { mostrarErro("ID inválido"); return; }
+
+      // 1) tenta a função
       try {
-        const response = await fetch("/data/lua_de_mel.json");
-        if (!response.ok) throw new Error("Erro ao carregar dados");
-        const data = await response.json();
-        const presente = data.presentes.find(p => p.id === parseInt(id));
-        if (!presente) { mostrarErro("Experiência não encontrada"); return; }
-        currentPresente = presente;
-        renderizarDetalhe(presente);
-      } catch (error) {
-        console.error(error);
+        const res = await fetch(`${API_BASE}/get-luademel-por-id?id=${idNum}`, {
+          headers: { Accept: "application/json" }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const raw = data.presente ?? data; // cobre Cenário A e B
+          if (raw?.id) {
+            currentPresente = normalizarPresente(raw);
+            renderizarDetalhe(currentPresente);
+            console.info("[detalhe] Carregado via função.");
+            return;
+          }
+        } else if (res.status !== 404) {
+          console.warn(`[detalhe] Função respondeu ${res.status}, usando fallback.`);
+        } else {
+          console.warn(`[detalhe] ID ${idNum} não existe na função, tentando JSON...`);
+        }
+      } catch (e) {
+        console.warn("[detalhe] Função indisponível, usando JSON estático:", e.message);
+      }
+
+      // 2) fallback para o JSON
+      try {
+        const res = await fetch("../data/lua_de_mel.json");
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const encontrado = (data.presentes || []).map(normalizarPresente).find(p => p.id === idNum);
+        if (!encontrado) { mostrarErro("Experiência não encontrada"); return; }
+        currentPresente = encontrado;
+        renderizarDetalhe(currentPresente);
+        console.info("[detalhe] Carregado via JSON estático (fallback).");
+      } catch (e) {
+        console.error(e);
         mostrarErro("Erro ao carregar detalhes");
       }
     }
 
-    // ==========================================================
     // RENDERIZAÇÃO DO DETALHE (Tailwind + imagens responsivas)
-    // ==========================================================
+
     function renderizarDetalhe(presente) {
       const container = document.getElementById("detalheContent");
       const precoFormatado = presente.preco > 0
@@ -903,10 +969,10 @@
           <div class="relative bg-gradient-to-br from-[#fef5d3] to-[#fde4a0] flex items-center justify-center overflow-hidden
                       aspect-[4/3] sm:aspect-[16/10] md:aspect-auto md:min-h-[400px]">
             ${presente.imagem
-              ? `<img src="${escapeHTML(presente.imagem)}" alt="${escapeHTML(presente.nome)}"
+          ? `<img src="${escapeHTML(presente.imagem)}" alt="${escapeHTML(presente.nome)}"
                       class="w-full h-full object-contain md:object-cover object-center p-4 sm:p-6 md:p-0
                              max-h-[300px] sm:max-h-[350px] md:max-h-none">`
-              : `<div class="text-[6rem] opacity-70">${presente.icone || "🌙"}</div>`}
+          : `<div class="text-[6rem] opacity-70">${presente.icone || "🌙"}</div>`}
           </div>
 
           <!-- INFO -->

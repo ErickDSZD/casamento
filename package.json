@@ -9,7 +9,9 @@
     "build:tailwind": "npx tailwindcss -i ./src/input.css -o ./dist/styles.css --minify"
   },
   "dependencies": {
-    "node-fetch": "^2.7.0"
+    "@netlify/database": "^2.0.1",
+    "node-fetch": "^2.7.0",
+    "pg": "^8.23.1"
   },
   "keywords": [
     "casamento",

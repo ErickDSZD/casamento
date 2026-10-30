@@ -48,8 +48,15 @@
 
     /* Toast animation */
     @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
 
     .toast-anim {
@@ -75,8 +82,7 @@
             class="h-[45px] w-auto block brightness-0 invert transition-transform duration-300 hover:scale-[1.02] sm:h-[45px]" />
         </a>
 
-        <ul id="navLinks"
-          class="hidden md:flex gap-10 list-none">
+        <ul id="navLinks" class="hidden md:flex gap-10 list-none">
           <li><a href="../"
               class="text-[0.72rem] tracking-[0.18em] uppercase font-medium text-white hover:text-amarelo transition-colors relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-amarelo after:transition-[width] after:duration-300 hover:after:w-full">Início</a>
           </li>
@@ -140,7 +146,8 @@
       <div class="p-4 sm:p-6">
         <!-- Métodos de pagamento -->
         <div class="flex flex-col sm:flex-row gap-3 mb-8">
-          <button class="payment-btn active flex-1 py-3 px-2 bg-rosa/10 border-[1.5px] border-rosa rounded-xl cursor-pointer font-paragrafos text-sm text-rosa transition-all duration-300"
+          <button
+            class="payment-btn active flex-1 py-3 px-2 bg-rosa/10 border-[1.5px] border-rosa rounded-xl cursor-pointer font-paragrafos text-sm text-rosa transition-all duration-300"
             data-method="pix">PIX</button>
           <!-- <button class="payment-btn flex-1 py-3 px-2 bg-transparent border-[1.5px] border-marrom/20 rounded-xl cursor-pointer font-paragrafos text-sm transition-all duration-300 hover:border-rosa" data-method="credit">Cartão de Crédito</button> -->
           <!-- <button class="payment-btn flex-1 py-3 px-2 bg-transparent border-[1.5px] border-marrom/20 rounded-xl cursor-pointer font-paragrafos text-sm transition-all duration-300 hover:border-rosa" data-method="debit">Cartão de Débito</button> -->
@@ -166,8 +173,7 @@
 
           <div id="pixGeneratedContent" class="hidden">
             <div id="qrCodeContainer" class="text-center p-4"></div>
-            <div id="pixCode"
-              class="bg-marrom/5 p-3 rounded-xl font-mono break-all my-4 text-sm"></div>
+            <div id="pixCode" class="bg-marrom/5 p-3 rounded-xl font-mono break-all my-4 text-sm"></div>
             <button onclick="copyPixCode()"
               class="w-full py-4 bg-rosa text-white border-none rounded-full font-paragrafos font-medium cursor-pointer transition-all duration-300 hover:bg-terracota hover:-translate-y-0.5">
               Copiar código PIX
@@ -342,6 +348,8 @@
     let valorContribuicao = null;
 
     const API_BASE = "/.netlify/functions";
+    const API_FUNCTION_URL = `${API_BASE}/get-presente-por-id`;
+    const API_FALLBACK_URL = "../data/presentes.json";
     const WHATSAPP_NUMBER = "5517996181324";
 
     function abrirWhatsapp(linkExterno, nomePresente, tipo) {
@@ -867,10 +875,10 @@
           <div class="relative bg-creme/40 flex items-center justify-center overflow-hidden
                       aspect-[4/3] sm:aspect-[16/10] md:aspect-auto md:min-h-[400px]">
             ${presente.imagem
-              ? `<img src="${escapeHTML(presente.imagem)}" alt="${escapeHTML(presente.nome)}"
+          ? `<img src="${escapeHTML(presente.imagem)}" alt="${escapeHTML(presente.nome)}"
                       class="w-full h-full object-contain md:object-cover object-center p-4 sm:p-6 md:p-0
                              max-h-[300px] sm:max-h-[350px] md:max-h-none">`
-              : `<div class="text-[6rem] sm:text-[8rem] opacity-70">${presente.icone || "🎁"}</div>`}
+          : `<div class="text-[6rem] sm:text-[8rem] opacity-70">${presente.icone || "🎁"}</div>`}
           </div>
 
           <!-- INFO -->
@@ -1056,15 +1064,73 @@
       });
     }
 
+    // Normaliza campos divergentes entre a função e o JSON
+    function normalizarPresente(p) {
+      return {
+        id: Number(p.id),
+        nome: p.nome,
+        categoria: p.categoria,
+        preco: Number(p.preco) || 0,
+        descricao: p.descricao,
+        imagem: p.imagem,
+        status: p.status,
+        linkExterno: p.linkExterno ?? p.link_externo ?? null,
+        detalhes: Array.isArray(p.detalhes) ? p.detalhes : []
+      };
+    }
+
+    // Busca o presente por ID: tenta função, cai para JSON, lança se não achar em nenhum
+    async function buscarPresentePorId(id) {
+      try {
+        const res = await fetch(`${API_FUNCTION_URL}?id=${id}`, {
+          headers: { Accept: "application/json" }
+        });
+
+        if (res.status === 404) {
+          console.warn(`[detalhe] ID ${id} não existe na função, tentando JSON...`);
+        } else if (!res.ok) {
+          throw new Error(`Função respondeu HTTP ${res.status}: ${res.statusText}`);
+        } else {
+          const data = await res.json();
+          const raw = data?.presente ?? data;
+          if (raw?.id) {
+            console.info("[detalhe] Carregado via função serverless.");
+            return { presente: normalizarPresente(raw), origem: "função" };
+          }
+          throw new Error("Resposta inválida da função: objeto sem 'id'");
+        }
+      } catch (errFuncao) {
+        console.warn("[detalhe] Função indisponível, usando JSON estático:", errFuncao.message);
+      }
+
+      try {
+        const res = await fetch(API_FALLBACK_URL, { headers: { Accept: "application/json" } });
+        if (!res.ok) throw new Error(`JSON estático respondeu HTTP ${res.status}: ${res.statusText}`);
+        const data = await res.json();
+        if (!data || !Array.isArray(data.presentes)) {
+          throw new Error('JSON inválido: falta a propriedade "presentes"');
+        }
+        const encontrado = data.presentes.map(normalizarPresente).find(p => p.id === id);
+        if (encontrado) {
+          console.info("[detalhe] Carregado via JSON estático (fallback).");
+          return { presente: encontrado, origem: "json" };
+        }
+        throw new Error(`ID ${id} não encontrado no JSON estático`);
+      } catch (errJson) {
+        throw new Error(`Não foi possível encontrar o presente (id=${id}). JSON estático: ${errJson.message}`);
+      }
+    }
+
     async function carregarDetalhePresente() {
       const id = getIdFromURL();
       if (!id) { mostrarErro("ID do presente não informado."); return; }
+
+      const idNum = parseInt(id, 10);
+      if (isNaN(idNum)) { mostrarErro("ID inválido."); return; }
+
       try {
-        const response = await fetch("/data/presentes.json");
-        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        const data = await response.json();
-        const presente = data.presentes.find((p) => p.id === parseInt(id));
-        if (!presente) { mostrarErro("Presente não encontrado."); return; }
+        const { presente, origem } = await buscarPresentePorId(idNum);
+        console.info(`[detalhe] Origem: ${origem}`);
         currentPresente = presente;
         renderizarDetalhe(presente);
       } catch (error) {

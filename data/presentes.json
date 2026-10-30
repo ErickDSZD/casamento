@@ -2,18 +2,18 @@
   "presentes": [
     {
       "id": 1,
-      "nome": "Mixer 3 em 1 Electrolux TruFlow EIB10 (400W, Preto)",
+      "nome": "Multiprocessador Turbo Chef",
       "categoria": "cozinha",
       "preco": 250,
-      "descricao": "Mixer 3 em 1 com tecnologia TruFlow, 400W, cor preta.",
-      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_774750-MLA99975679579_112025-F.webp",
+      "descricao": "Multiprocessador Turbo Chef 9 em 1 Mondial 1000W MPN-01-BF",
+      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_976102-MLA99511428534_112025-F.webp",
       "status": "presenteado",
       "linkExterno": "https://www.mercadolivre.com.br/mixer-3-em-1-electrolux-com-tecnologia-truflow-eib10-400w-cor-preto/p/MLB18425326",
       "detalhes": [
-        "Marca: Electrolux",
-        "Modelo: EIB10",
-        "Potência: 400W",
-        "Funções: 3 em 1",
+        "Marca: Mondial",
+        "Modelo: MPN-01-BF",
+        "Potência: 1000W",
+        "Funções: 9 em 1",
         "Cor: Preto"
       ]
     },
@@ -310,7 +310,7 @@
       "preco": 53.10,
       "descricao": "Assadeiras Marinex Nadir Opaline | Jogo De Assadeiras, Kit 3 Unidades",
       "imagem": "https://m.media-amazon.com/images/I/611DHhOHFkL._AC_SX679_.jpg",
-      "status": "disponivel",
+      "status": "presenteado",
       "linkExterno": "https://www.amazon.com.br/dp/B08G8WD9MF/ref=sspa_dk_detail_6?psc=1&pf_rd_p=01db1132-7a41-4b6b-bb8e-16b3635a59d0&pf_rd_r=3P08DD30WRBRY8FBPS5Y&pd_rd_wg=p3paq&pd_rd_w=0zRDY&content-id=amzn1.sym.01db1132-7a41-4b6b-bb8e-16b3635a59d0&pd_rd_r=7890a11f-a8cf-4ce5-aec7-10b85f6682eb&s=kitchen&sp_csd=d2lkZ2V0TmFtZT1zcF9kZXRhaWw",
       "detalhes": [
         "Fonte: Amazon",
@@ -383,19 +383,6 @@
       "linkExterno": "https://www.camicado.com.br/p/jogo-de-lencol-home-style-amalfi/-/A-100798890-br.lc?sku=100798881",
       "detalhes": [
         "Tipo: Pratos de Sobremesa Oxford Ryo Maresia"
-      ]
-    },
-    {
-      "id": 31,
-      "nome": "Jogo de cama",
-      "categoria": "quarto",
-      "preco": 119.99,
-      "descricao": "Jogo de cama queen 4 peças soft touch Nadia - multicor | Casa Riachuelo",
-      "imagem": "https://static.riachuelo.com.br/RCHLO/16283783001/portrait/63d98d0625bfa4819435c91fd52daa1311d459f0.jpg?imwidth=200",
-      "status": "valor",
-      "linkExterno": "https://www.riachuelo.com.br/jogo-de-cama-queen-4-pecas-soft-touch-nadia-multicor-casa-riachuelo-16283783001_sku_sku?sku=16283783001&gad_source=1&gad_campaignid=22975098893&gbraid=0AAAAADr2JaxmA_1FF-r-cMrzgmARs9SJ2&gclid=CjwKCAjwuuPRBhAnEiwA2Ji8emCgZDyWX7dN3vynxGt2WEBhOhLLsC7QftoO9xbw3o4LlsMMQu8pphoC7HwQAvD_BwE",
-      "detalhes": [
-        "Tipo: Jogo de cama"
       ]
     },
     {
@@ -580,6 +567,32 @@
         "Valor livre",
         "Qualquer contribuição",
         "Momentos inesquecíveis"
+      ]
+    },
+    {
+      "id": 45,
+      "nome": "Jogo de cama",
+      "categoria": "quarto",
+      "preco": 119.99,
+      "descricao": "Jogo de cama queen 4 peças soft touch Nadia - multicor | Casa Riachuelo",
+      "imagem": "https://static.riachuelo.com.br/RCHLO/16283783001/portrait/63d98d0625bfa4819435c91fd52daa1311d459f0.jpg?imwidth=200",
+      "status": "valor",
+      "linkExterno": "https://www.riachuelo.com.br/jogo-de-cama-queen-4-pecas-soft-touch-nadia-multicor-casa-riachuelo-16283783001_sku_sku?sku=16283783001&gad_source=1&gad_campaignid=22975098893&gbraid=0AAAAADr2JaxmA_1FF-r-cMrzgmARs9SJ2&gclid=CjwKCAjwuuPRBhAnEiwA2Ji8emCgZDyWX7dN3vynxGt2WEBhOhLLsC7QftoO9xbw3o4LlsMMQu8pphoC7HwQAvD_BwE",
+      "detalhes": [
+        "Tipo: Jogo de cama"
+      ]
+    },
+    {
+      "id": 46,
+      "nome": "Air Fryer Philco 6,5L",
+      "categoria": "cozinha",
+      "preco": 309.90,
+      "descricao": "Air Fryer Philco 6,5L Visor Glass e Redstone 1700W PAF65A",
+      "imagem": "https://http2.mlstatic.com/D_NQ_NP_2X_761173-MLA99475995202_112025-F.webp",
+      "status": "presenteado",
+      "linkExterno": "https://www.mercadolivre.com.br/air-fryer-philco-65l-visor-glass-e-redstone-1700w-paf65a/p/MLB52052995?pdp_filters=item_id%3AMLB7023148756&from=gshop&matt_tool=80488341&matt_word=&matt_source=google&matt_campaign_id=22090193747&matt_ad_group_id=194474625514&matt_match_type=&matt_network=g&matt_device=c&matt_creative=792355615578&matt_keyword=&matt_ad_position=&matt_ad_type=pla&matt_merchant_id=735128761&matt_product_id=MLB52052995-product&matt_product_partition_id=2495528968269&matt_target_id=aud-2493968549214:pla-2495528968269&cq_src=google_ads&cq_cmp=22090193747&cq_net=g&cq_plt=gp&cq_med=pla&gad_source=1&gad_campaignid=22090193747&gbraid=0AAAAAD93qcCIeuf6_m55VmdPUAYhJztYT&gclid=CjwKCAjwgJHXBhBGEiwAHohJq4F-VjenwI1-nsQ_dhZOnVvcjR60Bm7W7vwEATD0JPBqT2TyWOaishoC_LYQAvD_BwE",
+      "detalhes": [
+        "Tipo: Air Fryer Philco 6,5L"
       ]
     }
   ]

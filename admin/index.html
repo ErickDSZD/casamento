@@ -1,386 +1,166 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin — Lista de Presentes</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
-        rel="stylesheet" />
-    <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="/img/logo_laranja.png" type="image/x-icon" />
+  <title>Login Admin — Giovanna & Erick</title>
 
-        :root {
-            --rosa: #D63384;
-            --amarelo: #F3C623;
-            --laranja: #F05A28;
-            --terracota: #C85A2F;
-            --creme: #FDF6EE;
-            --creme-dark: #F5EBD8;
-            --marrom: #3A1F10;
-            --marrom-light: #6B3A22;
-            --branco: #FFFFFF;
-            --font-display: 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'Jost', sans-serif;
-        }
+  <!-- Tailwind compilado (mesmo da home) -->
+  <link href="/dist/styles.css" rel="stylesheet">
 
-        body {
-            background: var(--creme);
-            color: var(--marrom);
-            font-family: var(--font-body);
-            font-weight: 300;
-            font-size: 1rem;
-            line-height: 1.75;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
+  <style>
+    @font-face {
+      font-family: "Oleragie";
+      src: url("/fonts/Oleragie.otf") format("opentype");
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Satoshi";
+      src: url("/fonts/Satoshi-Variable.ttf") format("truetype");
+      font-weight: 300 900;
+      font-display: swap;
+    }
 
-        /* Background decorativo */
-        body::before {
-            content: '🎁';
-            position: absolute;
-            font-size: 35rem;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -52%);
-            opacity: 0.03;
-            pointer-events: none;
-            user-select: none;
-            filter: grayscale(1);
-            z-index: 0;
-        }
+    body {
+      font-family: "Satoshi", "Jost", -apple-system, sans-serif;
+      font-weight: 300;
+      line-height: 1.75;
+    }
 
-        body::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 70% 80% at 15% 50%, rgba(243, 198, 35, 0.08) 0%, transparent 55%),
-                radial-gradient(ellipse 60% 70% at 85% 40%, rgba(214, 51, 132, 0.06) 0%, transparent 55%);
-            pointer-events: none;
-            z-index: 0;
-        }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
 
-        .login-container {
-            position: relative;
-            z-index: 1;
-            background: var(--branco);
-            padding: 2.5rem;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(58, 31, 16, 0.12), 0 4px 12px rgba(58, 31, 16, 0.06);
-            width: 100%;
-            max-width: 440px;
-            border: 1px solid rgba(58, 31, 16, 0.08);
-            backdrop-filter: blur(2px);
-            transition: transform 0.3s ease;
-        }
-
-        .login-container:hover {
-            transform: translateY(-4px);
-        }
-
-        .divider {
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--rosa), var(--amarelo));
-            border: none;
-            margin: 1rem auto 1.5rem;
-        }
-
-        h1 {
-            font-family: var(--font-display);
-            font-size: 2.2rem;
-            font-weight: 400;
-            color: var(--marrom);
-            margin-bottom: 0.5rem;
-            text-align: center;
-            letter-spacing: -0.01em;
-        }
-
-        h1 em {
-            font-style: italic;
-            color: var(--rosa);
-            font-weight: 600;
-        }
-
-        .subtitle {
-            color: var(--marrom-light);
-            margin-bottom: 2rem;
-            font-size: 0.85rem;
-            text-align: center;
-            letter-spacing: 0.02em;
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.7rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--terracota);
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            border: 1.5px solid rgba(58, 31, 16, 0.12);
-            border-radius: 12px;
-            font-size: 1rem;
-            font-family: var(--font-body);
-            background: var(--creme);
-            transition: all 0.3s ease;
-            color: var(--marrom);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--rosa);
-            background: var(--branco);
-            box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
-        }
-
-        input::placeholder {
-            color: rgba(58, 31, 16, 0.3);
-            font-family: var(--font-body);
-            font-weight: 300;
-        }
-
-        button {
-            width: 100%;
-            padding: 0.9rem;
-            background: linear-gradient(135deg, var(--rosa) 0%, var(--laranja) 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-            position: relative;
-            overflow: hidden;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        button:hover::before {
-            left: 100%;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .error {
-            background: rgba(214, 51, 132, 0.08);
-            color: var(--rosa);
-            padding: 0.85rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            display: none;
-            font-size: 0.85rem;
-            text-align: center;
-            border-left: 3px solid var(--rosa);
-            font-weight: 400;
-        }
-
-        .error.show {
-            display: block;
-            animation: shake 0.4s ease;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            75% {
-                transform: translateX(5px);
-            }
-        }
-
-        .login-footer {
-            margin-top: 1.5rem;
-            text-align: center;
-            font-size: 0.7rem;
-            color: var(--marrom-light);
-            border-top: 1px solid rgba(58, 31, 16, 0.08);
-            padding-top: 1.5rem;
-        }
-
-        .login-footer span {
-            font-family: var(--font-display);
-            font-style: italic;
-        }
-
-        .icon-decoration {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.6;
-        }
-
-        @media (max-width: 480px) {
-            .login-container {
-                margin: 1rem;
-                padding: 1.8rem;
-                max-width: calc(100% - 2rem);
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
+    .shake { animation: shake 0.4s ease; }
+  </style>
 </head>
-<body>
-    <div class="login-container">
-        <div class="icon-decoration" aria-hidden="true">🔐 ✨ 🎁</div>
-        <h1>Área <em>Administrativa</em></h1>
-        <hr class="divider" />
-        <p class="subtitle">Gerenciamento de presentes — Giovanna & Erick</p>
-        
-        <div class="error" id="errorMsg">
-            <span id="errorText">Senha incorreta</span>
-        </div>
-        
-        <div class="input-group">
-            <label for="password">🔒 ACESSO RESTRITO</label>
-            <input type="password" id="password" placeholder="Digite a senha administrativa" autocomplete="off">
-        </div>
-        
-        <button onclick="login()" id="loginBtn">
-            <span>➜ Entrar no painel</span>
-        </button>
-        
-        <div class="login-footer">
-            <span>🎀 apenas para organizadores</span>
-        </div>
+
+<body class="bg-creme text-marrom font-light text-base min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+
+  <!-- Fundo decorativo (consistente com o estilo da página inicial) -->
+  <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[35rem] opacity-[0.03] grayscale select-none">🎁</div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_15%_50%,rgba(243,198,35,0.08)_0%,transparent_55%),radial-gradient(ellipse_60%_70%_at_85%_40%,rgba(214,51,132,0.06)_0%,transparent_55%)]"></div>
+  </div>
+
+  <!-- Cartão de login -->
+  <div class="relative z-10 w-full max-w-[440px] bg-white rounded-3xl shadow-[0_20px_40px_rgba(58,31,16,0.12),0_4px_12px_rgba(58,31,16,0.06)] border border-marrom/8 p-8 sm:p-10 transition-transform duration-300 hover:-translate-y-1">
+
+    <div class="text-center mb-6">
+      <h1 class="font-titulos font-semibold text-1xl text-marrom leading-tight">
+        Área <em class="italic text-rosa font-bold">Administrativa</em>
+      </h1>
+      <hr class="w-[60px] h-[2px] bg-gradient-to-r from-rosa to-amarelo border-none my-4 mx-auto" />
+      <p class="text-marrom-claro text-[0.85rem] tracking-wide">Gerenciamento de presentes — Giovanna & Erick</p>
     </div>
 
-    <script>
-        async function login() {
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('errorMsg');
-            const errorText = document.getElementById('errorText');
-            const loginBtn = document.getElementById('loginBtn');
-            
-            // Reset error
-            errorDiv.classList.remove('show');
-            
-            if (!password) {
-                errorText.textContent = 'Por favor, digite a senha';
-                errorDiv.classList.add('show');
-                return;
-            }
-            
-            // Disable button durante requisição
-            loginBtn.disabled = true;
-            loginBtn.style.opacity = '0.7';
-            const originalText = loginBtn.innerHTML;
-            loginBtn.innerHTML = '<span>⌛ Verificando...</span>';
-            
-            try {
-                const response = await fetch('/.netlify/functions/admin-auth', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    sessionStorage.setItem('admin_authenticated', 'true');
-                    sessionStorage.setItem('admin_login_time', Date.now().toString());
-                    
-                    // Animação de sucesso
-                    loginBtn.innerHTML = '<span>✓ Redirecionando...</span>';
-                    setTimeout(() => {
-                        window.location.href = '/admin/dashboard.html';
-                    }, 500);
-                } else {
-                    errorText.textContent = '❌ Senha incorreta. Acesso negado.';
-                    errorDiv.classList.add('show');
-                    loginBtn.disabled = false;
-                    loginBtn.style.opacity = '1';
-                    loginBtn.innerHTML = originalText;
-                    document.getElementById('password').value = '';
-                    document.getElementById('password').focus();
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                errorText.textContent = '⚠️ Erro ao conectar com o servidor. Tente novamente.';
-                errorDiv.classList.add('show');
-                loginBtn.disabled = false;
-                loginBtn.style.opacity = '1';
-                loginBtn.innerHTML = originalText;
-            }
-        }
-        
-        // Enter key support
-        document.getElementById('password').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                login();
-            }
+    <!-- Mensagem de erro -->
+    <div id="errorMsg" class="hidden bg-rosa/8 text-rosa px-4 py-3 rounded-xl mb-5 text-sm text-center border-l-[3px] border-rosa font-normal">
+      <span id="errorText">Senha incorreta</span>
+    </div>
+
+    <!-- Campo de senha -->
+    <div class="mb-5">
+      <label for="password" class="block text-[0.7rem] tracking-[0.15em] uppercase text-terracota font-medium mb-2">
+        🔒 Acesso Restrito
+      </label>
+      <input type="password" id="password" placeholder="Digite a senha administrativa" autocomplete="off"
+        class="w-full px-4 py-3.5 border-[1.5px] border-marrom/12 rounded-xl bg-creme text-base text-marrom placeholder:text-marrom/30 focus:outline-none focus:border-rosa focus:bg-white focus:ring-[3px] focus:ring-rosa/10 transition-all duration-300" />
+    </div>
+
+    <!-- Botão -->
+    <button onclick="login()" id="loginBtn"
+      class="w-full py-3.5 bg-gradient-to-br from-rosa to-laranja text-white rounded-xl text-[0.85rem] font-semibold tracking-[0.15em] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(214,51,132,0.3)] active:translate-y-0 relative overflow-hidden group">
+      <span class="relative z-10">➜ Entrar no painel</span>
+      <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500"></span>
+    </button>
+
+    <!-- Rodapé -->
+    <div class="mt-6 pt-5 border-t border-marrom/8 text-center text-[0.7rem] text-marrom-claro">
+      <span class="font-paragrafos italic">apenas para organizadores</span>
+    </div>
+  </div>
+
+  <script>
+    async function login() {
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('errorMsg');
+      const errorText = document.getElementById('errorText');
+      const loginBtn = document.getElementById('loginBtn');
+
+      errorDiv.classList.add('hidden');
+      errorDiv.classList.remove('shake');
+
+      if (!password) {
+        errorText.textContent = 'Por favor, digite a senha';
+        errorDiv.classList.remove('hidden');
+        errorDiv.classList.add('shake');
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.style.opacity = '0.7';
+      const originalText = loginBtn.innerHTML;
+      loginBtn.innerHTML = '<span class="relative z-10">⌛ Verificando...</span>';
+
+      try {
+        const response = await fetch('/.netlify/functions/admin-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
         });
-        
-        // Auto focus
-        document.getElementById('password').focus();
-        
-        // Verificar se já está logado e redirecionar
-        if (sessionStorage.getItem('admin_authenticated') === 'true') {
-            const loginTime = parseInt(sessionStorage.getItem('admin_login_time') || '0');
-            const now = Date.now();
-            // Se login foi há menos de 8 horas, redireciona
-            if (now - loginTime < 8 * 60 * 60 * 1000) {
-                window.location.href = '/admin/dashboard.html';
-            } else {
-                // Sessão expirada
-                sessionStorage.removeItem('admin_authenticated');
-                sessionStorage.removeItem('admin_login_time');
-            }
+
+        const data = await response.json();
+
+        if (data.success) {
+          sessionStorage.setItem('admin_authenticated', 'true');
+          sessionStorage.setItem('admin_login_time', Date.now().toString());
+          loginBtn.innerHTML = '<span class="relative z-10">✓ Redirecionando...</span>';
+          setTimeout(() => {
+            window.location.href = '/admin/dashboard.html';
+          }, 500);
+        } else {
+          errorText.textContent = '❌ Senha incorreta. Acesso negado.';
+          errorDiv.classList.remove('hidden');
+          errorDiv.classList.add('shake');
+          loginBtn.disabled = false;
+          loginBtn.style.opacity = '1';
+          loginBtn.innerHTML = originalText;
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
         }
-    </script>
+      } catch (error) {
+        console.error('Erro:', error);
+        errorText.textContent = '⚠️ Erro ao conectar com o servidor. Tente novamente.';
+        errorDiv.classList.remove('hidden');
+        errorDiv.classList.add('shake');
+        loginBtn.disabled = false;
+        loginBtn.style.opacity = '1';
+        loginBtn.innerHTML = originalText;
+      }
+    }
+
+    document.getElementById('password').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); login(); }
+    });
+
+    document.getElementById('password').focus();
+
+    // Se já estiver logado (sessão de 8h), redireciona direto
+    if (sessionStorage.getItem('admin_authenticated') === 'true') {
+      const loginTime = parseInt(sessionStorage.getItem('admin_login_time') || '0');
+      if (Date.now() - loginTime < 8 * 60 * 60 * 1000) {
+        window.location.href = '/admin/dashboard.html';
+      } else {
+        sessionStorage.removeItem('admin_authenticated');
+        sessionStorage.removeItem('admin_login_time');
+      }
+    }
+  </script>
 </body>
+
 </html>

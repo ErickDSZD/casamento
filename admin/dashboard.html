@@ -1,769 +1,588 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard — Lista de Presentes</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
-        rel="stylesheet" />
-    <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="/img/logo_laranja.png" type="image/x-icon" />
+  <title>Admin — Lista de Presentes · Giovanna & Erick</title>
 
-        :root {
-            --rosa: #D63384;
-            --amarelo: #F3C623;
-            --laranja: #F05A28;
-            --terracota: #C85A2F;
-            --creme: #FDF6EE;
-            --creme-dark: #F5EBD8;
-            --marrom: #3A1F10;
-            --marrom-light: #6B3A22;
-            --branco: #FFFFFF;
-            --verde: #28a745;
-            --vermelho: #dc3545;
-            --azul: #17a2b8;
-            --font-display: 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'Jost', sans-serif;
-        }
+  <link href="/dist/styles.css" rel="stylesheet">
 
-        body {
-            background: var(--creme);
-            color: var(--marrom);
-            font-family: var(--font-body);
-            font-weight: 300;
-            font-size: 1rem;
-            line-height: 1.75;
-            min-height: 100vh;
-        }
+  <style>
+    @font-face {
+      font-family: "Oleragie";
+      src: url("/fonts/Oleragie.otf") format("opentype");
+      font-display: swap;
+    }
 
-        /* Header */
-        .admin-header {
-            background: linear-gradient(135deg, var(--rosa) 0%, var(--laranja) 100%);
-            color: var(--branco);
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 20px rgba(58, 31, 16, 0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    @font-face {
+      font-family: "Satoshi";
+      src: url("/fonts/Satoshi-Variable.ttf") format("truetype");
+      font-weight: 300 900;
+      font-display: swap;
+    }
 
-        .admin-header h1 {
-            font-family: var(--font-display);
-            font-size: 1.8rem;
-            font-weight: 400;
-            letter-spacing: -0.01em;
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        .admin-header h1 small {
-            font-size: 0.8rem;
-            font-style: italic;
-            opacity: 0.9;
-            font-family: var(--font-body);
-        }
+    body {
+      font-family: "Satoshi", "Jost", -apple-system, sans-serif;
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.75;
+    }
 
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1.5px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: 99px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-        }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
 
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
 
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
 
-        .stat-card {
-            background: var(--branco);
-            border-radius: 16px;
-            padding: 1.25rem;
-            text-align: center;
-            border: 1px solid rgba(58, 31, 16, 0.08);
-            box-shadow: 0 2px 8px rgba(58, 31, 16, 0.05);
-            transition: transform 0.2s;
-        }
+    .admin-card {
+      animation: fadeUp 0.4s both;
+    }
 
-        .stat-card:hover {
-            transform: translateY(-3px);
-        }
+    .toast-anim {
+      animation: slideIn 0.3s ease;
+    }
 
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
+    /* Scrollbar discreta */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
 
-        .stat-number {
-            font-family: var(--font-display);
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--rosa);
-            line-height: 1;
-        }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
 
-        .stat-label {
-            font-size: 0.7rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--marrom-light);
-            margin-top: 0.3rem;
-        }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(58, 42, 31, 0.15);
+      border-radius: 10px;
+    }
 
-        /* Toolbar */
-        .toolbar {
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1rem;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--rosa) 0%, var(--laranja) 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.8rem;
-            border-radius: 99px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--creme-dark);
-            color: var(--marrom);
-            border: 1px solid rgba(58, 31, 16, 0.15);
-            padding: 0.65rem 1.5rem;
-            border-radius: 99px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 400;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-        }
-
-        .btn-secondary:hover {
-            background: var(--creme);
-            border-color: var(--rosa);
-        }
-
-        .btn-danger {
-            background: var(--vermelho);
-            color: white;
-            border: none;
-            padding: 0.4rem 0.9rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-            transform: scale(1.02);
-        }
-
-        .btn-warning {
-            background: var(--amarelo);
-            color: var(--marrom);
-            border: none;
-            padding: 0.4rem 0.9rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-warning:hover {
-            background: #e0b020;
-            transform: scale(1.02);
-        }
-
-        /* Grid de Presentes */
-        .presentes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .presente-card {
-            background: var(--branco);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(58, 31, 16, 0.08);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(58, 31, 16, 0.06);
-            position: relative;
-        }
-
-        .presente-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 32px rgba(58, 31, 16, 0.12);
-        }
-
-        .presente-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
-        .presente-nome {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 400;
-            color: var(--marrom);
-            line-height: 1.2;
-        }
-
-        .presente-preco {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 600;
-            color: var(--verde);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 99px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            margin-top: 0.5rem;
-            letter-spacing: 0.02em;
-        }
-
-        .status-available {
-            background: rgba(40, 167, 69, 0.12);
-            color: #1e7e34;
-        }
-
-        .status-priority {
-            background: rgba(243, 198, 35, 0.15);
-            color: #856404;
-        }
-
-        .status-reserved {
-            background: rgba(214, 51, 132, 0.1);
-            color: var(--rosa);
-        }
-
-        .presente-categoria {
-            font-size: 0.65rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--terracota);
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .presente-desc {
-            color: var(--marrom-light);
-            font-size: 0.85rem;
-            margin: 0.75rem 0;
-            line-height: 1.5;
-        }
-
-        .card-actions {
-            margin-top: 1rem;
-            display: flex;
-            gap: 0.5rem;
-            justify-content: flex-end;
-            border-top: 1px solid rgba(58, 31, 16, 0.08);
-            padding-top: 1rem;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(58, 31, 16, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background: var(--branco);
-            margin: 2rem auto;
-            padding: 2rem;
-            border-radius: 24px;
-            max-width: 650px;
-            position: relative;
-            box-shadow: 0 32px 48px rgba(58, 31, 16, 0.2);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid var(--creme-dark);
-        }
-
-        .modal-header h2 {
-            font-family: var(--font-display);
-            font-size: 1.8rem;
-            font-weight: 400;
-            color: var(--marrom);
-        }
-
-        .close {
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--marrom-light);
-            transition: color 0.2s;
-            line-height: 1;
-        }
-
-        .close:hover {
-            color: var(--rosa);
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--marrom);
-            font-size: 0.85rem;
-            letter-spacing: 0.02em;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1.5px solid rgba(58, 31, 16, 0.12);
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-family: var(--font-body);
-            background: var(--creme);
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--rosa);
-            background: var(--branco);
-            box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        /* Toast Message */
-        .toast-msg {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--verde);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            z-index: 1100;
-            display: none;
-            font-size: 0.9rem;
-            font-weight: 400;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Loading */
-        .loading-state {
-            text-align: center;
-            padding: 4rem;
-            color: var(--marrom-light);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            .presentes-grid {
-                grid-template-columns: 1fr;
-            }
-            .admin-header h1 {
-                font-size: 1.2rem;
-            }
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .btn-primary, .btn-secondary {
-                text-align: center;
-                justify-content: center;
-            }
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(58, 42, 31, 0.25);
+    }
+  </style>
 </head>
-<body>
-    <div class="admin-header">
-        <h1>🎁 Gerenciador de Presentes <small>— Giovanna & Erick</small></h1>
-        <button class="logout-btn" onclick="logout()">✕ Sair</button>
+
+<body class="bg-creme text-marrom font-paragrafos font-light text-base leading-relaxed">
+
+  <!-- NAV (mesma identidade da página pública) -->
+  <nav role="navigation" aria-label="Menu administrativo"
+    class="fixed top-0 inset-x-0 z-[100] py-5 bg-laranja backdrop-blur-md shadow-[0_1px_0_rgba(58,42,31,0.08)]">
+    <div class="w-[min(1400px,92%)] mx-auto flex items-center justify-between gap-4">
+      <a href="/" class="block leading-none">
+        <img src="/img/logo_branco.png" alt="Giovanna & Erick"
+          class="h-[45px] w-auto block transition-transform duration-300 hover:scale-[1.02] max-[600px]:h-[32px]" />
+      </a>
+
+      <div class="hidden min-[900px]:flex items-center gap-3">
+        <span class="text-[0.7rem] tracking-[0.18em] uppercase font-medium text-white/70">
+          Painel Admin
+        </span>
+        <a href="/presentes/"
+          class="text-[0.72rem] tracking-[0.18em] uppercase font-medium text-white hover:text-amarelo transition-colors relative pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-amarelo after:transition-[width] after:duration-300 hover:after:w-full">
+          Ver Site
+        </a>
+        <button onclick="logout()"
+          class="ml-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-5 py-2 rounded-full text-[0.7rem] font-semibold tracking-[0.15em] uppercase transition-all duration-300">
+          Sair
+        </button>
+      </div>
+
+      <button onclick="logout()"
+        class="min-[900px]:hidden text-white text-[0.7rem] tracking-[0.15em] uppercase font-semibold border border-white/40 px-4 py-2 rounded-full">
+        Sair
+      </button>
     </div>
-    
-    <div class="container">
-        <!-- Stats -->
-        <div class="stats-bar" id="statsBar">
-            <div class="stat-card">
-                <div class="stat-icon">🎁</div>
-                <div class="stat-number" id="totalPresentes">0</div>
-                <div class="stat-label">Total de Presentes</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">⭐</div>
-                <div class="stat-number" id="priorityCount">0</div>
-                <div class="stat-label">Prioritários</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">✅</div>
-                <div class="stat-number" id="availableCount">0</div>
-                <div class="stat-label">Disponíveis</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">💰</div>
-                <div class="stat-number" id="totalValue">R$ 0</div>
-                <div class="stat-label">Valor Total</div>
-            </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="pt-36 pb-0 text-center relative overflow-hidden max-[600px]:pt-28">
+    <div class="w-[min(1400px,92%)] mx-auto relative z-10">
+      <h1
+        class="font-titulos font-semibold tracking-[0.2em] text-laranja text-[clamp(1.55rem,1.75vw,2rem)] max-[600px]:text-[1.35rem]">
+        Gerenciar <em class="italic text-rosa">Presentes</em>
+      </h1>
+      <hr
+        class="w-[70px] h-[2px] bg-gradient-to-r from-rosa to-amarelo border-none my-6 mx-auto max-[600px]:w-[50px] max-[600px]:my-4" />
+      <p class="max-w-[700px] mx-auto text-marrom-claro text-[1rem] max-[600px]:text-[0.9rem] max-[600px]:px-2">
+        Adicione, edite ou remova os presentes que aparecem na lista pública do casal.
+      </p>
+    </div>
+  </header>
+
+  <main class="w-[min(1400px,92%)] mx-auto pt-10 pb-[clamp(4rem,8vw,7rem)] max-[600px]:pt-6">
+
+    <!-- ABAS -->
+    <div class="flex justify-center gap-2 mb-8 border-b border-marrom/10">
+      <button id="tabPresentes" onclick="mudarAba('presentes')"
+        class="tab-btn px-6 py-3 text-[0.72rem] font-semibold tracking-[0.18em] uppercase border-b-2 border-rosa text-laranja transition-all">
+        🎁 Lista de Presentes
+      </button>
+      <button id="tabLuademel" onclick="mudarAba('luademel')"
+        class="tab-btn px-6 py-3 text-[0.72rem] font-semibold tracking-[0.18em] uppercase border-b-2 border-transparent text-marrom-claro hover:text-laranja transition-all">
+        ✈️ Lua de Mel
+      </button>
+    </div>
+
+    <!-- STATS (no estilo dos info-cards da home) -->
+    <div class="grid grid-cols-2 min-[900px]:grid-cols-4 gap-5 max-[600px]:gap-3 mb-8">
+
+      <div
+        class="bg-white/80 backdrop-blur-md rounded-[24px] p-5 text-center shadow-[0_8px_24px_rgba(58,42,31,0.08)] border border-white/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(58,42,31,0.12)]">
+        <div class="text-2xl mb-1.5">🎁</div>
+        <div id="totalPresentes" class="font-paragrafos font-bold text-[1.8rem] text-rosa leading-none">0</div>
+        <div class="text-[0.62rem] tracking-[0.2em] uppercase text-marrom-claro mt-2 font-medium">Total</div>
+      </div>
+
+      <div
+        class="bg-white/80 backdrop-blur-md rounded-[24px] p-5 text-center shadow-[0_8px_24px_rgba(58,42,31,0.08)] border border-white/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(58,42,31,0.12)]">
+        <div class="text-2xl mb-1.5">✅</div>
+        <div id="availableCount" class="font-paragrafos font-bold text-[1.8rem] text-verde leading-none">0</div>
+        <div class="text-[0.62rem] tracking-[0.2em] uppercase text-marrom-claro mt-2 font-medium">Disponíveis</div>
+      </div>
+
+      <div
+        class="bg-white/80 backdrop-blur-md rounded-[24px] p-5 text-center shadow-[0_8px_24px_rgba(58,42,31,0.08)] border border-white/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(58,42,31,0.12)]">
+        <div class="text-2xl mb-1.5">💝</div>
+        <div id="giftedCount" class="font-paragrafos font-bold text-[1.8rem] text-laranja leading-none">0</div>
+        <div class="text-[0.62rem] tracking-[0.2em] uppercase text-marrom-claro mt-2 font-medium">Presenteados</div>
+      </div>
+
+      <div
+        class="bg-white/80 backdrop-blur-md rounded-[24px] p-5 text-center shadow-[0_8px_24px_rgba(58,42,31,0.08)] border border-white/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(58,42,31,0.12)]">
+        <div class="text-2xl mb-1.5">💰</div>
+        <div id="totalValue" class="font-paragrafos font-bold text-[1.8rem] text-marrom leading-none">R$ 0</div>
+        <div class="text-[0.62rem] tracking-[0.2em] uppercase text-marrom-claro mt-2 font-medium">Valor Total</div>
+      </div>
+
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="flex flex-wrap gap-3 justify-between items-center mb-6">
+      <button onclick="abrirModalNovo()"
+        class="bg-gradient-to-br from-rosa to-laranja text-white px-7 py-3 rounded-full text-[0.72rem] font-semibold tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+        + Novo Presente
+      </button>
+      <button onclick="carregarPresentes()"
+        class="inline-flex items-center gap-2 bg-transparent border border-marrom-claro text-marrom-claro px-5 py-2.5 rounded-full font-paragrafos text-[0.72rem] tracking-[0.15em] uppercase cursor-pointer transition-all duration-300 hover:bg-marrom-claro hover:text-white hover:border-marrom-claro">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+          <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+          <path d="M16 21h5v-5"></path>
+        </svg>
+        Atualizar
+      </button>
+    </div>
+
+    <!-- GRID -->
+    <div id="presentesGrid"
+      class="grid grid-cols-1 min-[600px]:grid-cols-2 min-[1100px]:grid-cols-3 gap-6 max-[600px]:gap-4">
+      <div class="col-span-full text-center py-16 text-marrom-claro">✨ Carregando presentes...</div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-12 bg-creme text-center border-t border-marrom/[0.07] max-[600px]:py-8">
+    <p class="block w-full mx-auto mb-1.5">
+      <img src="/img/nome_laranja.png" alt="Giovanna & Erick"
+        class="w-full h-auto max-w-[240px] inline-block max-[600px]:max-w-[180px]" />
+    </p>
+    <p class="text-[0.85rem] tracking-[0.2em] uppercase text-laranja max-[600px]:text-[0.7rem]">
+      21 · Novembro · 2026 · Olímpia
+    </p>
+  </footer>
+
+  <!-- MODAL (redesenhado) -->
+  <div id="modal" class="hidden fixed inset-0 bg-marrom/60 backdrop-blur-sm z-[1000] overflow-y-auto p-4">
+    <div class="bg-creme max-w-2xl mx-auto my-8 rounded-[28px] shadow-2xl p-6 sm:p-8 relative border border-white/60">
+      <div class="flex justify-between items-center mb-6 pb-4 border-b border-marrom/10">
+        <div>
+          <h2 id="modalTitle" class="font-titulos font-semibold text-[1.3rem] tracking-[0.1em] text-laranja uppercase">
+            Novo Presente
+          </h2>
+          <p class="text-[0.7rem] tracking-[0.15em] uppercase text-marrom-claro mt-1">Preencha os dados do item</p>
+        </div>
+        <button onclick="fecharModal()" aria-label="Fechar"
+          class="text-3xl text-marrom-claro hover:text-rosa leading-none transition-colors">&times;</button>
+      </div>
+
+      <form id="presenteForm" class="space-y-4">
+        <input type="hidden" id="id">
+
+        <div>
+          <label class="block text-[0.72rem] font-medium text-marrom mb-1.5 tracking-[0.1em] uppercase">Nome *</label>
+          <input type="text" id="nome" required
+            class="w-full px-4 py-2.5 border-[1.5px] border-marrom/15 rounded-xl bg-white text-[0.9rem] focus:outline-none focus:border-rosa transition" />
         </div>
 
-        <div class="toolbar">
-            <button class="btn-primary" onclick="abrirModalNovo()">✨ + Novo Presente</button>
-            <button class="btn-secondary" onclick="carregarPresentes()">⟳ Atualizar Lista</button>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label
+              class="block text-[0.72rem] font-medium text-marrom mb-1.5 tracking-[0.1em] uppercase">Categoria</label>
+            <select id="categoria"
+              class="w-full px-4 py-2.5 border-[1.5px] border-marrom/15 rounded-xl bg-white text-[0.9rem] focus:outline-none focus:border-rosa transition">
+              <option value="cozinha">Cozinha</option>
+              <option value="quarto">Quarto</option>
+              <option value="sala">Sala</option>
+              <option value="casa">Casa</option>
+              <option value="móvel">Móvel</option>
+              <option value="casal">Casal</option>
+              <option value="lua de mel">Lua de Mel</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[0.72rem] font-medium text-marrom mb-1.5 tracking-[0.1em] uppercase">Preço (R$)
+              *</label>
+            <input type="number" id="preco" step="0.01" required
+              class="w-full px-4 py-2.5 border-[1.5px] border-marrom/15 rounded-xl bg-white text-[0.9rem] focus:outline-none focus:border-rosa transition" />
+          </div>
         </div>
-        
-        <div id="presentesGrid" class="presentes-grid">
-            <div class="loading-state">✨ Carregando presentes...</div>
+
+        <div>
+          <label class="block text-[0.72rem] font-medium text-marrom mb-1.5 tracking-[0.1em] uppercase">Descrição
+            *</label>
+          <textarea id="descricao" required rows="3"
+            class="w-full px-4 py-2.5 border-[1.5px] border-marrom/15 rounded-xl bg-white text-[0.9rem] focus:outline-none focus:border-rosa transition resize-y"></textarea>
         </div>
+
+        <div>
+          <label class="block text-[0.72rem] font-medium text-marrom mb-1.5 tracking-[0.1em] uppercase">URL da
+            Imagem</label>
+          <input type="text" id="imagem" placeholder="/img/exemplo.jpg ou https://..."
+            class="w-full px-4 py-2.5 border-[1.5px] border-marrom/15 rounded-xl bg-white text-[0.9rem] focus:outline-none focus:border-rosa transition" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[0.72rem] font-medium text-marrom mb-1.5 tracking-[0.1em] uppercase">Status</label>
+            <select id="status"
+              class="w-full px-4 py-2.5 border-[1.5px] border-marrom/15 rounded-xl bg-white text-[0.9rem] focus:outline-none focus:border-rosa transition">
+              <option value="disponivel">Disponível</option>
+              <option value="presenteado">Presenteado</option>
+              <option value="valor">Valor</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[0.72rem] font-medium text-marrom mb-1.5 tracking-[0.1em] uppercase">Link
+              Externo</label>
+            <input type="url" id="linkExterno" placeholder="https://..."
+              class="w-full px-4 py-2.5 border-[1.5px] border-marrom/15 rounded-xl bg-white text-[0.9rem] focus:outline-none focus:border-rosa transition" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[0.72rem] font-medium text-marrom mb-1.5 tracking-[0.1em] uppercase">Detalhes (um por
+            linha)</label>
+          <textarea id="detalhes" rows="3" placeholder="Marca: ...&#10;Modelo: ...&#10;Cor: ..."
+            class="w-full px-4 py-2.5 border-[1.5px] border-marrom/15 rounded-xl bg-white text-[0.9rem] focus:outline-none focus:border-rosa transition resize-y"></textarea>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="fecharModal()"
+            class="flex-1 bg-transparent border border-marrom/20 text-marrom px-6 py-3 rounded-full text-[0.72rem] font-semibold tracking-[0.18em] uppercase transition-all duration-300 hover:border-marrom/40">
+            Cancelar
+          </button>
+          <button type="submit"
+            class="flex-1 bg-gradient-to-br from-rosa to-laranja text-white px-6 py-3 rounded-full text-[0.72rem] font-semibold tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+            Salvar
+          </button>
+        </div>
+      </form>
     </div>
-    
-    <!-- Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Novo Presente</h2>
-                <span class="close" onclick="fecharModal()">&times;</span>
-            </div>
-            <form id="presenteForm">
-                <input type="hidden" id="id">
-                <div class="form-group">
-                    <label>🏷️ Nome *</label>
-                    <input type="text" id="nome" required>
-                </div>
-                <div class="form-group">
-                    <label>📂 Categoria</label>
-                    <select id="categoria">
-                        <option value="cozinha">🍳 Cozinha</option>
-                        <option value="quarto">🛏️ Quarto</option>
-                        <option value="sala">🛋️ Sala</option>
-                        <option value="banheiro">🚿 Banheiro</option>
-                        <option value="eletronicos">📱 Eletrônicos</option>
-                        <option value="viagem">✈️ Viagem</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>💰 Preço (R$)</label>
-                    <input type="number" id="preco" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label>📝 Descrição</label>
-                    <textarea id="descricao" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label>🖼️ URL da Imagem</label>
-                    <input type="text" id="imagem" placeholder="/assets/images/imagem.jpg">
-                </div>
-                <div class="form-group">
-                    <label>😊 Ícone (Emoji)</label>
-                    <input type="text" id="icone" placeholder="🎁">
-                </div>
-                <div class="form-group">
-                    <label>🏷️ Status</label>
-                    <select id="status">
-                        <option value="available">✅ Disponível</option>
-                        <option value="priority">⭐ Prioritário</option>
-                        <option value="reserved">🔒 Reservado</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>🔗 Link Externo (opcional)</label>
-                    <input type="url" id="linkExterno" placeholder="https://...">
-                </div>
-                <div class="form-group">
-                    <label>📋 Detalhes (um por linha)</label>
-                    <textarea id="detalhes" placeholder="Material: ...&#10;Tamanho: ...&#10;Cor: ..."></textarea>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">💾 Salvar Presente</button>
-            </form>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toastMsg"
+    class="hidden fixed bottom-6 right-6 left-6 sm:left-auto px-6 py-4 rounded-2xl text-white text-sm font-medium shadow-2xl z-[1100] toast-anim text-center sm:text-left">
+  </div>
+
+  <script>
+    let abaAtiva = 'presentes'; // 'presentes' | 'luademel'
+
+    // Estado separado por tipo
+    const estado = {
+      presentes: { itens: [], endpointGet: '/.netlify/functions/get-presentes', endpointUpdate: '/.netlify/functions/update-presentes' },
+      luademel: { itens: [], endpointGet: '/.netlify/functions/get-luademel', endpointUpdate: '/.netlify/functions/update-luademel' }
+    };
+
+    const ICONS = {
+      cozinha: '🍳', quarto: '🛏️', sala: '🛋️', casa: '🏠',
+      'móvel': '🪑', casal: '💑', 'lua de mel': '✈️'
+    };
+
+    const STATUS_LABEL = {
+      disponivel: { text: 'Disponível', cls: 'bg-amarelo text-white' },
+      presenteado: { text: 'Presenteado', cls: 'bg-rosa text-white' },
+      valor: { text: 'Valor', cls: 'bg-red-500 text-white' }
+    };
+
+    function verificarAutenticacao() {
+      if (!sessionStorage.getItem('admin_authenticated')) {
+        window.location.href = '/admin/';
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('admin_authenticated');
+      sessionStorage.removeItem('admin_login_time');
+      window.location.href = '/admin/';
+    }
+
+    function mostrarMensagem(msg, isError = false) {
+      const toast = document.getElementById('toastMsg');
+      toast.textContent = (isError ? '✕ ' : '✓ ') + msg;
+      toast.className = 'fixed bottom-6 right-6 left-6 sm:left-auto px-6 py-4 rounded-2xl text-white text-sm font-medium shadow-2xl z-[1100] toast-anim text-center sm:text-left ' +
+        (isError ? 'bg-vermelho' : 'bg-marrom');
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    /* ---------- ABAS ---------- */
+    async function mudarAba(aba) {
+      abaAtiva = aba;
+      const btnP = document.getElementById('tabPresentes');
+      const btnL = document.getElementById('tabLuademel');
+
+      [btnP, btnL].forEach(b => {
+        b.classList.remove('border-rosa', 'text-laranja');
+        b.classList.add('border-transparent', 'text-marrom-claro');
+      });
+      const btnAtivo = aba === 'presentes' ? btnP : btnL;
+      btnAtivo.classList.remove('border-transparent', 'text-marrom-claro');
+      btnAtivo.classList.add('border-rosa', 'text-laranja');
+
+      // Se ainda não carregou essa aba, busca agora
+      if (!getEstado().carregado) {
+        await carregarItens();
+      } else {
+        atualizarStats();
+        renderizarItens();
+      }
+    }
+
+    function getEstado() { return estado[abaAtiva]; }
+
+    /* ---------- STATS ---------- */
+    function atualizarStats() {
+      const itens = getEstado().itens;
+      const total = itens.length;
+      const available = itens.filter(p => p.status === 'disponivel').length;
+      const gifted = itens.filter(p => p.status === 'presenteado').length;
+      const totalValue = itens.reduce((s, p) => s + (p.preco || 0), 0);
+
+      document.getElementById('totalPresentes').textContent = total;
+      document.getElementById('availableCount').textContent = available;
+      document.getElementById('giftedCount').textContent = gifted;
+      document.getElementById('totalValue').textContent =
+        'R$ ' + totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    /* ---------- CARREGAR ---------- */
+    async function carregarItens() {
+      const est = getEstado();
+      try {
+        const res = await fetch(est.endpointGet);
+        const data = await res.json();
+        est.itens = data.presentes || data.luademel || data.itens || data.items || [];
+        est.carregado = true;
+        atualizarStats();
+        renderizarItens();
+      } catch (err) {
+        console.error(err);
+        mostrarMensagem('Erro ao carregar ' + (abaAtiva === 'luademel' ? 'lua de mel' : 'presentes'), true);
+      }
+    }
+
+    // Compatibilidade com botão "Atualizar"
+    function carregarPresentes() { carregarItens(); }
+
+    /* ---------- RENDER ---------- */
+    function renderizarItens() {
+      const est = getEstado();
+      const grid = document.getElementById('presentesGrid');
+
+      if (!est.itens.length) {
+        grid.innerHTML = `<div class="col-span-full text-center py-20">
+      <div class="text-5xl mb-4 opacity-40">${abaAtiva === 'luademel' ? '✈️' : '🎁'}</div>
+      <p class="text-marrom-claro text-base">Nenhum item cadastrado nesta aba.</p>
+      <p class="text-marrom-claro text-sm mt-1">Clique em "Novo" para começar.</p>
+    </div>`;
+        return;
+      }
+
+      grid.innerHTML = est.itens.map(p => {
+        const st = STATUS_LABEL[p.status] || STATUS_LABEL.disponivel;
+        const icon = ICONS[p.categoria] || (abaAtiva === 'luademel' ? '✈️' : '🎁');
+        const img = p.imagem
+          ? `<div class="h-[160px] rounded-xl mb-3 bg-contain bg-center bg-no-repeat bg-white" style="background-image:url('${p.imagem}')"></div>`
+          : `<div class="h-[160px] rounded-xl mb-3 grid place-items-center bg-gradient-to-br from-[#fde8f3] to-[#f9c8e1]">
+           <span class="text-5xl opacity-55">${icon}</span>
+         </div>`;
+
+        return `
+      <div class="admin-card group relative flex flex-col bg-white rounded-2xl overflow-hidden border border-marrom/[0.07] shadow-[0_2px_12px_rgba(58,42,31,0.05)] transition-all duration-[0.3s] [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1.5 hover:shadow-[0_16px_40px_rgba(58,42,31,0.12)]">
+        <span class="absolute top-3.5 right-3 z-[2] text-[0.6rem] font-medium tracking-[0.12em] uppercase py-[0.28rem] px-[0.7rem] rounded-full ${st.cls}">
+          ${st.text}
+        </span>
+        <div class="px-5 pt-5">
+          ${img}
+          <div class="text-[0.62rem] tracking-[0.18em] uppercase text-terracota font-medium mb-1">
+            ${p.categoria || 'geral'}
+          </div>
+          <h3 class="font-paragrafos font-semibold text-[1.1rem] text-marrom leading-snug mb-1.5">${p.nome}</h3>
         </div>
-    </div>
-    
-    <div id="toastMsg" class="toast-msg"></div>
-    
-    <script>
-        let presentes = [];
-        
-        function verificarAutenticacao() {
-            if (!sessionStorage.getItem('admin_authenticated')) {
-                window.location.href = '/admin/';
-            }
-        }
-        
-        function logout() {
-            sessionStorage.removeItem('admin_authenticated');
-            sessionStorage.removeItem('admin_login_time');
-            window.location.href = '/admin/';
-        }
-        
-        function mostrarMensagem(msg, isError = false) {
-            const toast = document.getElementById('toastMsg');
-            toast.textContent = isError ? '❌ ' + msg : '✓ ' + msg;
-            toast.style.backgroundColor = isError ? '#dc3545' : '#28a745';
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-        
-        function atualizarStats() {
-            const total = presentes.length;
-            const priority = presentes.filter(p => p.status === 'priority').length;
-            const available = presentes.filter(p => p.status === 'available').length;
-            const totalValue = presentes.reduce((sum, p) => sum + (p.preco || 0), 0);
-            
-            document.getElementById('totalPresentes').textContent = total;
-            document.getElementById('priorityCount').textContent = priority;
-            document.getElementById('availableCount').textContent = available;
-            document.getElementById('totalValue').innerHTML = `R$ ${totalValue.toLocaleString('pt-BR')}`;
-        }
-        
-        async function carregarPresentes() {
-            try {
-                const response = await fetch('/.netlify/functions/get-presentes');
-                const data = await response.json();
-                presentes = data.presentes || [];
-                atualizarStats();
-                renderizarPresentes();
-            } catch (error) {
-                console.error('Erro:', error);
-                mostrarMensagem('Erro ao carregar presentes', true);
-            }
-        }
-        
-        function renderizarPresentes() {
-            const grid = document.getElementById('presentesGrid');
-            if (!presentes.length) {
-                grid.innerHTML = '<div class="loading-state">🎀 Nenhum presente cadastrado ainda. Clique em "Novo Presente" para começar!</div>';
-                return;
-            }
-            
-            grid.innerHTML = presentes.map(p => `
-                <div class="presente-card">
-                    <div class="presente-header">
-                        <div>
-                            <div class="presente-categoria">${getCategoriaIcon(p.categoria)} ${p.categoria || 'geral'}</div>
-                            <div class="presente-nome">${p.icone || '🎁'} ${p.nome}</div>
-                            <div class="status-badge status-${p.status || 'available'}">
-                                ${p.status === 'priority' ? '⭐ Prioritário' : p.status === 'reserved' ? '🔒 Reservado' : '✅ Disponível'}
-                            </div>
-                        </div>
-                        <div class="presente-preco">R$ ${(p.preco || 0).toLocaleString('pt-BR')}</div>
-                    </div>
-                    <div class="presente-desc">${p.descricao ? p.descricao.substring(0, 100) : ''}${p.descricao && p.descricao.length > 100 ? '...' : ''}</div>
-                    <div class="card-actions">
-                        <button class="btn-warning" onclick="editarPresente(${p.id})">✏️ Editar</button>
-                        <button class="btn-danger" onclick="excluirPresente(${p.id})">🗑️ Excluir</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function getCategoriaIcon(categoria) {
-            const icons = {
-                cozinha: '🍳',
-                quarto: '🛏️',
-                sala: '🛋️',
-                banheiro: '🚿',
-                eletronicos: '📱',
-                viagem: '✈️'
-            };
-            return icons[categoria] || '🎁';
-        }
-        
-        function abrirModalNovo() {
-            document.getElementById('modalTitle').textContent = '✨ Novo Presente';
-            document.getElementById('presenteForm').reset();
-            document.getElementById('id').value = '';
-            document.getElementById('modal').style.display = 'block';
-        }
-        
-        function editarPresente(id) {
-            const presente = presentes.find(p => p.id === id);
-            if (!presente) return;
-            
-            document.getElementById('modalTitle').textContent = '✏️ Editar Presente';
-            document.getElementById('id').value = presente.id;
-            document.getElementById('nome').value = presente.nome;
-            document.getElementById('categoria').value = presente.categoria || '';
-            document.getElementById('preco').value = presente.preco;
-            document.getElementById('descricao').value = presente.descricao;
-            document.getElementById('imagem').value = presente.imagem || '';
-            document.getElementById('icone').value = presente.icone || '';
-            document.getElementById('status').value = presente.status || 'available';
-            document.getElementById('linkExterno').value = presente.linkExterno || '';
-            document.getElementById('detalhes').value = (presente.detalhes || []).join('\n');
-            
-            document.getElementById('modal').style.display = 'block';
-        }
-        
-        async function excluirPresente(id) {
-            if (!confirm('Tem certeza que deseja excluir este presente?')) return;
-            
-            try {
-                const response = await fetch('/.netlify/functions/update-presentes', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'delete', id })
-                });
-                
-                const data = await response.json();
-                if (data.success) {
-                    mostrarMensagem('Presente excluído com sucesso!');
-                    carregarPresentes();
-                } else {
-                    mostrarMensagem('Erro ao excluir', true);
-                }
-            } catch (error) {
-                mostrarMensagem('Erro ao excluir', true);
-            }
-        }
-        
-        function fecharModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
-        
-        document.getElementById('presenteForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const id = parseInt(document.getElementById('id').value);
-            const presente = {
-                id: id || Date.now(),
-                nome: document.getElementById('nome').value,
-                categoria: document.getElementById('categoria').value,
-                preco: parseFloat(document.getElementById('preco').value),
-                descricao: document.getElementById('descricao').value,
-                imagem: document.getElementById('imagem').value || null,
-                icone: document.getElementById('icone').value || '🎁',
-                status: document.getElementById('status').value,
-                linkExterno: document.getElementById('linkExterno').value || null,
-                detalhes: document.getElementById('detalhes').value.split('\n').filter(d => d.trim())
-            };
-            
-            const action = id ? 'update' : 'create';
-            
-            try {
-                const response = await fetch('/.netlify/functions/update-presentes', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action, presente })
-                });
-                
-                const data = await response.json();
-                if (data.success) {
-                    mostrarMensagem('Presente salvo com sucesso!');
-                    fecharModal();
-                    carregarPresentes();
-                } else {
-                    mostrarMensagem('Erro ao salvar', true);
-                }
-            } catch (error) {
-                mostrarMensagem('Erro ao salvar', true);
-            }
+        <div class="px-5 pb-5 flex-1 flex flex-col">
+          <p class="text-marrom-claro text-[0.82rem] leading-[1.6] mb-3 flex-1">
+            ${p.descricao ? p.descricao.substring(0, 100) + (p.descricao.length > 100 ? '...' : '') : ''}
+          </p>
+          <div class="flex items-center justify-between pt-3 border-t border-marrom/[0.07] mb-3">
+            <span class="font-paragrafos text-[1.2rem] font-bold text-marrom">
+              <sup class="text-[0.65rem] font-normal align-middle mr-px">R$</sup>
+              ${(p.preco || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="editarItem(${p.id})"
+              class="flex-1 bg-amarelo/15 text-[#856404] px-3 py-2 rounded-full text-[0.65rem] font-semibold tracking-[0.12em] uppercase hover:bg-amarelo/25 transition">
+              Editar
+            </button>
+            <button onclick="excluirItem(${p.id})"
+              class="flex-1 bg-rosa/10 text-rosa px-3 py-2 rounded-full text-[0.65rem] font-semibold tracking-[0.12em] uppercase hover:bg-rosa/20 transition">
+              Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+      }).join('');
+    }
+
+    /* ---------- MODAL ---------- */
+    function abrirModalNovo() {
+      document.getElementById('modalTitle').textContent =
+        abaAtiva === 'luademel' ? 'Nova Experiência · Lua de Mel' : 'Novo Presente';
+      document.getElementById('presenteForm').reset();
+      document.getElementById('id').value = '';
+      document.getElementById('modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function editarItem(id) {
+      const p = getEstado().itens.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('modalTitle').textContent = 'Editar Item';
+      document.getElementById('id').value = p.id;
+      document.getElementById('nome').value = p.nome;
+      document.getElementById('categoria').value = p.categoria || 'cozinha';
+      document.getElementById('preco').value = p.preco;
+      document.getElementById('descricao').value = p.descricao || '';
+      document.getElementById('imagem').value = p.imagem || '';
+      document.getElementById('status').value = p.status || 'disponivel';
+      document.getElementById('linkExterno').value = p.linkExterno || '';
+      document.getElementById('detalhes').value = (p.detalhes || []).join('\n');
+      document.getElementById('modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // aliases para compatibilidade
+    const editarPresente = editarItem;
+
+    async function excluirItem(id) {
+      if (!confirm('Tem certeza que deseja excluir este item?')) return;
+      const est = getEstado();
+      try {
+        const res = await fetch(est.endpointUpdate, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete', id })
         });
-        
-        window.onclick = (event) => {
-            if (event.target === document.getElementById('modal')) {
-                fecharModal();
-            }
-        };
-        
-        verificarAutenticacao();
-        carregarPresentes();
-    </script>
+        const data = await res.json();
+        if (data.success) {
+          mostrarMensagem('Item excluído');
+          carregarItens();
+        } else {
+          mostrarMensagem('Erro ao excluir', true);
+        }
+      } catch { mostrarMensagem('Erro ao excluir', true); }
+    }
+    const excluirPresente = excluirItem;
+
+    function fecharModal() {
+      document.getElementById('modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    /* ---------- SUBMIT ---------- */
+    document.getElementById('presenteForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const est = getEstado();
+      const id = parseInt(document.getElementById('id').value);
+      const item = {
+        id: id || undefined,
+        nome: document.getElementById('nome').value,
+        categoria: document.getElementById('categoria').value,
+        preco: parseFloat(document.getElementById('preco').value),
+        descricao: document.getElementById('descricao').value,
+        imagem: document.getElementById('imagem').value || null,
+        status: document.getElementById('status').value,
+        linkExterno: document.getElementById('linkExterno').value || null,
+        detalhes: document.getElementById('detalhes').value.split('\n').map(s => s.trim()).filter(Boolean)
+      };
+      const action = id ? 'update' : 'create';
+
+      try {
+        const res = await fetch(est.endpointUpdate, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, presente: item })
+        });
+        const data = await res.json();
+        if (data.success) {
+          mostrarMensagem('Item salvo');
+          fecharModal();
+          carregarItens();
+        } else {
+          mostrarMensagem('Erro ao salvar', true);
+        }
+      } catch { mostrarMensagem('Erro ao salvar', true); }
+    });
+
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') fecharModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') fecharModal();
+    });
+
+    /* ---------- INIT ---------- */
+    verificarAutenticacao();
+    carregarItens();
+  </script>
 </body>
+
 </html>
